@@ -8,6 +8,9 @@ import {
   TextField,
   Toolbar,
   Typography,
+  useTheme,
+  MenuItem,
+  Menu,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -17,16 +20,18 @@ interface INavbarProps {
 
 export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
     <>
-      <AppBar>
+      <AppBar component="nav">
         <Toolbar>
           <Box
             display="flex"
             justifyContent="center"
             alignItems="center"
             width="100%"
+            height={theme.spacing(8)}
           >
             <Box flex={2}>
               <Typography variant="h6">ReactGram</Typography>
@@ -52,17 +57,19 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
               <IconButton>
                 <Icon>home</Icon>
               </IconButton>
-              <Button color="secondary" onClick={() => navigate("/login")}>
-                Cadastrar
-              </Button>
-              <Button color="secondary" onClick={() => navigate("/register")}>
-                Registrar
-              </Button>
+              <MenuItem onClick={() => navigate("/login")}>
+                <Typography>Entrar</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => navigate("/register")}>
+                <Typography>Cadastrar</Typography>
+              </MenuItem>
             </Box>
           </Box>
         </Toolbar>
       </AppBar>
-      {children}
+      <Box height="100vh" marginTop={theme.spacing(8)}>
+        {children}
+      </Box>
     </>
   );
 };

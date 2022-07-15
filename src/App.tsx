@@ -1,3 +1,14 @@
+import { BrowserRouter } from "react-router-dom";
+
+import { Navbar } from "./shared/components";
+import { AppRoutes } from "./routes";
+
 export const App = () => {
-  return <div>Teste</div>;
+  return (
+    <BrowserRouter>
+      <Navbar>
+        <AppRoutes />;
+      </Navbar>
+    </BrowserRouter>
+  );
 };

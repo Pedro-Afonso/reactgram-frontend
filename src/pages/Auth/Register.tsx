@@ -5,12 +5,16 @@ import {
   Paper,
   TextField,
   Typography,
-  Card,
   Divider,
-  Button,
 } from "@mui/material";
-import { useState } from "react";
+import { LoadingButton } from "@mui/lab";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../shared/hooks";
+import { IUser } from "../../shared/interface";
+
+// Redux
+import { register, reset } from "../../shared/slices/authSlice";
 
 export const Register = () => {
   const [name, setName] = useState("");
@@ -18,18 +22,28 @@ export const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const { error, loading } = useAppSelector((state) => state.auth);
+
+  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const user = {
+    const user: IUser = {
       name,
       email,
       password,
       confirmPassword,
     };
     console.log(user);
+    dispatch(register(user));
   };
+
+  // Clean all auth states
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
 
   return (
     <Box
@@ -67,6 +81,8 @@ export const Register = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  error={!!error?.match(/nome/g)}
+                  helperText={error}
                 >
                   Nome
                 </TextField>
@@ -79,6 +95,8 @@ export const Register = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  error={!!error?.match(/e-mail/g)}
+                  helperText={error}
                 >
                   Email
                 </TextField>
@@ -91,6 +109,8 @@ export const Register = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  error={!!error?.match(/\bsenha\b/g)}
+                  helperText={error}
                 >
                   Senha
                 </TextField>
@@ -103,14 +123,21 @@ export const Register = () => {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  error={!!error?.match(/\bsenhas\b/g)}
+                  helperText={error}
                 >
                   Confirme a senha
                 </TextField>
               </Grid>
               <Grid>
-                <Button type="submit" fullWidth variant="contained">
+                <LoadingButton
+                  loading={loading}
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                >
                   Cadastrar
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </Box>

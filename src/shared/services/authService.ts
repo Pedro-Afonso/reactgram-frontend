@@ -18,4 +18,9 @@ const register = async (user: IUser) => {
   return res;
 };
 
-export const authService = { register };
+// Logout a user
+const logout = () => {
+  localStorage.removeItem("user");
+};
+
+export const authService = { register, logout };

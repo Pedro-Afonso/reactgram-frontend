@@ -32,10 +32,8 @@ export const AppRoutes = () => {
       />
       <Route
         path="/register"
-        element={auth ? <Register /> : <Navigate to="/home" />}
+        element={!auth ? <Register /> : <Navigate to="/home" />}
       />
-
-      <Route path="*" element={<Navigate to="/home" />} />
     </Routes>
   );
 };

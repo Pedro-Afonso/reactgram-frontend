@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector, useAuth } from "../../hooks";
+import { logout, reset } from "../../slices/authSlice";
 
 interface INavbarProps {
   children: React.ReactNode;
@@ -25,6 +26,13 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   const { auth } = useAuth();
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+
+    navigate("/login");
+  };
 
   return (
     <>
@@ -72,7 +80,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
                   <MenuItem onClick={() => navigate("/profile")}>
                     <Icon>person</Icon>
                   </MenuItem>
-                  <MenuItem>
+                  <MenuItem onClick={handleLogout}>
                     <Typography>Sair</Typography>
                   </MenuItem>
                 </>

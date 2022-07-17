@@ -10,9 +10,9 @@ import {
   Typography,
   useTheme,
   MenuItem,
-  Menu,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector, useAuth } from "../../hooks";
 
 interface INavbarProps {
   children: React.ReactNode;
@@ -21,6 +21,10 @@ interface INavbarProps {
 export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   const navigate = useNavigate();
   const theme = useTheme();
+
+  const { auth } = useAuth();
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -53,16 +57,35 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
               alignItems="center"
               justifyContent="space-between"
               flex={1}
+              gap={1}
             >
-              <IconButton>
-                <Icon>home</Icon>
-              </IconButton>
-              <MenuItem onClick={() => navigate("/login")}>
-                <Typography>Entrar</Typography>
-              </MenuItem>
-              <MenuItem onClick={() => navigate("/register")}>
-                <Typography>Cadastrar</Typography>
-              </MenuItem>
+              {auth ? (
+                <>
+                  <MenuItem onClick={() => navigate("/home")}>
+                    <Icon>home</Icon>
+                  </MenuItem>
+                  {user && (
+                    <MenuItem onClick={() => navigate(`/users/${user._id}`)}>
+                      <Icon>camera_alt</Icon>
+                    </MenuItem>
+                  )}
+                  <MenuItem onClick={() => navigate("/profile")}>
+                    <Icon>person</Icon>
+                  </MenuItem>
+                  <MenuItem>
+                    <Typography>Sair</Typography>
+                  </MenuItem>
+                </>
+              ) : (
+                <>
+                  <MenuItem onClick={() => navigate("/login")}>
+                    <Typography>Entrar</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/register")}>
+                    <Typography>Cadastrar</Typography>
+                  </MenuItem>
+                </>
+              )}
             </Box>
           </Box>
         </Toolbar>

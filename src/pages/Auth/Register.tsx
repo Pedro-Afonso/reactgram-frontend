@@ -82,7 +82,7 @@ export const Register = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   error={!!error?.match(/nome/g)}
-                  helperText={error}
+                  helperText={error?.match(/nome/g) && error}
                 >
                   Nome
                 </TextField>
@@ -96,7 +96,7 @@ export const Register = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   error={!!error?.match(/e-mail/g)}
-                  helperText={error}
+                  helperText={error?.match(/e-mail/g) && error}
                 >
                   Email
                 </TextField>
@@ -110,7 +110,7 @@ export const Register = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   error={!!error?.match(/\bsenha\b/g)}
-                  helperText={error}
+                  helperText={error?.match(/\bsenha\b/g) && error}
                 >
                   Senha
                 </TextField>
@@ -124,7 +124,7 @@ export const Register = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   error={!!error?.match(/\bsenhas\b/g)}
-                  helperText={error}
+                  helperText={error?.match(/\bsenhas\b/g) && error}
                 >
                   Confirme a senha
                 </TextField>

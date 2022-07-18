@@ -82,7 +82,7 @@ export const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   error={!!error?.match(/e-mail/g)}
-                  helperText={error}
+                  helperText={error?.match(/e-mail/g) && error}
                 >
                   Email
                 </TextField>
@@ -96,7 +96,7 @@ export const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   error={!!error?.match(/\bsenha\b/g)}
-                  helperText={error}
+                  helperText={error?.match(/\bsenha\b/g) && error}
                 >
                   Senha
                 </TextField>

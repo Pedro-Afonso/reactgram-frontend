@@ -11,10 +11,10 @@ export interface IUserState {
 }
 
 export interface IUser {
-  name: string;
+  name?: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
 }
 
 export interface IRegisterResponse {

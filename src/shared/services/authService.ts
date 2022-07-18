@@ -23,4 +23,20 @@ const logout = () => {
   localStorage.removeItem("user");
 };
 
-export const authService = { register, logout };
+// Sign in a user
+const login = async (data: Omit<IUser, "name" | "confirmPassword">) => {
+  const config = requestConfig("POST", data);
+
+  const res = await fecthRequest<IRegisterResponse>(
+    `${api}/users/login`,
+    config
+  );
+
+  if (res) {
+    localStorage.setItem("user", JSON.stringify(res));
+  }
+
+  return res;
+};
+
+export const authService = { register, logout, login };

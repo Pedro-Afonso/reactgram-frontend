@@ -1,11 +1,11 @@
 export const api = "http://localhost:5000/api";
 export const uploads = "http://localhost:5000/uploads";
 
-import { IUser } from "../interface";
+import { IUserAuth, IUserIdToken } from "../interface";
 
 interface IConfig {
   method?: string;
-  body?: string | IUser;
+  body?: string | IUserAuth | IUserIdToken | FormData | null;
   headers?: {
     "Content-Type"?: string;
     Authorization?: string;
@@ -14,7 +14,7 @@ interface IConfig {
 
 type IRequestConfigProps = (
   method: string,
-  data?: IUser,
+  data?: IUserAuth | IUserIdToken | FormData | null,
   token?: string | null,
   image?: string | null
 ) => RequestInit;

@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { IUser, IUserAuth, IUserState } from "../interface";
+import { IUserAuth, IUserIdToken, IUserState } from "../interface";
 import { authService } from "../services/authService";
 
 const localUser = localStorage.getItem("user");
-const user: IUserAuth = localUser ? JSON.parse(localUser) : null;
+const user: IUserIdToken = localUser ? JSON.parse(localUser) : null;
 
 const initialState: IUserState = {
   user: user ? user : null,
@@ -19,7 +19,7 @@ interface MyKnownError {
 // Register a user and sign in
 export const register = createAsyncThunk(
   "auth/register",
-  async (data: IUser, thunkAPI) => {
+  async (data: IUserAuth, thunkAPI) => {
     const res = await authService.register(data);
 
     // Check for errors
@@ -39,7 +39,7 @@ export const logout = createAsyncThunk("auth/logout", () => {
 // Sign in a user
 export const login = createAsyncThunk(
   "auth/login",
-  async (user: Omit<IUser, "name" | "confirmPassword">, thunkAPI) => {
+  async (user: Omit<IUserAuth, "name" | "confirmPassword">, thunkAPI) => {
     const res = await authService.login(user);
 
     // Check for errors
@@ -62,55 +62,53 @@ export const authSlice = createSlice({
       state.user = null;
     },
   },
-  extraReducers(builder) {
-    builder.addCase(register.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(
-      register.fulfilled.type,
-      (state, action: PayloadAction<IUserAuth>) => {
+  extraReducers: (builder) => {
+    builder
+      .addCase(register.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        register.fulfilled.type,
+        (state, action: PayloadAction<IUserIdToken>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.user = action.payload;
+        }
+      )
+      .addCase(
+        register.rejected.type,
+        (state, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.error = action.payload ? action.payload : null;
+          state.user = null;
+        }
+      )
+      .addCase(logout.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.user = action.payload;
-      }
-    );
-    builder.addCase(
-      register.rejected.type,
-      (state, action: PayloadAction<string>) => {
-        state.loading = false;
-        state.error = action.payload ? action.payload : null;
         state.user = null;
-      }
-    );
-    builder.addCase(logout.fulfilled, (state) => {
-      state.loading = false;
-      state.success = true;
-      state.error = null;
-      state.user = null;
-    });
-    builder.addCase(login.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(
-      login.fulfilled.type,
-      (state, action: PayloadAction<IUserAuth>) => {
-        state.loading = false;
-        state.success = true;
+      })
+      .addCase(login.pending, (state) => {
+        state.loading = true;
         state.error = null;
-        state.user = action.payload;
-      }
-    );
-    builder.addCase(
-      login.rejected.type,
-      (state, action: PayloadAction<string>) => {
+      })
+      .addCase(
+        login.fulfilled.type,
+        (state, action: PayloadAction<IUserIdToken>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.user = action.payload;
+        }
+      )
+      .addCase(login.rejected.type, (state, action: PayloadAction<string>) => {
         state.loading = false;
         state.error = action.payload ? action.payload : null;
         state.user = null;
-      }
-    );
+      });
   },
 });
 

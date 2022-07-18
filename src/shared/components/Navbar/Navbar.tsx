@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector, useAuth } from "../../hooks";
+import { IUserIdToken } from "../../interface";
 import { logout, reset } from "../../slices/authSlice";
 
 interface INavbarProps {
@@ -24,7 +25,9 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   const theme = useTheme();
 
   const { auth } = useAuth();
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth) as {
+    user: IUserIdToken;
+  };
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {

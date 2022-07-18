@@ -11,7 +11,7 @@ import { LoadingButton } from "@mui/lab";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { IUser } from "../../shared/interface";
+import { IUserAuth } from "../../shared/interface";
 
 // Redux
 import { register, reset } from "../../shared/slices/authSlice";
@@ -30,7 +30,7 @@ export const Register = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const user: IUser = {
+    const user: IUserAuth = {
       name,
       email,
       password,

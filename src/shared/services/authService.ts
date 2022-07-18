@@ -1,9 +1,9 @@
 import { api, requestConfig, fecthRequest } from "../utils";
 
-import { IUser, IRegisterResponse } from "../interface";
+import { IUserAuth, IRegisterResponse } from "../interface";
 
 // Register a user
-const register = async (user: IUser) => {
+const register = async (user: IUserAuth) => {
   const config = requestConfig("POST", user);
 
   const res = await fecthRequest<IRegisterResponse>(
@@ -24,7 +24,7 @@ const logout = () => {
 };
 
 // Sign in a user
-const login = async (data: Omit<IUser, "name" | "confirmPassword">) => {
+const login = async (data: Omit<IUserAuth, "name" | "confirmPassword">) => {
   const config = requestConfig("POST", data);
 
   const res = await fecthRequest<IRegisterResponse>(

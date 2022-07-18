@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 // interface
-import { IUser } from "../../shared/interface";
+import { IUserAuth } from "../../shared/interface";
 
 // redux
 import { login, reset } from "../../shared/slices/authSlice";
@@ -32,7 +32,7 @@ export const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const user: IUser = {
+    const user: IUserAuth = {
       email,
       password,
     };

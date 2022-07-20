@@ -1,6 +1,7 @@
 import { Box, CircularProgress } from "@mui/material";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { EditProfile, Home, Login, Register } from "../pages";
+import { Profile } from "../pages/Profile/Profile";
 import { useAuth } from "../shared/hooks";
 
 export const AppRoutes = () => {
@@ -37,6 +38,10 @@ export const AppRoutes = () => {
       <Route
         path="/profile"
         element={auth ? <EditProfile /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/users/:id"
+        element={auth ? <Profile /> : <Navigate to="/login" />}
       />
     </Routes>
   );

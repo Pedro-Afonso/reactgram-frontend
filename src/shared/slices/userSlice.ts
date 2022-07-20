@@ -4,7 +4,7 @@ import { userService } from "../services/userService";
 import { reset } from "./authSlice";
 
 const initialState: IUserState = {
-  user: null,
+  user: { name: "", email: "", profileImage: "" },
   error: null,
   success: false,
   loading: false,
@@ -29,6 +29,21 @@ export const updateProfile = createAsyncThunk(
       data,
       userIdToken.auth.user.token
     );
+
+    // Check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
+// Get user details
+export const getUserDetails = createAsyncThunk(
+  "user/get",
+  async (id: string, thunkAPI) => {
+    const res = await userService.getUserDetails(id);
 
     // Check for errors
     if (res.errors) {
@@ -78,6 +93,27 @@ export const userSlice = createSlice({
       )
       .addCase(
         updateProfile.rejected.type,
+        (state, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.error = action.payload ? action.payload : null;
+          state.user = null;
+        }
+      )
+      .addCase(getUserDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getUserDetails.fulfilled.type,
+        (state, action: PayloadAction<IProfile>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.user = action.payload;
+        }
+      )
+      .addCase(
+        getUserDetails.rejected.type,
         (state, action: PayloadAction<string>) => {
           state.loading = false;
           state.error = action.payload ? action.payload : null;

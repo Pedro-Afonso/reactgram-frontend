@@ -19,4 +19,13 @@ const updateProfile = async (data: FormData, token: string) => {
   return res;
 };
 
-export const userService = { profile, updateProfile };
+// Get user details
+const getUserDetails = async (id: string) => {
+  const config = requestConfig("GET");
+
+  const res = await fecthRequest<IUserResponse>(`${api}/users/${id}`, config);
+
+  return res;
+};
+
+export const userService = { profile, updateProfile, getUserDetails };

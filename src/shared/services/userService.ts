@@ -1,4 +1,4 @@
-import { IProfile, IUserIdToken } from "../interface";
+import { IProfile, IUserIdToken, IUserResponse } from "../interface";
 import { api, requestConfig, fecthRequest } from "../utils";
 
 // Get user details
@@ -10,4 +10,13 @@ const profile = async (data: FormData | null, token: string) => {
   return res;
 };
 
-export const userService = { profile };
+// Update user details
+const updateProfile = async (data: FormData, token: string) => {
+  const config = requestConfig("PUT", data, token, true);
+
+  const res = await fecthRequest<IUserResponse>(`${api}/users/`, config);
+
+  return res;
+};
+
+export const userService = { profile, updateProfile };

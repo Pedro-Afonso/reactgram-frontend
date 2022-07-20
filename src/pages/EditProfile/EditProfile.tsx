@@ -12,7 +12,7 @@ import { LoadingButton } from "@mui/lab";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { profile } from "../../shared/slices/userSlice";
+import { profile, updateProfile } from "../../shared/slices/userSlice";
 import { IProfile, IUserState } from "../../shared/interface";
 import { uploads } from "../../shared/utils";
 
@@ -21,17 +21,20 @@ export const EditProfile = () => {
   const [email, setEmail] = useState("");
   const [bio, setBio] = useState("");
   const [password, setPassword] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage, setProfileImage] = useState<File | string>("");
   const [previewImage, setPreviewImage] = useState("");
 
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.user) as { user: IProfile };
-
+  const { user, loading } = useAppSelector((state) => state.user) as {
+    user: IProfile;
+    loading: boolean;
+  };
+  // console.log(user);
   // Load user data
   useEffect(() => {
-    dispatch(profile(null));
+    dispatch(profile());
   }, [dispatch]);
 
   useEffect(() => {
@@ -44,20 +47,35 @@ export const EditProfile = () => {
   }, [user]);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const image =
-        e.target.value && e.target.value.trim() !== ""
-          ? e.target.files[0]
-          : undefined;
-      const url = URL.createObjectURL(e.target.files[0]);
-      setPreviewImage(url);
-      console.log(image);
-      console.log(url);
-    }
+    const file = e.target.files && e.target.files[0];
+    const url = file && URL.createObjectURL(file);
+    setPreviewImage(url || "");
+    setProfileImage(file || "");
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Gather user data from states
+    const userData = {
+      name,
+      profileImage,
+      bio: bio ? bio : "undefined",
+      password: password ? password : undefined,
+    };
+
+    // Build form data
+    const formData = new FormData();
+
+    Object.entries(userData).forEach(([key, value]) => {
+      if (value) formData.append(key, value);
+    });
+
+    /*     for (const pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
+    } */
+
+    await dispatch(updateProfile(formData));
   };
 
   return (
@@ -135,7 +153,6 @@ export const EditProfile = () => {
                   variant="standard"
                   label="Imagem do perfil:"
                   type="file"
-                  value={password}
                   onChange={handleFile}
                   //error={!!error?.match(/\bsenha\b/g)}
                   //helperText={error?.match(/\bsenha\b/g) && error}
@@ -169,7 +186,7 @@ export const EditProfile = () => {
               </Grid>
               <Grid>
                 <LoadingButton
-                  //loading={loading}
+                  loading={loading}
                   type="submit"
                   fullWidth
                   variant="contained"
@@ -180,13 +197,6 @@ export const EditProfile = () => {
             </Grid>
           </Box>
         </form>
-        {/* <Divider />
-        <Typography textAlign="center" marginY={2}>
-          Já tem conta?{" "}
-          <Link component="button" onClick={() => navigate("/login")}>
-            Clique aqui
-          </Link>
-        </Typography> */}
       </Box>
     </Box>
   );

@@ -40,6 +40,26 @@ export const publishPhoto = createAsyncThunk(
   }
 );
 
+// Publish an user's photo
+export const getUserPhotos = createAsyncThunk(
+  "photo/userphotos",
+  async (id: string, thunkAPI) => {
+    const userIdToken: any = thunkAPI.getState();
+
+    const res = await photoService.getUserPhotos(
+      id,
+      userIdToken.auth.user.token
+    );
+
+    // Check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
 export const photoSlice = createSlice({
   name: "publish",
   initialState,
@@ -71,6 +91,19 @@ export const photoSlice = createSlice({
           state.loading = false;
           state.error = action.payload;
           state.photo = null;
+        }
+      )
+      .addCase(getUserPhotos.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getUserPhotos.fulfilled.type,
+        (state, action: PayloadAction<IPhoto[]>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.photos = action.payload;
         }
       );
   },

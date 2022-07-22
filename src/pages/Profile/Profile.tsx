@@ -11,13 +11,19 @@ import {
   Paper,
   TextField,
   Typography,
+  Button,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { IProfile, IUserIdToken } from "../../shared/interface";
-import { getUserPhotos, publishPhoto } from "../../shared/slices";
+import { IPhoto, IProfile, IUserIdToken } from "../../shared/interface";
+import {
+  deletePhoto,
+  getUserPhotos,
+  publishPhoto,
+  updatePhoto,
+} from "../../shared/slices";
 import { getUserDetails } from "../../shared/slices/userSlice";
 import { uploads } from "../../shared/utils";
 
@@ -46,13 +52,19 @@ export const Profile = () => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState<File | string>("");
 
+  const [editMode, setEditMode] = useState(false);
+  const [editImage, setEditImage] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editId, setEditId] = useState("");
+
   // Load user data
   useEffect(() => {
+    console.log("HASSSSSSSSSSSSSSSS");
     if (id) {
       dispatch(getUserDetails(id));
       dispatch(getUserPhotos(id));
     }
-  }, [id, dispatch]);
+  }, [id]);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -60,7 +72,28 @@ export const Profile = () => {
     setImage(file || "");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleEdit = (photo: IPhoto) => {
+    setEditImage(photo.image);
+    setEditId(photo._id);
+    setEditMode(true);
+  };
+
+  const handleUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(updatePhoto({ title: editTitle, _id: editId }));
+
+    setEditMode(false);
+  };
+
+  // Delete a photo
+  const handleDelete = async (photoId: string) => {
+    await dispatch(deletePhoto(photoId));
+    if (id) {
+      await dispatch(getUserPhotos(id));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const photoData = {
@@ -75,7 +108,7 @@ export const Profile = () => {
       formData.append(key, value);
     });
 
-    dispatch(publishPhoto(formData));
+    await dispatch(publishPhoto(formData));
     setTitle("");
   };
 
@@ -125,35 +158,97 @@ export const Profile = () => {
               Compartilhe algum momento seu:
             </Typography>
           </Box>
-          <form onSubmit={handleSubmit}>
-            <Box marginBottom={4}>
-              <Grid container display="flex" direction="column" gap={3}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    variant="standard"
-                    label="Título para a foto:"
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    //error={!!error?.match(/nome/g)}
-                    //helperText={error?.match(/nome/g) && error}
-                  />
-                </Grid>
+          {editMode ? (
+            <form onSubmit={handleUpdate}>
+              <Box marginBottom={4}>
+                <Grid container direction="column" gap={3}>
+                  <Grid item sm={12}>
+                    {editImage && (
+                      <img
+                        width="600px"
+                        src={`${uploads}/photos/${editImage}`}
+                        alt={editTitle}
+                      />
+                    )}
+                  </Grid>
+                  <Grid item sm={12}>
+                    <TextField
+                      variant="standard"
+                      fullWidth
+                      label="Insira um novo título para a foto:"
+                      type="text"
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      //value={editTitle}
+                      //error={!!error?.match(/nome/g)}
+                      //helperText={error?.match(/nome/g) && error}
+                    />
+                  </Grid>
 
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    variant="standard"
-                    label="Imagem:"
-                    type="file"
-                    onChange={handleFile}
-                    //error={!!error?.match(/\bsenha\b/g)}
-                    //helperText={error?.match(/\bsenha\b/g) && error}
-                  />
-                </Grid>
+                  {/* <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="standard"
+                      label="Imagem:"
+                      type="file"
+                      onChange={handleFile}
+                      //error={!!error?.match(/\bsenha\b/g)}
+                      //helperText={error?.match(/\bsenha\b/g) && error}
+                    />
+                  </Grid> */}
 
-                {/* <Grid item xs={12}>
+                  <Divider />
+                  <Grid item sm={12}>
+                    <LoadingButton
+                      fullWidth
+                      loading={loading}
+                      type="submit"
+                      variant="contained"
+                    >
+                      Atualizar
+                    </LoadingButton>
+                  </Grid>
+                  <Grid item sm={12}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => setEditMode(false)}
+                    >
+                      Cancelar
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+            </form>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <Box marginBottom={4}>
+                <Grid container display="flex" direction="column" gap={3}>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="standard"
+                      label="Título para a foto:"
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      //error={!!error?.match(/nome/g)}
+                      //helperText={error?.match(/nome/g) && error}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      variant="standard"
+                      label="Imagem:"
+                      type="file"
+                      onChange={handleFile}
+                      //error={!!error?.match(/\bsenha\b/g)}
+                      //helperText={error?.match(/\bsenha\b/g) && error}
+                    />
+                  </Grid>
+
+                  {/* <Grid item xs={12}>
                   <TextField
                     fullWidth
                     variant="standard"
@@ -166,20 +261,21 @@ export const Profile = () => {
                     //helperText={error?.match(/\bsenhas\b/g) && error}
                   />
                 </Grid> */}
-                <Divider />
-                <Grid>
-                  <LoadingButton
-                    loading={loading}
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                  >
-                    Postar
-                  </LoadingButton>
+                  <Divider />
+                  <Grid>
+                    <LoadingButton
+                      loading={loading}
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Postar
+                    </LoadingButton>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
-          </form>
+              </Box>
+            </form>
+          )}
         </Box>
         <Box>
           <Typography variant="h2" fontSize={16}>
@@ -193,7 +289,6 @@ export const Profile = () => {
                     {photo.image && (
                       <img
                         src={`${uploads}/photos/${photo.image}`}
-                        srcSet={`${uploads}/photos/${photo.image}`}
                         alt={photo.title}
                       />
                     )}
@@ -204,10 +299,10 @@ export const Profile = () => {
                             <IconButton>
                               <Icon>visibility</Icon>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => handleEdit(photo)}>
                               <Icon>mode_edit</Icon>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => handleDelete(photo._id)}>
                               <Icon>delete</Icon>
                             </IconButton>
                           </>

@@ -1,7 +1,13 @@
-import { IPhotoResponse } from "../interface";
+import {
+  IDeleteResponse,
+  IErrors,
+  IPhoto,
+  IPhotoResponse,
+  IPhotoUpdateResponse,
+} from "../interface";
 import { api, fecthRequest, requestConfig } from "../utils";
 
-// Publish an user's photo
+// Publish a photo
 const publishPhoto = async (data: FormData, token: string) => {
   const config = requestConfig("POST", data, token, true);
 
@@ -10,7 +16,7 @@ const publishPhoto = async (data: FormData, token: string) => {
   return res;
 };
 
-// Publish an user's photo
+// Get all user photos
 const getUserPhotos = async (id: string, token: string) => {
   const config = requestConfig("GET", null, token);
 
@@ -19,7 +25,27 @@ const getUserPhotos = async (id: string, token: string) => {
   return res;
 };
 
+// Delete a photo
+const deletePhoto = async (id: string, token: string) => {
+  const config = requestConfig("DELETE", null, token);
+
+  const res = fecthRequest<IDeleteResponse>(`${api}/photos/${id}`, config);
+
+  return res;
+};
+
+// Update a user photos
+const updatePhoto = async (title: string, id: string, token: string) => {
+  const config = requestConfig("PUT", { title }, token);
+
+  const res = fecthRequest<IPhotoUpdateResponse>(`${api}/photos/${id}`, config);
+
+  return res;
+};
+
 export const photoService = {
   publishPhoto,
   getUserPhotos,
+  deletePhoto,
+  updatePhoto,
 };

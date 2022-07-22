@@ -1,15 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IPhoto } from "../interface";
+import {
+  IDeleteResponse,
+  IPhoto,
+  IPhotoState,
+  IPhotoUpdateResponse,
+} from "../interface";
 import { photoService } from "../services";
-
-interface IPhotoState {
-  photos: IPhoto[];
-  photo: IPhoto | null;
-  error: string | null;
-  success: boolean;
-  loading: boolean;
-  message?: string | null;
-}
 
 const initialState: IPhotoState = {
   photos: [],
@@ -48,6 +44,42 @@ export const getUserPhotos = createAsyncThunk(
 
     const res = await photoService.getUserPhotos(
       id,
+      userIdToken.auth.user.token
+    );
+
+    // Check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
+export const deletePhoto = createAsyncThunk(
+  "photo/delete",
+  async (id: string, thunkAPI) => {
+    const userIdToken: any = thunkAPI.getState();
+
+    const res = await photoService.deletePhoto(id, userIdToken.auth.user.token);
+
+    // Check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
+export const updatePhoto = createAsyncThunk(
+  "photo/update",
+  async (photo: { title: string; _id: string }, thunkAPI) => {
+    const userIdToken: any = thunkAPI.getState();
+
+    const res = await photoService.updatePhoto(
+      photo.title,
+      photo._id,
       userIdToken.auth.user.token
     );
 
@@ -104,6 +136,57 @@ export const photoSlice = createSlice({
           state.success = true;
           state.error = null;
           state.photos = action.payload;
+        }
+      )
+      .addCase(deletePhoto.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        deletePhoto.fulfilled.type,
+        (state, action: PayloadAction<IDeleteResponse>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.photos = state.photos.filter((photo) => {
+            return photo._id !== action.payload._id;
+          });
+          state.message = action.payload.message;
+        }
+      )
+      .addCase(
+        deletePhoto.rejected.type,
+        (state, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.error = action.payload;
+          state.photo = null;
+        }
+      )
+      .addCase(updatePhoto.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        updatePhoto.fulfilled.type,
+        (state, action: PayloadAction<IPhotoUpdateResponse>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.photos.map((photo) => {
+            if (photo._id === action.payload._id) {
+              return (photo.title = action.payload.title);
+            }
+            return photo;
+          });
+          state.message = action.payload.message;
+        }
+      )
+      .addCase(
+        updatePhoto.rejected.type,
+        (state, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.error = action.payload;
+          state.photo = null;
         }
       );
   },

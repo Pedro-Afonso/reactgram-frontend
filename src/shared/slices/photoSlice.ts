@@ -4,6 +4,7 @@ import {
   IPhoto,
   IPhotoState,
   IPhotoMessageErrors,
+  ILike,
 } from "../interface";
 import { photoService } from "../services";
 
@@ -96,6 +97,22 @@ export const getPhoto = createAsyncThunk(
   "photo/getphoto",
   async (id: string, thunkAPI) => {
     const res = await photoService.getPhoto(id);
+
+    // Check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
+export const likePhoto = createAsyncThunk(
+  "photo/likephoto",
+  async (id: string, thunkAPI) => {
+    const userIdToken: any = thunkAPI.getState();
+
+    const res = await photoService.likePhoto(id, userIdToken.auth.user.token);
 
     // Check for errors
     if (res.errors) {
@@ -214,6 +231,30 @@ export const photoSlice = createSlice({
           state.success = true;
           state.error = null;
           state.photo = action.payload;
+        }
+      )
+      .addCase(likePhoto.rejected, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        likePhoto.fulfilled.type,
+        (state, action: PayloadAction<ILike>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          if (state.photo?.likes) {
+            state.photo.likes.push(action.payload.userId);
+          }
+
+          state.photos.map((photo) => {
+            if (photo._id === action.payload.photoId) {
+              return photo.likes.push(action.payload.userId);
+            }
+            return photo;
+          });
+
+          state.message = action.payload.message;
         }
       );
   },

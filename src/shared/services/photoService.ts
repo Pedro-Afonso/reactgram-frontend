@@ -4,6 +4,7 @@ import {
   IPhoto,
   IPhotoResponse,
   IPhotoMessageErrors,
+  ILikeErrors,
 } from "../interface";
 import { api, fecthRequest, requestConfig } from "../utils";
 
@@ -52,10 +53,20 @@ const getPhoto = async (id: string) => {
   return res;
 };
 
+// Like a photo
+const likePhoto = async (id: string, token: string) => {
+  const config = requestConfig("PUT", null, token);
+
+  const res = fecthRequest<ILikeErrors>(`${api}/photos/like/${id}`, config);
+
+  return res;
+};
+
 export const photoService = {
   publishPhoto,
   getUserPhotos,
   deletePhoto,
   updatePhoto,
   getPhoto,
+  likePhoto,
 };

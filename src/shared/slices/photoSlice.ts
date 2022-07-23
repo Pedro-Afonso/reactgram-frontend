@@ -3,7 +3,7 @@ import {
   IDeleteResponse,
   IPhoto,
   IPhotoState,
-  IPhotoUpdateResponse,
+  IPhotoMessageErrors,
 } from "../interface";
 import { photoService } from "../services";
 
@@ -92,6 +92,20 @@ export const updatePhoto = createAsyncThunk(
   }
 );
 
+export const getPhoto = createAsyncThunk(
+  "photo/getphoto",
+  async (id: string, thunkAPI) => {
+    const res = await photoService.getPhoto(id);
+
+    // Check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
 export const photoSlice = createSlice({
   name: "publish",
   initialState,
@@ -168,7 +182,7 @@ export const photoSlice = createSlice({
       })
       .addCase(
         updatePhoto.fulfilled.type,
-        (state, action: PayloadAction<IPhotoUpdateResponse>) => {
+        (state, action: PayloadAction<IPhotoMessageErrors>) => {
           state.loading = false;
           state.success = true;
           state.error = null;
@@ -187,6 +201,19 @@ export const photoSlice = createSlice({
           state.loading = false;
           state.error = action.payload;
           state.photo = null;
+        }
+      )
+      .addCase(getPhoto.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getPhoto.fulfilled.type,
+        (state, action: PayloadAction<IPhoto>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.photo = action.payload;
         }
       );
   },

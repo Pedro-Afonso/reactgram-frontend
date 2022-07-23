@@ -3,7 +3,7 @@ import {
   IErrors,
   IPhoto,
   IPhotoResponse,
-  IPhotoUpdateResponse,
+  IPhotoMessageErrors,
 } from "../interface";
 import { api, fecthRequest, requestConfig } from "../utils";
 
@@ -38,7 +38,16 @@ const deletePhoto = async (id: string, token: string) => {
 const updatePhoto = async (title: string, id: string, token: string) => {
   const config = requestConfig("PUT", { title }, token);
 
-  const res = fecthRequest<IPhotoUpdateResponse>(`${api}/photos/${id}`, config);
+  const res = fecthRequest<IPhotoMessageErrors>(`${api}/photos/${id}`, config);
+
+  return res;
+};
+
+// Get user photo by id
+const getPhoto = async (id: string) => {
+  const config = requestConfig("GET");
+
+  const res = fecthRequest<IPhotoMessageErrors>(`${api}/photos/${id}`, config);
 
   return res;
 };
@@ -48,4 +57,5 @@ export const photoService = {
   getUserPhotos,
   deletePhoto,
   updatePhoto,
+  getPhoto,
 };

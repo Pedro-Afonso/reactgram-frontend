@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
 import { IPhoto, IProfile, IUserIdToken } from "../../shared/interface";
 import {
@@ -44,6 +44,8 @@ export const Profile = () => {
     message: messagePhoto,
     error: errorPhoto,
   } = useAppSelector((state) => state.photo);
+
+  const navigate = useNavigate();
 
   // New form and edit form refs
   const newPhotoForm = useRef();
@@ -297,7 +299,11 @@ export const Profile = () => {
                         actionIcon={
                           <>
                             <IconButton>
-                              <Icon>visibility</Icon>
+                              <Icon
+                                onClick={() => navigate(`/photos/${photo._id}`)}
+                              >
+                                visibility
+                              </Icon>
                             </IconButton>
                             <IconButton onClick={() => handleEdit(photo)}>
                               <Icon>mode_edit</Icon>

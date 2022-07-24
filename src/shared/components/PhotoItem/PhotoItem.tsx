@@ -6,15 +6,19 @@ import { uploads } from "../../utils";
 
 interface IPhotoItemProps {
   photo: IPhoto;
+  linkControl?: boolean;
 }
 
-export const PhotoItem: React.FC<IPhotoItemProps> = ({ photo }) => {
+export const PhotoItem: React.FC<IPhotoItemProps> = ({
+  photo,
+  linkControl = false,
+}) => {
   const navigate = useNavigate();
 
   return (
     <Box
       component={Paper}
-      width="80%"
+      width="100%"
       padding={2}
       marginX="auto"
       variant="outlined"
@@ -24,6 +28,10 @@ export const PhotoItem: React.FC<IPhotoItemProps> = ({ photo }) => {
           width="100%"
           src={`${uploads}/photos/${photo.image}`}
           alt={photo.title}
+          style={{ cursor: linkControl ? "pointer" : "auto" }}
+          onClick={() => {
+            linkControl && navigate(`/photos/${photo._id}`);
+          }}
         />
       )}
       <Typography variant="h2" fontSize={18} fontWeight={400} marginTop={1}>

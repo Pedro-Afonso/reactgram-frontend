@@ -147,6 +147,17 @@ export const commentPhoto = createAsyncThunk(
   }
 );
 
+export const getAllPhotos = createAsyncThunk(
+  "photo/getallphotos",
+  async (_, thunkAPI) => {
+    const userIdToken: any = thunkAPI.getState();
+
+    const res = await photoService.getAllPhotos(userIdToken.auth.user.token);
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
 export const photoSlice = createSlice({
   name: "publish",
   initialState,
@@ -302,6 +313,19 @@ export const photoSlice = createSlice({
           state.loading = false;
           state.error = action.payload;
           state.photo = null;
+        }
+      )
+      .addCase(getAllPhotos.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getAllPhotos.fulfilled.type,
+        (state, action: PayloadAction<IPhoto[]>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.photos = action.payload;
         }
       );
   },

@@ -6,6 +6,7 @@ import {
   IPhotoMessageErrors,
   ILikeErrors,
   ICommentsMessageErrors,
+  IPhotoState,
 } from "../interface";
 import { api, fecthRequest, requestConfig } from "../utils";
 
@@ -79,6 +80,15 @@ const commentPhoto = async (
   return res;
 };
 
+// Get all photos
+const getAllPhotos = async (token: string) => {
+  const config = requestConfig("GET", null, token);
+
+  const res = fecthRequest<IPhoto[]>(`${api}/photos`, config);
+
+  return res;
+};
+
 export const photoService = {
   publishPhoto,
   getUserPhotos,
@@ -87,4 +97,5 @@ export const photoService = {
   getPhoto,
   likePhoto,
   commentPhoto,
+  getAllPhotos,
 };

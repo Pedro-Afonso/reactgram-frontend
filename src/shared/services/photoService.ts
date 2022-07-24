@@ -5,6 +5,7 @@ import {
   IPhotoResponse,
   IPhotoMessageErrors,
   ILikeErrors,
+  ICommentsMessageErrors,
 } from "../interface";
 import { api, fecthRequest, requestConfig } from "../utils";
 
@@ -62,6 +63,22 @@ const likePhoto = async (id: string, token: string) => {
   return res;
 };
 
+// Add comment to a photo
+const commentPhoto = async (
+  id: string,
+  data: { comment: string },
+  token: string
+) => {
+  const config = requestConfig("PUT", data, token);
+
+  const res = fecthRequest<ICommentsMessageErrors>(
+    `${api}/photos/comment/${id}`,
+    config
+  );
+
+  return res;
+};
+
 export const photoService = {
   publishPhoto,
   getUserPhotos,
@@ -69,4 +86,5 @@ export const photoService = {
   updatePhoto,
   getPhoto,
   likePhoto,
+  commentPhoto,
 };

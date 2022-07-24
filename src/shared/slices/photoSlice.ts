@@ -5,6 +5,10 @@ import {
   IPhotoState,
   IPhotoMessageErrors,
   ILike,
+  ICommentsMessageErrors,
+  IComments,
+  IMessage,
+  ICommentMessageErrors,
 } from "../interface";
 import { photoService } from "../services";
 
@@ -113,6 +117,26 @@ export const likePhoto = createAsyncThunk(
     const userIdToken: any = thunkAPI.getState();
 
     const res = await photoService.likePhoto(id, userIdToken.auth.user.token);
+
+    // Check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
+export const commentPhoto = createAsyncThunk(
+  "photo/commentphoto",
+  async (commentData: { comment: string; id: string }, thunkAPI) => {
+    const userIdToken: any = thunkAPI.getState();
+
+    const res = await photoService.commentPhoto(
+      commentData.id,
+      { comment: commentData.comment },
+      userIdToken.auth.user.token
+    );
 
     // Check for errors
     if (res.errors) {
@@ -255,6 +279,29 @@ export const photoSlice = createSlice({
           });
 
           state.message = action.payload.message;
+        }
+      )
+      .addCase(commentPhoto.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        commentPhoto.fulfilled.type,
+        (state, action: PayloadAction<ICommentMessageErrors>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.photo &&
+            state.photo.comments.push({ ...action.payload.comment, _id: "" });
+          state.message = action.payload.message;
+        }
+      )
+      .addCase(
+        commentPhoto.rejected.type,
+        (state, action: PayloadAction<string>) => {
+          state.loading = false;
+          state.error = action.payload;
+          state.photo = null;
         }
       );
   },

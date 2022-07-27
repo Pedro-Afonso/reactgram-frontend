@@ -1,23 +1,27 @@
-import { LoadingButton } from "@mui/lab";
-import { Avatar, Paper, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { LikeButton } from "../../shared/components";
-import { PhotoItem } from "../../shared/components/PhotoItem/PhotoItem";
+import { useEffect, useState } from "react";
+
+import { Avatar, Paper, TextField, Typography } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Box } from "@mui/system";
+
+import {
+  commentPhoto,
+  getPhoto,
+  likePhoto,
+} from "../../shared/slices/photoSlice";
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
+import { LikeButton, PhotoItem } from "../../shared/components";
 import { IUserIdToken } from "../../shared/interface";
-import { commentPhoto, getPhoto, likePhoto } from "../../shared/slices";
 import { uploads } from "../../shared/utils";
+import { CommentItem } from "../../shared/components/CommentItem/CommentItem";
 
 export const Photo = () => {
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
 
-  const { user } = useAppSelector((state) => state.auth) as {
-    user: IUserIdToken;
-  };
+  const { user } = useAppSelector((state) => state.auth);
   const { photo, loading, error, message } = useAppSelector(
     (state) => state.photo
   );
@@ -31,10 +35,8 @@ export const Photo = () => {
   // Load photo data
   useEffect(() => {
     if (id) {
-      console.log(id);
       dispatch(getPhoto(id));
     }
-    console.log(photo);
   }, [id]);
 
   const handleComment = (e: React.FormEvent<HTMLFormElement>) => {
@@ -91,17 +93,7 @@ export const Photo = () => {
           </form>
           <Box>
             {photo.comments.map((comment, key) => (
-              <Box width="100%" padding={2} key={key}>
-                <Typography>{comment.comment}</Typography>
-                <Box>
-                  <Typography>{comment.userName}</Typography>
-                  <Avatar
-                    sx={{ width: 32, height: 32 }}
-                    src={`${uploads}/users/${comment.userImage}`}
-                    alt={comment.userName}
-                  />
-                </Box>
-              </Box>
+              <CommentItem comment={comment} key={key} />
             ))}
           </Box>
         </>

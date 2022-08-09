@@ -3,6 +3,14 @@ export interface IUserIdToken {
   token: string;
 }
 
+export interface IUserAuthState {
+  user?: IUserIdToken | null;
+  error?: string | null;
+  success: boolean;
+  loading: boolean;
+  message?: string | null;
+}
+
 export interface IUserState {
   user: IProfile | IUserIdToken | null;
   error: string | null;
@@ -20,6 +28,10 @@ export interface IUserAuth {
 
 export interface IRegisterResponse {
   user: IUserIdToken;
+  errors: string[];
+}
+export interface IUserResponse {
+  user: IProfile;
   errors: string[];
 }
 

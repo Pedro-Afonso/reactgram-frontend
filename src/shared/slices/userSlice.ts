@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProfile, IUserIdToken, IUserState } from "../interface";
 import { userService } from "../services/userService";
-import { reset } from "./authSlice";
 
 const initialState: IUserState = {
   user: { name: "", email: "", profileImage: "" },
@@ -124,4 +123,4 @@ export const userSlice = createSlice({
 });
 
 export const { resetMessage } = userSlice.actions;
-export default userSlice.reducer;
+export const { reducer: userReducer } = userSlice;

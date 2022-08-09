@@ -1,19 +1,12 @@
-import {
-  Box,
-  Typography,
-  Grid,
-  Paper,
-  TextField,
-  Divider,
-  Link,
-  Avatar,
-} from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../shared/hooks";
+import { useEffect, useState } from "react";
+
+import { Box, Typography, Grid, Paper, TextField, Avatar } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+
 import { profile, updateProfile } from "../../shared/slices/userSlice";
-import { IProfile, IUserState } from "../../shared/interface";
+import { useAppDispatch, useAppSelector } from "../../shared/hooks";
+import { IProfile } from "../../shared/interface";
 import { uploads } from "../../shared/utils";
 
 export const EditProfile = () => {

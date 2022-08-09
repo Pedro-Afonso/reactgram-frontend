@@ -1,5 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { photoReducer, userReducer, authReducer } from "../shared/slices";
+import { photoReducer } from "../shared/slices/photoSlice";
+import { userReducer } from "../shared/slices/userSlice";
+import { authReducer } from "../shared/slices/authSlice";
 
 export const store = configureStore({
   reducer: {

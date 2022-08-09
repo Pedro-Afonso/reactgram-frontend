@@ -1,22 +1,16 @@
-import { Box, Paper } from "@mui/material";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { LikeButton, PhotoItem } from "../../shared/components";
+
+import { Box } from "@mui/material";
+
+import { getAllPhotos, likePhoto } from "../../shared/slices/photoSlice";
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { IUserIdToken } from "../../shared/interface";
-import { getAllPhotos, likePhoto } from "../../shared/slices";
-import { api } from "../../shared/utils";
+import { LikeButton, PhotoItem } from "../../shared/components";
 
 export const Home = () => {
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
-
   const { photos, loading } = useAppSelector((state) => state.photo);
-
-  const { user: authUser } = useAppSelector((state) => state.auth) as {
-    user: IUserIdToken;
-  };
+  const { user: authUser } = useAppSelector((state) => state.auth);
 
   // Load photos
   useEffect(() => {

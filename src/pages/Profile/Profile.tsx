@@ -23,7 +23,7 @@ import {
   getUserPhotos,
   publishPhoto,
   updatePhoto,
-} from "../../shared/slices";
+} from "../../shared/slices/photoSlice";
 import { getUserDetails } from "../../shared/slices/userSlice";
 import { uploads } from "../../shared/utils";
 
@@ -298,12 +298,10 @@ export const Profile = () => {
                       <ImageListItemBar
                         actionIcon={
                           <>
-                            <IconButton>
-                              <Icon
-                                onClick={() => navigate(`/photos/${photo._id}`)}
-                              >
-                                visibility
-                              </Icon>
+                            <IconButton
+                              onClick={() => navigate(`/photos/${photo._id}`)}
+                            >
+                              <Icon>visibility</Icon>
                             </IconButton>
                             <IconButton onClick={() => handleEdit(photo)}>
                               <Icon>mode_edit</Icon>

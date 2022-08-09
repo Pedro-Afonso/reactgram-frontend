@@ -1,4 +1,4 @@
-import { IProfile, IUserIdToken, IUserResponse } from "../interface";
+import { IProfile, IUserResponse } from "../interface";
 import { api, requestConfig, fecthRequest } from "../utils";
 
 // Get user details

@@ -1,20 +1,21 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { IUserAuth, IUserIdToken, IUserState } from "../interface";
+import { IUserAuth, IUserIdToken, IUserAuthState } from "../interface";
 import { authService } from "../services/authService";
 
 const localUser = localStorage.getItem("user");
 const user: IUserIdToken = localUser ? JSON.parse(localUser) : null;
 
-const initialState: IUserState = {
+/* const user: IUserIdToken = {
+  _id: "1231424",
+  token: "1231424ds",
+}; */
+
+const initialState: IUserAuthState = {
   user: user ? user : null,
   error: null,
   success: false,
   loading: false,
 };
-
-interface MyKnownError {
-  message: string;
-}
 
 // Register a user and sign in
 export const register = createAsyncThunk(
@@ -55,7 +56,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    reset: (state: IUserState) => {
+    reset: (state: IUserAuthState) => {
       state.loading = false;
       state.error = null;
       state.success = false;

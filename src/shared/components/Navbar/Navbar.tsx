@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 import {
   AppBar,
   Box,
-  Button,
   Icon,
-  IconButton,
   InputAdornment,
   TextField,
   Toolbar,
@@ -11,9 +12,8 @@ import {
   useTheme,
   MenuItem,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+
 import { useAppDispatch, useAppSelector, useAuth } from "../../hooks";
-import { IUserIdToken } from "../../interface";
 import { logout, reset } from "../../slices/authSlice";
 
 interface INavbarProps {
@@ -25,10 +25,18 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   const theme = useTheme();
 
   const { auth } = useAuth();
-  const { user } = useAppSelector((state) => state.auth) as {
-    user: IUserIdToken;
-  };
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+
+  const [query, setQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (query) {
+      return navigate(`/search?q=${query}`);
+    }
+  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -52,16 +60,19 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
               <Typography variant="h6">ReactGram</Typography>
             </Box>
             <Box flex={2}>
-              <TextField
-                placeholder="Pesquisar..."
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Icon>search</Icon>
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              <form onSubmit={handleSearch}>
+                <TextField
+                  placeholder="Pesquisar..."
+                  onChange={(e) => setQuery(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Icon>search</Icon>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </form>
             </Box>
             <Box
               display="flex"

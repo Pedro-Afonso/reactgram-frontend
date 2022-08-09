@@ -1,12 +1,10 @@
 import {
   IDeleteResponse,
-  IErrors,
   IPhoto,
   IPhotoResponse,
   IPhotoMessageErrors,
   ILikeErrors,
   ICommentsMessageErrors,
-  IPhotoState,
 } from "../interface";
 import { api, fecthRequest, requestConfig } from "../utils";
 
@@ -89,6 +87,15 @@ const getAllPhotos = async (token: string) => {
   return res;
 };
 
+// Search photo by title
+const searchPhotos = async (query: string, token: string) => {
+  const config = requestConfig("GET", null, token);
+
+  const res = fecthRequest<IPhoto[]>(`${api}/photos/search?q=${query}`, config);
+
+  return res;
+};
+
 export const photoService = {
   publishPhoto,
   getUserPhotos,
@@ -98,4 +105,5 @@ export const photoService = {
   likePhoto,
   commentPhoto,
   getAllPhotos,
+  searchPhotos,
 };

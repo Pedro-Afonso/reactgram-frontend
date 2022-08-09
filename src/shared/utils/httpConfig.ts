@@ -5,7 +5,14 @@ import { IUserAuth, IUserIdToken } from "../interface";
 
 interface IConfig {
   method?: string;
-  body?: string | IUserAuth | IUserIdToken | FormData | null;
+  body?:
+    | string
+    | IUserAuth
+    | IUserIdToken
+    | FormData
+    | null
+    | { title: string }
+    | { comment: string };
   headers?: {
     "Content-Type"?: string;
     Authorization?: string;
@@ -14,9 +21,15 @@ interface IConfig {
 
 type IRequestConfigProps = (
   method: string,
-  data?: IUserAuth | IUserIdToken | FormData | null,
+  data?:
+    | IUserAuth
+    | IUserIdToken
+    | FormData
+    | null
+    | { title: string }
+    | { comment: string },
   token?: string | null,
-  image?: string | null
+  image?: boolean | null
 ) => RequestInit;
 
 export const requestConfig: IRequestConfigProps = (

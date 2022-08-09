@@ -5,9 +5,6 @@ import {
   IPhotoState,
   IPhotoMessageErrors,
   ILike,
-  ICommentsMessageErrors,
-  IComments,
-  IMessage,
   ICommentMessageErrors,
 } from "../interface";
 import { photoService } from "../services";
@@ -153,6 +150,20 @@ export const getAllPhotos = createAsyncThunk(
     const userIdToken: any = thunkAPI.getState();
 
     const res = await photoService.getAllPhotos(userIdToken.auth.user.token);
+
+    return thunkAPI.fulfillWithValue(res);
+  }
+);
+
+export const searchPhotos = createAsyncThunk(
+  "photo/searchphotos",
+  async (query: string, thunkAPI) => {
+    const userIdToken: any = thunkAPI.getState();
+
+    const res = await photoService.searchPhotos(
+      query,
+      userIdToken.auth.user.token
+    );
 
     return thunkAPI.fulfillWithValue(res);
   }
@@ -321,6 +332,19 @@ export const photoSlice = createSlice({
       })
       .addCase(
         getAllPhotos.fulfilled.type,
+        (state, action: PayloadAction<IPhoto[]>) => {
+          state.loading = false;
+          state.success = true;
+          state.error = null;
+          state.photos = action.payload;
+        }
+      )
+      .addCase(searchPhotos.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        searchPhotos.fulfilled.type,
         (state, action: PayloadAction<IPhoto[]>) => {
           state.loading = false;
           state.success = true;

@@ -15,6 +15,7 @@ import { LikeButton, PhotoItem } from "../../shared/components";
 import { IUserIdToken } from "../../shared/interface";
 import { uploads } from "../../shared/utils";
 import { CommentItem } from "../../shared/components/CommentItem/CommentItem";
+import { CommentForm } from "../../shared/components/CommentForm/CommentForm";
 
 export const Photo = () => {
   const { id } = useParams();
@@ -25,8 +26,6 @@ export const Photo = () => {
   const { photo, loading, error, message } = useAppSelector(
     (state) => state.photo
   );
-
-  const [textComment, setTextComment] = useState("");
 
   const handleLike = (photoId: string) => {
     dispatch(likePhoto(photoId));
@@ -39,7 +38,10 @@ export const Photo = () => {
     }
   }, [id]);
 
-  const handleComment = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleComment = (
+    e: React.FormEvent<HTMLFormElement>,
+    textComment: string
+  ) => {
     e.preventDefault();
 
     if (!id) {
@@ -52,8 +54,6 @@ export const Photo = () => {
     };
 
     dispatch(commentPhoto(commentData));
-
-    setTextComment("");
   };
 
   if (loading) {
@@ -72,25 +72,7 @@ export const Photo = () => {
         <>
           <PhotoItem photo={photo} />
           <LikeButton photo={photo} user={user} handleLike={handleLike} />
-          <form onSubmit={handleComment}>
-            <Box width="100%" padding={2}>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Deixe o seu comentário:"
-                  type="text"
-                  value={textComment}
-                  onChange={(e) => setTextComment(e.target.value)}
-                />
-              </Box>
-              <Box marginTop={4}>
-                <LoadingButton type="submit" fullWidth variant="contained">
-                  Enviar
-                </LoadingButton>
-              </Box>
-            </Box>
-          </form>
+          <CommentForm handleComment={handleComment} />
           <Box>
             {photo.comments.map((comment, key) => (
               <CommentItem comment={comment} key={key} />

@@ -3,7 +3,7 @@ import { IPhoto, IUserIdToken } from "../../interface";
 
 interface ILikeProps {
   photo: IPhoto;
-  user: IUserIdToken;
+  user?: IUserIdToken | null;
   handleLike: (photoId: string) => void;
 }
 

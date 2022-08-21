@@ -72,8 +72,8 @@ export const Register = () => {
 
         <form onSubmit={handleSubmit}>
           <Box marginBottom={4}>
-            <Grid container display="flex" direction="column" gap={3}>
-              <Grid item xs={12}>
+            <Box display="flex" flexDirection="column" gap={3}>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -86,8 +86,8 @@ export const Register = () => {
                 >
                   Nome
                 </TextField>
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -100,8 +100,8 @@ export const Register = () => {
                 >
                   Email
                 </TextField>
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -114,8 +114,8 @@ export const Register = () => {
                 >
                   Senha
                 </TextField>
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -128,8 +128,8 @@ export const Register = () => {
                 >
                   Confirme a senha
                 </TextField>
-              </Grid>
-              <Grid>
+              </Box>
+              <Box>
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -138,8 +138,8 @@ export const Register = () => {
                 >
                   Cadastrar
                 </LoadingButton>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </Box>
         </form>
         <Divider />

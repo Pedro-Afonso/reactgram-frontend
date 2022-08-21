@@ -31,13 +31,8 @@ export const Profile = () => {
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
-  const { user, loading } = useAppSelector((state) => state.user) as {
-    user: IProfile;
-    loading: boolean;
-  };
-  const { user: userAuth } = useAppSelector((state) => state.auth) as {
-    user: IUserIdToken;
-  };
+  const { user, loading } = useAppSelector((state) => state.user);
+  const { user: userAuth } = useAppSelector((state) => state.auth);
   const {
     photos,
     loading: loadingPhoto,
@@ -46,10 +41,6 @@ export const Profile = () => {
   } = useAppSelector((state) => state.photo);
 
   const navigate = useNavigate();
-
-  // New form and edit form refs
-  const newPhotoForm = useRef();
-  const editPhotoForm = useRef();
 
   const [title, setTitle] = useState("");
   const [image, setImage] = useState<File | string>("");
@@ -61,7 +52,6 @@ export const Profile = () => {
 
   // Load user data
   useEffect(() => {
-    console.log("HASSSSSSSSSSSSSSSS");
     if (id) {
       dispatch(getUserDetails(id));
       dispatch(getUserPhotos(id));
@@ -70,7 +60,6 @@ export const Profile = () => {
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
-    const url = file && URL.createObjectURL(file);
     setImage(file || "");
   };
 
@@ -163,8 +152,8 @@ export const Profile = () => {
           {editMode ? (
             <form onSubmit={handleUpdate}>
               <Box marginBottom={4}>
-                <Grid container direction="column" gap={3}>
-                  <Grid item sm={12}>
+                <Box flexDirection="column" gap={3}>
+                  <Box>
                     {editImage && (
                       <img
                         width="600px"
@@ -172,34 +161,18 @@ export const Profile = () => {
                         alt={editTitle}
                       />
                     )}
-                  </Grid>
-                  <Grid item sm={12}>
+                  </Box>
+                  <Box>
                     <TextField
                       variant="standard"
                       fullWidth
                       label="Insira um novo título para a foto:"
                       type="text"
                       onChange={(e) => setEditTitle(e.target.value)}
-                      //value={editTitle}
-                      //error={!!error?.match(/nome/g)}
-                      //helperText={error?.match(/nome/g) && error}
                     />
-                  </Grid>
-
-                  {/* <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      variant="standard"
-                      label="Imagem:"
-                      type="file"
-                      onChange={handleFile}
-                      //error={!!error?.match(/\bsenha\b/g)}
-                      //helperText={error?.match(/\bsenha\b/g) && error}
-                    />
-                  </Grid> */}
-
+                  </Box>
                   <Divider />
-                  <Grid item sm={12}>
+                  <Box>
                     <LoadingButton
                       fullWidth
                       loading={loading}
@@ -208,8 +181,8 @@ export const Profile = () => {
                     >
                       Atualizar
                     </LoadingButton>
-                  </Grid>
-                  <Grid item sm={12}>
+                  </Box>
+                  <Box>
                     <Button
                       fullWidth
                       variant="contained"
@@ -217,8 +190,8 @@ export const Profile = () => {
                     >
                       Cancelar
                     </Button>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
               </Box>
             </form>
           ) : (
@@ -294,7 +267,7 @@ export const Profile = () => {
                         alt={photo.title}
                       />
                     )}
-                    {id === userAuth._id ? (
+                    {id === userAuth!._id ? (
                       <ImageListItemBar
                         actionIcon={
                           <>

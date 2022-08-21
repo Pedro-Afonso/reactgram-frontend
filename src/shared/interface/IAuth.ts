@@ -11,8 +11,8 @@ export interface IUserAuthState {
   message?: string | null;
 }
 
-export interface IUserState {
-  user: IProfile | IUserIdToken | null;
+export interface IUserProfileState {
+  user: IProfile | null;
   error: string | null;
   success: boolean;
   loading: boolean;

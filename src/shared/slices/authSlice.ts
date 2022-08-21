@@ -5,11 +5,6 @@ import { authService } from "../services/authService";
 const localUser = localStorage.getItem("user");
 const user: IUserIdToken = localUser ? JSON.parse(localUser) : null;
 
-/* const user: IUserIdToken = {
-  _id: "1231424",
-  token: "1231424ds",
-}; */
-
 const initialState: IUserAuthState = {
   user: user ? user : null,
   error: null,

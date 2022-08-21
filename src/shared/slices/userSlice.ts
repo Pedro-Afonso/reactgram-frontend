@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IProfile, IUserIdToken, IUserState } from "../interface";
+import { IProfile, IUserIdToken, IUserProfileState } from "../interface";
 import { userService } from "../services/userService";
 
-const initialState: IUserState = {
+const initialState: IUserProfileState = {
   user: { name: "", email: "", profileImage: "" },
   error: null,
   success: false,
@@ -57,7 +57,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    resetMessage: (state: IUserState) => {
+    resetMessage: (state: IUserProfileState) => {
       state.message = null;
     },
   },

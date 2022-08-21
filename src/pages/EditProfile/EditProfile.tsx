@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { Box, Typography, Grid, Paper, TextField, Avatar } from "@mui/material";
+import { Box, Typography, Paper, TextField, Avatar } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 
 import { profile, updateProfile } from "../../shared/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { IProfile } from "../../shared/interface";
 import { uploads } from "../../shared/utils";
 
 export const EditProfile = () => {
@@ -20,11 +19,7 @@ export const EditProfile = () => {
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
-  const { user, loading } = useAppSelector((state) => state.user) as {
-    user: IProfile;
-    loading: boolean;
-  };
-  // console.log(user);
+  const { user, loading, error } = useAppSelector((state) => state.user);
   // Load user data
   useEffect(() => {
     dispatch(profile());
@@ -63,10 +58,6 @@ export const EditProfile = () => {
     Object.entries(userData).forEach(([key, value]) => {
       if (value) formData.append(key, value);
     });
-
-    /*     for (const pair of formData.entries()) {
-      console.log(`${pair[0]}, ${pair[1]}`);
-    } */
 
     await dispatch(updateProfile(formData));
   };
@@ -115,8 +106,8 @@ export const EditProfile = () => {
         </Box>
         <form onSubmit={handleSubmit}>
           <Box marginBottom={4}>
-            <Grid container display="flex" direction="column" gap={3}>
-              <Grid item xs={12}>
+            <Box display="flex" flexDirection="column" gap={3}>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -124,11 +115,11 @@ export const EditProfile = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  //error={!!error?.match(/nome/g)}
-                  //helperText={error?.match(/nome/g) && error}
+                  error={!!error?.match(/nome/g)}
+                  helperText={error?.match(/nome/g) && error}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -136,22 +127,22 @@ export const EditProfile = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  //error={!!error?.match(/e-mail/g)}
-                  //helperText={error?.match(/e-mail/g) && error}
+                  error={!!error?.match(/e-mail/g)}
+                  helperText={error?.match(/e-mail/g) && error}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
                   label="Imagem do perfil:"
                   type="file"
                   onChange={handleFile}
-                  //error={!!error?.match(/\bsenha\b/g)}
-                  //helperText={error?.match(/\bsenha\b/g) && error}
+                  error={!!error?.match(/\imagem\b/g)}
+                  helperText={error?.match(/\imagem\b/g) && error}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -160,34 +151,32 @@ export const EditProfile = () => {
                   type="text"
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  //error={!!error?.match(/\bsenhas\b/g)}
-                  //helperText={error?.match(/\bsenhas\b/g) && error}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
                   label="Deseja alterar sua senha?"
                   placeholder="Digite sua nova senha"
-                  type="text"
+                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  //error={!!error?.match(/\bsenhas\b/g)}
-                  //helperText={error?.match(/\bsenhas\b/g) && error}
+                  error={!!error?.match(/\bsenha\b/g)}
+                  helperText={error?.match(/\bsenha\b/g) && error}
                 />
-              </Grid>
-              <Grid>
+              </Box>
+              <Box>
                 <LoadingButton
                   loading={loading}
                   type="submit"
                   fullWidth
                   variant="contained"
                 >
-                  Cadastrar
+                  Salvar
                 </LoadingButton>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </Box>
         </form>
       </Box>

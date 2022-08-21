@@ -61,7 +61,6 @@ export const Profile = () => {
 
   // Load user data
   useEffect(() => {
-    console.log("HASSSSSSSSSSSSSSSS");
     if (id) {
       dispatch(getUserDetails(id));
       dispatch(getUserPhotos(id));
@@ -134,11 +133,7 @@ export const Profile = () => {
           <Box display="flex" paddingY={2}>
             <Avatar
               sx={{ width: 128, height: 128 }}
-              src={
-                user.profileImage
-                  ? `${uploads}/users/${user.profileImage}`
-                  : undefined
-              }
+              src={user.profileImage ? `${user.profileImage}` : undefined}
             />
             <Box
               display="flex"
@@ -289,10 +284,7 @@ export const Profile = () => {
                 photos.map((photo) => (
                   <ImageListItem key={photo._id}>
                     {photo.image && (
-                      <img
-                        src={`${uploads}/photos/${photo.image}`}
-                        alt={photo.title}
-                      />
+                      <img src={`${photo.image}`} alt={photo.title} />
                     )}
                     {id === userAuth._id ? (
                       <ImageListItemBar

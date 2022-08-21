@@ -26,7 +26,7 @@ export const PhotoItem: React.FC<IPhotoItemProps> = ({
       {photo.image && (
         <img
           width="100%"
-          src={`${uploads}/photos/${photo.image}`}
+          src={`${photo.image}`}
           alt={photo.title}
           style={{ cursor: linkControl ? "pointer" : "auto" }}
           onClick={() => {

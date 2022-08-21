@@ -108,7 +108,7 @@ export const EditProfile = () => {
               previewImage
                 ? previewImage
                 : profileImage
-                ? `${uploads}/users/${profileImage}`
+                ? `${profileImage}`
                 : undefined
             }
           />

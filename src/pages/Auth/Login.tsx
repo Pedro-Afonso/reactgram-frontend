@@ -72,8 +72,8 @@ export const Login = () => {
 
         <form onSubmit={handleSubmit}>
           <Box marginBottom={4}>
-            <Grid container display="flex" direction="column" gap={3}>
-              <Grid item xs={12}>
+            <Box display="flex" flexDirection="column" gap={2}>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -86,8 +86,8 @@ export const Login = () => {
                 >
                   Email
                 </TextField>
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   variant="standard"
@@ -100,9 +100,9 @@ export const Login = () => {
                 >
                   Senha
                 </TextField>
-              </Grid>
+              </Box>
 
-              <Grid>
+              <Box>
                 <LoadingButton
                   loading={loading}
                   type="submit"
@@ -111,8 +111,8 @@ export const Login = () => {
                 >
                   Entrar
                 </LoadingButton>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </Box>
         </form>
         <Divider />

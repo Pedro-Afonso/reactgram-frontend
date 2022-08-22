@@ -1,5 +1,4 @@
 import {
-  IDeleteResponse,
   IPhoto,
   IPhotoResponse,
   IPhotoMessageErrors,
@@ -7,59 +6,101 @@ import {
   ICommentsMessageErrors,
 } from "../interface";
 import { api, fecthRequest, requestConfig } from "../utils";
+import { handleError } from "../utils/handleError";
 
 // Publish a photo
 const publishPhoto = async (data: FormData, token: string) => {
   const config = requestConfig("POST", data, token, true);
 
-  const res = fecthRequest<IPhotoResponse>(`${api}/photos`, config);
+  let res: IPhotoResponse = {};
 
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(`${api}/photos`, config);
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 // Get all user photos
 const getUserPhotos = async (id: string, token: string) => {
   const config = requestConfig("GET", null, token);
+  let res: IPhotoResponse = {};
 
-  const res = fecthRequest<IPhotoResponse>(`${api}/photos/user/${id}`, config);
-
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(
+      `${api}/photos/user/${id}`,
+      config
+    );
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 // Delete a photo
 const deletePhoto = async (id: string, token: string) => {
   const config = requestConfig("DELETE", null, token);
 
-  const res = fecthRequest<IDeleteResponse>(`${api}/photos/${id}`, config);
+  let res: IPhotoResponse = {};
 
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(`${api}/photos/${id}`, config);
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 // Update a user photos
 const updatePhoto = async (title: string, id: string, token: string) => {
   const config = requestConfig("PUT", { title }, token);
 
-  const res = fecthRequest<IPhotoMessageErrors>(`${api}/photos/${id}`, config);
+  let res: IPhotoResponse = {};
 
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(`${api}/photos/${id}`, config);
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 // Get user photo by id
 const getPhoto = async (id: string) => {
   const config = requestConfig("GET");
 
-  const res = fecthRequest<IPhotoMessageErrors>(`${api}/photos/${id}`, config);
+  let res: IPhotoResponse = {};
 
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(`${api}/photos/${id}`, config);
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 // Like a photo
 const likePhoto = async (id: string, token: string) => {
   const config = requestConfig("PUT", null, token);
 
-  const res = fecthRequest<ILikeErrors>(`${api}/photos/like/${id}`, config);
+  let res: IPhotoResponse = {};
 
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(
+      `${api}/photos/like/${id}`,
+      config
+    );
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 // Add comment to a photo
@@ -70,30 +111,51 @@ const commentPhoto = async (
 ) => {
   const config = requestConfig("PUT", data, token);
 
-  const res = fecthRequest<ICommentsMessageErrors>(
-    `${api}/photos/comment/${id}`,
-    config
-  );
+  let res: IPhotoResponse = {};
 
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(
+      `${api}/photos/comment/${id}`,
+      config
+    );
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 // Get all photos
 const getAllPhotos = async (token: string) => {
   const config = requestConfig("GET", null, token);
 
-  const res = fecthRequest<IPhoto[]>(`${api}/photos`, config);
+  let res: IPhotoResponse = {};
 
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(`${api}/photos`, config);
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 // Search photo by title
 const searchPhotos = async (query: string, token: string) => {
   const config = requestConfig("GET", null, token);
 
-  const res = fecthRequest<IPhoto[]>(`${api}/photos/search?q=${query}`, config);
+  let res: IPhotoResponse = {};
 
-  return res;
+  try {
+    res = await fecthRequest<IPhotoResponse>(
+      `${api}/photos/search?q=${query}`,
+      config
+    );
+  } catch (error) {
+    res.errors = [handleError(error)];
+  } finally {
+    return res;
+  }
 };
 
 export const photoService = {

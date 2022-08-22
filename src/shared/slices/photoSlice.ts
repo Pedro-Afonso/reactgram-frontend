@@ -1,11 +1,13 @@
+import { IComment } from "./../interface/IPhoto";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  IDeleteResponse,
   IPhoto,
   IPhotoState,
   IPhotoMessageErrors,
   ILike,
   ICommentMessageErrors,
+  IPhotoResponse,
+  IMessage,
 } from "../interface";
 import { photoService } from "../services";
 
@@ -221,7 +223,7 @@ export const photoSlice = createSlice({
       })
       .addCase(
         deletePhoto.fulfilled.type,
-        (state, action: PayloadAction<IDeleteResponse>) => {
+        (state, action: PayloadAction<IPhotoResponse>) => {
           state.loading = false;
           state.success = true;
           state.error = null;
@@ -245,13 +247,13 @@ export const photoSlice = createSlice({
       })
       .addCase(
         updatePhoto.fulfilled.type,
-        (state, action: PayloadAction<IPhotoMessageErrors>) => {
+        (state, action: PayloadAction<{ photo: IPhoto; message: string }>) => {
           state.loading = false;
           state.success = true;
           state.error = null;
           state.photos.map((photo) => {
-            if (photo._id === action.payload._id) {
-              return (photo.title = action.payload.title);
+            if (photo._id === action.payload.photo._id) {
+              return (photo.title = action.payload.photo.title);
             }
             return photo;
           });
@@ -309,7 +311,12 @@ export const photoSlice = createSlice({
       })
       .addCase(
         commentPhoto.fulfilled.type,
-        (state, action: PayloadAction<ICommentMessageErrors>) => {
+        (
+          state,
+          action: PayloadAction<
+            IComment & { message: string; errors: string[] }
+          >
+        ) => {
           state.loading = false;
           state.success = true;
           state.error = null;

@@ -27,12 +27,12 @@ export interface IUserAuth {
 }
 
 export interface IRegisterResponse {
-  user: IUserIdToken;
-  errors: string[];
+  user?: IUserIdToken;
+  errors?: string[];
 }
 export interface IUserResponse {
-  user: IProfile;
-  errors: string[];
+  user?: IProfile;
+  errors?: string[];
 }
 
 export interface IProfile {

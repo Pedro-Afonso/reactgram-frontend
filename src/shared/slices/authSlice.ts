@@ -40,6 +40,7 @@ export const login = createAsyncThunk(
 
     // Check for errors
     if (res.errors) {
+      console.log(res);
       return thunkAPI.rejectWithValue(res.errors[0]);
     }
 

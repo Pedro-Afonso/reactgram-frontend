@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IProfile, IUserIdToken, IUserProfileState } from "../interface";
+import { IProfile, IUserProfileState } from "../interface/IUser";
 import { userService } from "../services/userService";
 
 const initialState: IUserProfileState = {
@@ -16,7 +16,12 @@ export const profile = createAsyncThunk("user/profile", async (_, thunkAPI) => {
 
   const res = await userService.profile(null, userIdToken.auth.user.token);
 
-  return res;
+  // Check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+
+  return thunkAPI.fulfillWithValue(res);
 });
 
 export const updateProfile = createAsyncThunk(

@@ -36,25 +36,6 @@ export interface IMessage {
   message: string;
 }
 
-export interface IPhotoResponse extends IPhoto, IErrors {}
-
-export interface IMessageAndId {
-  _id: string;
-  message: string;
-}
-
-export interface IDeleteResponse extends IMessageAndId, IErrors {}
-
-export interface IPhotoMessageErrors extends IPhoto, IMessage, IErrors {}
-
-export interface ILike {
-  photoId: string;
-  userId: string;
-  message: string;
-}
-
-export interface ILikeErrors extends ILike, IErrors {}
-
 export interface IComment {
   comment: {
     comment: string;
@@ -63,6 +44,24 @@ export interface IComment {
     userId: string;
   };
 }
+
+export interface ILike {
+  photoId: string;
+  userId: string;
+  message: string;
+}
+
+export interface IPhotoResponse extends Partial<ILike & IComment> {
+  photo?: IPhoto;
+  photos?: IPhoto[];
+  errors?: string[];
+  _id?: string;
+  message?: string;
+}
+
+export interface IPhotoMessageErrors extends IPhoto, IMessage, IErrors {}
+
+export interface ILikeErrors extends ILike, IErrors {}
 
 export interface ICommentsMessageErrors extends IComments, IMessage, IErrors {}
 export interface ICommentMessageErrors extends IComment, IMessage, IErrors {}

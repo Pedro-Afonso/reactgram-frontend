@@ -1,9 +1,9 @@
-import { Box, Typography, Avatar, Paper } from "@mui/material";
-import { IComments } from "../../interface/IPhoto";
-import { uploads } from "../../utils";
+import { Box, Typography, Avatar, Paper } from '@mui/material'
+import { IComments } from '../../interface/IPhoto'
+import { uploads } from '../../utils'
 
 interface ICommentItemProps {
-  comment: IComments;
+  comment: IComments
 }
 
 export const CommentItem: React.FC<ICommentItemProps> = ({ comment }) => {
@@ -20,11 +20,11 @@ export const CommentItem: React.FC<ICommentItemProps> = ({ comment }) => {
             {comment.userName}
           </Typography>
           <Typography display="inline" fontSize={16}>
-            {" "}
+            {' '}
             {comment.comment}
           </Typography>
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}

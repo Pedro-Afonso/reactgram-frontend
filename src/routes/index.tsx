@@ -1,5 +1,5 @@
-import { Box, CircularProgress } from "@mui/material";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Box, CircularProgress } from '@mui/material'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import {
   EditProfile,
   Home,
@@ -7,12 +7,12 @@ import {
   Photo,
   Register,
   Profile,
-  Search,
-} from "../pages";
-import { useAuth } from "../shared/hooks";
+  Search
+} from '../pages'
+import { useAuth } from '../shared/hooks'
 
 export const AppRoutes = () => {
-  const { auth, loading } = useAuth();
+  const { auth, loading } = useAuth()
 
   if (loading) {
     return (
@@ -25,7 +25,7 @@ export const AppRoutes = () => {
       >
         <CircularProgress />;
       </Box>
-    );
+    )
   }
 
   return (
@@ -60,5 +60,5 @@ export const AppRoutes = () => {
       />
       <Route path="*" element={auth ? <Home /> : <Navigate to="/login" />} />
     </Routes>
-  );
-};
+  )
+}

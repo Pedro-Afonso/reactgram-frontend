@@ -1,2 +1,2 @@
-export * from "./httpConfig";
-export * from "./fetchRequest";
+export * from './httpConfig'
+export * from './fetchRequest'

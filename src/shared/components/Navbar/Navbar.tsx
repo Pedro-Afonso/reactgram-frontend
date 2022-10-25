@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 import {
   AppBar,
@@ -10,40 +10,40 @@ import {
   Toolbar,
   Typography,
   useTheme,
-  MenuItem,
-} from "@mui/material";
+  MenuItem
+} from '@mui/material'
 
-import { useAppDispatch, useAppSelector, useAuth } from "../../hooks";
-import { logout, reset } from "../../slices/authSlice";
+import { useAppDispatch, useAppSelector, useAuth } from '../../hooks'
+import { logout, reset } from '../../slices/authSlice'
 
 interface INavbarProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const Navbar: React.FC<INavbarProps> = ({ children }) => {
-  const navigate = useNavigate();
-  const theme = useTheme();
+  const navigate = useNavigate()
+  const theme = useTheme()
 
-  const { auth } = useAuth();
-  const { user } = useAppSelector((state) => state.auth);
-  const dispatch = useAppDispatch();
+  const { auth } = useAuth()
+  const { user } = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('')
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (query) {
-      return navigate(`/search?q=${query}`);
+      return navigate(`/search?q=${query}`)
     }
-  };
+  }
 
   const handleLogout = () => {
-    dispatch(logout());
-    dispatch(reset());
+    dispatch(logout())
+    dispatch(reset())
 
-    navigate("/login");
-  };
+    navigate('/login')
+  }
 
   return (
     <>
@@ -63,13 +63,13 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
               <form onSubmit={handleSearch}>
                 <TextField
                   placeholder="Pesquisar..."
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={e => setQuery(e.target.value)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
                         <Icon>search</Icon>
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
               </form>
@@ -83,7 +83,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
             >
               {auth ? (
                 <>
-                  <MenuItem onClick={() => navigate("/home")}>
+                  <MenuItem onClick={() => navigate('/home')}>
                     <Icon>home</Icon>
                   </MenuItem>
                   {user && (
@@ -91,7 +91,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
                       <Icon>camera_alt</Icon>
                     </MenuItem>
                   )}
-                  <MenuItem onClick={() => navigate("/profile")}>
+                  <MenuItem onClick={() => navigate('/profile')}>
                     <Icon>person</Icon>
                   </MenuItem>
                   <MenuItem onClick={handleLogout}>
@@ -100,10 +100,10 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
                 </>
               ) : (
                 <>
-                  <MenuItem onClick={() => navigate("/login")}>
+                  <MenuItem onClick={() => navigate('/login')}>
                     <Typography>Entrar</Typography>
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/register")}>
+                  <MenuItem onClick={() => navigate('/register')}>
                     <Typography>Cadastrar</Typography>
                   </MenuItem>
                 </>
@@ -116,5 +116,5 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
         {children}
       </Box>
     </>
-  );
-};
+  )
+}

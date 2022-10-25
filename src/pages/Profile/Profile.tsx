@@ -1,4 +1,4 @@
-import { LoadingButton } from "@mui/lab";
+import { LoadingButton } from '@mui/lab'
 import {
   Avatar,
   Divider,
@@ -11,97 +11,92 @@ import {
   Paper,
   TextField,
   Typography,
-  Button,
-} from "@mui/material";
-import { Box } from "@mui/system";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { IPhoto, IProfile, IUserIdToken } from "../../shared/interface";
+  Button
+} from '@mui/material'
+import { Box } from '@mui/system'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../shared/hooks'
+import { IPhoto } from '../../shared/interface'
 import {
   deletePhoto,
   getUserPhotos,
   publishPhoto,
-  updatePhoto,
-} from "../../shared/slices/photoSlice";
-import { getUserDetails } from "../../shared/slices/userSlice";
-import { uploads } from "../../shared/utils";
+  updatePhoto
+} from '../../shared/slices/photoSlice'
+import { getUserDetails } from '../../shared/slices/userSlice'
+import { uploads } from '../../shared/utils'
 
 export const Profile = () => {
-  const { id } = useParams();
+  const { id } = useParams()
 
-  const dispatch = useAppDispatch();
-  const { user, loading } = useAppSelector((state) => state.user);
-  const { user: userAuth } = useAppSelector((state) => state.auth);
-  const {
-    photos,
-    loading: loadingPhoto,
-    message: messagePhoto,
-    error: errorPhoto,
-  } = useAppSelector((state) => state.photo);
+  const dispatch = useAppDispatch()
+  const { user, loading } = useAppSelector(state => state.user)
+  const { user: userAuth } = useAppSelector(state => state.auth)
+  const { photos } = useAppSelector(state => state.photo)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const [title, setTitle] = useState("");
-  const [image, setImage] = useState<File | string>("");
+  const [title, setTitle] = useState('')
+  const [image, setImage] = useState<File | string>('')
 
-  const [editMode, setEditMode] = useState(false);
-  const [editImage, setEditImage] = useState("");
-  const [editTitle, setEditTitle] = useState("");
-  const [editId, setEditId] = useState("");
+  const [editMode, setEditMode] = useState(false)
+  const [editImage, setEditImage] = useState('')
+  const [editTitle, setEditTitle] = useState('')
+  const [editId, setEditId] = useState('')
 
   // Load user data
   useEffect(() => {
     if (id) {
-      dispatch(getUserDetails(id));
-      dispatch(getUserPhotos(id));
+      dispatch(getUserDetails(id))
+      dispatch(getUserPhotos(id))
     }
-  }, [id]);
+  }, [id, dispatch])
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    setImage(file || "");
-  };
+    const file = e.target.files && e.target.files[0]
+    setImage(file || '')
+  }
 
   const handleEdit = (photo: IPhoto) => {
-    setEditImage(photo.image);
-    setEditId(photo._id);
-    setEditMode(true);
-  };
+    setEditImage(photo.image)
+    setEditId(photo._id)
+    setEditMode(true)
+  }
 
   const handleUpdate = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(updatePhoto({ title: editTitle, _id: editId }));
+    e.preventDefault()
+    dispatch(updatePhoto({ title: editTitle, _id: editId }))
 
-    setEditMode(false);
-  };
+    setEditMode(false)
+  }
 
   // Delete a photo
   const handleDelete = async (photoId: string) => {
-    await dispatch(deletePhoto(photoId));
+    await dispatch(deletePhoto(photoId))
     if (id) {
-      await dispatch(getUserPhotos(id));
+      await dispatch(getUserPhotos(id))
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const photoData = {
       title,
-      image,
-    };
+      image
+    }
 
     // build form data
-    const formData = new FormData();
+    const formData = new FormData()
 
     Object.entries(photoData).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
+      formData.append(key, value)
+    })
 
-    await dispatch(publishPhoto(formData));
-    setTitle("");
-  };
+    await dispatch(publishPhoto(formData))
+    setTitle('')
+  }
 
   return (
     <Box
@@ -168,7 +163,7 @@ export const Profile = () => {
                       fullWidth
                       label="Insira um novo título para a foto:"
                       type="text"
-                      onChange={(e) => setEditTitle(e.target.value)}
+                      onChange={e => setEditTitle(e.target.value)}
                     />
                   </Box>
                   <Divider />
@@ -205,9 +200,7 @@ export const Profile = () => {
                       label="Título para a foto:"
                       type="text"
                       value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      //error={!!error?.match(/nome/g)}
-                      //helperText={error?.match(/nome/g) && error}
+                      onChange={e => setTitle(e.target.value)}
                     />
                   </Grid>
 
@@ -218,8 +211,6 @@ export const Profile = () => {
                       label="Imagem:"
                       type="file"
                       onChange={handleFile}
-                      //error={!!error?.match(/\bsenha\b/g)}
-                      //helperText={error?.match(/\bsenha\b/g) && error}
                     />
                   </Grid>
 
@@ -259,7 +250,7 @@ export const Profile = () => {
           <Box maxWidth={800}>
             <ImageList cols={3}>
               {photos &&
-                photos.map((photo) => (
+                photos.map(photo => (
                   <ImageListItem key={photo._id}>
                     {photo.image && (
                       <img
@@ -301,5 +292,5 @@ export const Profile = () => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}

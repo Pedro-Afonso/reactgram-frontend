@@ -1,34 +1,28 @@
-import { useEffect } from "react";
+import { useEffect } from 'react'
 
-import { Box } from "@mui/material";
+import { Box } from '@mui/material'
 
-import { getAllPhotos, likePhoto } from "../../shared/slices/photoSlice";
-import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { LikeButton, PhotoItem } from "../../shared/components";
+import { getAllPhotos, likePhoto } from '../../shared/slices/photoSlice'
+import { useAppDispatch, useAppSelector } from '../../shared/hooks'
+import { LikeButton, PhotoItem } from '../../shared/components'
 
 export const Home = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const { photos, loading } = useAppSelector((state) => state.photo);
-  const { user: authUser } = useAppSelector((state) => state.auth);
+  const { photos } = useAppSelector(state => state.photo)
+  const { user: authUser } = useAppSelector(state => state.auth)
 
   // Load photos
   useEffect(() => {
-    dispatch(getAllPhotos());
-  }, []);
+    dispatch(getAllPhotos())
+  }, [dispatch])
 
   const handleLike = (photoId: string) => {
-    dispatch(likePhoto(photoId));
-  };
+    dispatch(likePhoto(photoId))
+  }
 
   return (
-    <Box
-      maxWidth={700}
-      marginX="auto"
-      marginTop={10}
-      paddingY={2}
-      //component={Paper}
-    >
+    <Box maxWidth={700} marginX="auto" marginTop={10} paddingY={2}>
       {photos &&
         photos.map((photo, key) => (
           <Box key={key} marginBottom={2}>
@@ -42,5 +36,5 @@ export const Home = () => {
           </Box>
         ))}
     </Box>
-  );
-};
+  )
+}

@@ -1,40 +1,34 @@
-import { useEffect } from "react";
+import { useEffect } from 'react'
 
-import { Box } from "@mui/system";
+import { Box } from '@mui/system'
 
-import { likePhoto, searchPhotos } from "../../shared/slices/photoSlice";
-import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { LikeButton, PhotoItem } from "../../shared/components";
-import { useQuery } from "../../shared/hooks/useQuery";
+import { likePhoto, searchPhotos } from '../../shared/slices/photoSlice'
+import { useAppDispatch, useAppSelector } from '../../shared/hooks'
+import { LikeButton, PhotoItem } from '../../shared/components'
+import { useQuery } from '../../shared/hooks/useQuery'
 
 export const Search = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const { user: authUser } = useAppSelector((state) => state.auth);
+  const { user: authUser } = useAppSelector(state => state.auth)
 
-  const { photos } = useAppSelector((state) => state.photo);
+  const { photos } = useAppSelector(state => state.photo)
 
-  const query = useQuery();
-  const search = query.get("q");
+  const query = useQuery()
+  const search = query.get('q')
 
   useEffect(() => {
     if (search) {
-      dispatch(searchPhotos(search));
+      dispatch(searchPhotos(search))
     }
-  }, [search]);
+  }, [search, dispatch])
 
   const handleLike = (photoId: string) => {
-    dispatch(likePhoto(photoId));
-  };
+    dispatch(likePhoto(photoId))
+  }
 
   return (
-    <Box
-      maxWidth={700}
-      marginX="auto"
-      marginTop={10}
-      paddingY={2}
-      //component={Paper}
-    >
+    <Box maxWidth={700} marginX="auto" marginTop={10} paddingY={2}>
       {photos &&
         photos.map((photo, key) => (
           <Box key={key} marginBottom={2}>
@@ -48,5 +42,5 @@ export const Search = () => {
           </Box>
         ))}
     </Box>
-  );
-};
+  )
+}

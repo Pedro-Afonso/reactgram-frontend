@@ -1,2 +1,2 @@
-export * from "./IAuth";
-export * from "./IPhoto";
+export * from './IAuth'
+export * from './IPhoto'

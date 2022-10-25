@@ -1,63 +1,60 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
 
-import { Avatar, Paper, TextField, Typography } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { Box } from "@mui/system";
+import { Paper } from '@mui/material'
+
+import { Box } from '@mui/system'
 
 import {
   commentPhoto,
   getPhoto,
-  likePhoto,
-} from "../../shared/slices/photoSlice";
-import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { LikeButton, PhotoItem } from "../../shared/components";
-import { IUserIdToken } from "../../shared/interface";
-import { uploads } from "../../shared/utils";
-import { CommentItem } from "../../shared/components/CommentItem/CommentItem";
-import { CommentForm } from "../../shared/components/CommentForm/CommentForm";
+  likePhoto
+} from '../../shared/slices/photoSlice'
+import { useAppDispatch, useAppSelector } from '../../shared/hooks'
+import { LikeButton, PhotoItem } from '../../shared/components'
+
+import { CommentItem } from '../../shared/components/CommentItem/CommentItem'
+import { CommentForm } from '../../shared/components/CommentForm/CommentForm'
 
 export const Photo = () => {
-  const { id } = useParams();
+  const { id } = useParams()
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const { user } = useAppSelector((state) => state.auth);
-  const { photo, loading, error, message } = useAppSelector(
-    (state) => state.photo
-  );
+  const { user } = useAppSelector(state => state.auth)
+  const { photo, loading } = useAppSelector(state => state.photo)
 
   const handleLike = (photoId: string) => {
-    dispatch(likePhoto(photoId));
-  };
+    dispatch(likePhoto(photoId))
+  }
 
   // Load photo data
   useEffect(() => {
     if (id) {
-      dispatch(getPhoto(id));
+      dispatch(getPhoto(id))
     }
-  }, [id]);
+  }, [id, dispatch])
 
   const handleComment = (
     e: React.FormEvent<HTMLFormElement>,
     textComment: string
   ) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (!id) {
-      return;
+      return
     }
 
     const commentData = {
       comment: textComment,
-      id: id,
-    };
+      id
+    }
 
-    dispatch(commentPhoto(commentData));
-  };
+    dispatch(commentPhoto(commentData))
+  }
 
   if (loading) {
-    return <p>Carregando...</p>;
+    return <p>Carregando...</p>
   }
 
   return (
@@ -81,5 +78,5 @@ export const Photo = () => {
         </>
       )}
     </Box>
-  );
-};
+  )
+}

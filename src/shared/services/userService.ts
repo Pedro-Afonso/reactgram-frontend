@@ -1,50 +1,47 @@
-import { handleError } from "./../utils/handleError";
-import { IUserResponse } from "../interface/IUser";
-import { api, requestConfig, fecthRequest } from "../utils";
+import { handleError } from './../utils/handleError'
+import { IUserResponse } from '../interface/IUser'
+import { api, requestConfig, fecthRequest } from '../utils'
 
 // Get user details
 const profile = async (data: FormData | null, token: string) => {
-  const config = requestConfig("GET", data, token);
+  const config = requestConfig('GET', data, token)
 
-  let res: IUserResponse = {};
+  let res: IUserResponse = {}
 
   try {
-    res = await fecthRequest<IUserResponse>(`${api}/users/profile`, config);
+    res = await fecthRequest<IUserResponse>(`${api}/users/profile`, config)
   } catch (error) {
-    res.errors = [handleError(error)];
-  } finally {
-    return res;
+    res.errors = [handleError(error)]
   }
-};
+  return res
+}
 
 // Update user details
 const updateProfile = async (data: FormData, token: string) => {
-  const config = requestConfig("PUT", data, token, true);
+  const config = requestConfig('PUT', data, token, true)
 
-  let res: IUserResponse = {};
+  let res: IUserResponse = {}
 
   try {
-    res = await fecthRequest<IUserResponse>(`${api}/users/`, config);
+    res = await fecthRequest<IUserResponse>(`${api}/users/`, config)
   } catch (error) {
-    res.errors = [handleError(error)];
-  } finally {
-    return res;
+    res.errors = [handleError(error)]
   }
-};
+  return res
+}
 
 // Get user details
 const getUserDetails = async (id: string) => {
-  const config = requestConfig("GET");
+  const config = requestConfig('GET')
 
-  let res: IUserResponse = {};
+  let res: IUserResponse = {}
 
   try {
-    res = await fecthRequest<IUserResponse>(`${api}/users/${id}`, config);
+    res = await fecthRequest<IUserResponse>(`${api}/users/${id}`, config)
   } catch (error) {
-    res.errors = [handleError(error)];
-  } finally {
-    return res;
+    res.errors = [handleError(error)]
   }
-};
+  return res
+}
 
-export const userService = { profile, updateProfile, getUserDetails };
+export const userService = { profile, updateProfile, getUserDetails }

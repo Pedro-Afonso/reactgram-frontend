@@ -1,65 +1,65 @@
 export interface IComments {
-  comment: string;
-  userName: string;
-  userImage: string;
-  userId: string;
-  _id: string;
+  comment: string
+  userName: string
+  userImage: string
+  userId: string
+  _id: string
 }
 
 export interface IPhoto {
-  image: string;
-  title: string;
-  likes: string[];
-  userId: string;
-  userName: string;
-  _id: string;
-  comments: IComments[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  image: string
+  title: string
+  likes: string[]
+  userId: string
+  userName: string
+  _id: string
+  comments: IComments[]
+  createdAt: string
+  updatedAt: string
+  __v: number
 }
 
 export interface IPhotoState {
-  photos: IPhoto[];
-  photo: IPhoto | null;
-  error: string | null;
-  success: boolean;
-  loading: boolean;
-  message?: string | null;
+  photos: IPhoto[]
+  photo: IPhoto | null
+  error: string | null
+  success: boolean
+  loading: boolean
+  message?: string | null
 }
 
 export interface IErrors {
-  errors: string[];
+  errors: string[]
 }
 
 export interface IMessage {
-  message: string;
+  message: string
 }
 
 export interface IComment {
   comment: {
-    comment: string;
-    userName: string;
-    userImage: string;
-    userId: string;
-  };
+    comment: string
+    userName: string
+    userImage: string
+    userId: string
+  }
 }
 
 export interface ILike {
-  photoId: string;
-  userId: string;
-  message: string;
+  photoId: string
+  userId: string
+  message: string
 }
 
 export interface IPhotoResponse extends Partial<ILike & IComment> {
-  photo?: IPhoto;
-  photos?: IPhoto[];
-  errors?: string[];
-  _id?: string;
-  message?: string;
+  photo?: IPhoto
+  photos?: IPhoto[]
+  errors?: string[]
+  _id?: string
+  message?: string
 }
 
-export interface IPhotoMessageErrors extends IPhoto, IMessage, IErrors {}
+//  export interface IPhotoMessageErrors extends IPhoto, IMessage, IErrors {}
 
 export interface ILikeErrors extends ILike, IErrors {}
 

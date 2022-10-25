@@ -1,49 +1,40 @@
-import {
-  Box,
-  Grid,
-  Link,
-  Paper,
-  TextField,
-  Typography,
-  Divider,
-} from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { IUserAuth } from "../../shared/interface";
+import { Box, Link, Paper, TextField, Typography, Divider } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../shared/hooks'
+import { IUserAuth } from '../../shared/interface'
 
 // Redux
-import { register, reset } from "../../shared/slices/authSlice";
+import { register, reset } from '../../shared/slices/authSlice'
 
 export const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
-  const { error, loading } = useAppSelector((state) => state.auth);
+  const { error, loading } = useAppSelector(state => state.auth)
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     const user: IUserAuth = {
       name,
       email,
       password,
-      confirmPassword,
-    };
-    console.log(user);
-    dispatch(register(user));
-  };
+      confirmPassword
+    }
+    dispatch(register(user))
+  }
 
   // Clean all auth states
   useEffect(() => {
-    dispatch(reset());
-  }, [dispatch]);
+    dispatch(reset())
+  }, [dispatch])
 
   return (
     <Box
@@ -80,7 +71,7 @@ export const Register = () => {
                   label="Nome"
                   type="text"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={e => setName(e.target.value)}
                   error={!!error?.match(/nome/g)}
                   helperText={error?.match(/nome/g) && error}
                 >
@@ -94,7 +85,7 @@ export const Register = () => {
                   label="Email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   error={!!error?.match(/e-mail/g)}
                   helperText={error?.match(/e-mail/g) && error}
                 >
@@ -108,7 +99,7 @@ export const Register = () => {
                   label="Senha"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   error={!!error?.match(/\bsenha\b/g)}
                   helperText={error?.match(/\bsenha\b/g) && error}
                 >
@@ -122,7 +113,7 @@ export const Register = () => {
                   label="Confirme a senha"
                   type="password"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={e => setConfirmPassword(e.target.value)}
                   error={!!error?.match(/\bsenhas\b/g)}
                   helperText={error?.match(/\bsenhas\b/g) && error}
                 >
@@ -144,12 +135,12 @@ export const Register = () => {
         </form>
         <Divider />
         <Typography textAlign="center" marginY={2}>
-          Já tem conta?{" "}
-          <Link component="button" onClick={() => navigate("/login")}>
+          Já tem conta?{' '}
+          <Link component="button" onClick={() => navigate('/login')}>
             Clique aqui
           </Link>
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}

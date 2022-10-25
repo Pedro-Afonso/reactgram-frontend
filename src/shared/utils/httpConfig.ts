@@ -1,10 +1,10 @@
-export const api = "http://localhost:5000/api";
-export const uploads = "http://localhost:5000/uploads";
+import { IUserAuth, IUserIdToken } from '../interface'
 
-import { IUserAuth, IUserIdToken } from "../interface";
+export const api = 'http://localhost:5000/api'
+export const uploads = 'http://localhost:5000/uploads'
 
 interface IConfig {
-  method?: string;
+  method?: string
   body?:
     | string
     | IUserAuth
@@ -12,11 +12,11 @@ interface IConfig {
     | FormData
     | null
     | { title: string }
-    | { comment: string };
+    | { comment: string }
   headers?: {
-    "Content-Type"?: string;
-    Authorization?: string;
-  };
+    'Content-Type'?: string
+    Authorization?: string
+  }
 }
 
 type IRequestConfigProps = (
@@ -30,7 +30,7 @@ type IRequestConfigProps = (
     | { comment: string },
   token?: string | null,
   image?: boolean | null
-) => RequestInit;
+) => RequestInit
 
 export const requestConfig: IRequestConfigProps = (
   method,
@@ -38,35 +38,35 @@ export const requestConfig: IRequestConfigProps = (
   token = null,
   image = null
 ) => {
-  let config: IConfig;
+  let config: IConfig
 
   if (image) {
     config = {
-      method: method,
+      method,
       body: data,
-      headers: {},
-    };
-  } else if (method === "DELETE" || data === null) {
+      headers: {}
+    }
+  } else if (method === 'DELETE' || data === null) {
     config = {
-      method: method,
-      headers: {},
-    };
+      method,
+      headers: {}
+    }
   } else {
     config = {
-      method: method,
+      method,
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json",
-      },
-    };
+        'Content-Type': 'application/json'
+      }
+    }
   }
 
   if (token) {
     config = {
       ...config,
-      headers: { ...config.headers, Authorization: `Bearer ${token}` },
-    };
+      headers: { ...config.headers, Authorization: `Bearer ${token}` }
+    }
   }
 
-  return config as RequestInit;
-};
+  return config as RequestInit
+}

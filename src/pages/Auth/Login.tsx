@@ -1,49 +1,41 @@
 // material ui
-import {
-  Box,
-  Typography,
-  Paper,
-  Grid,
-  TextField,
-  Link,
-  Divider,
-} from "@mui/material";
-import { LoadingButton } from "@mui/lab";
+import { Box, Typography, Paper, TextField, Link, Divider } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 
 // hooks
-import { useAppDispatch, useAppSelector } from "../../shared/hooks";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from '../../shared/hooks'
+import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 // interface
-import { IUserAuth } from "../../shared/interface";
+import { IUserAuth } from '../../shared/interface'
 
 // redux
-import { login, reset } from "../../shared/slices/authSlice";
+import { login, reset } from '../../shared/slices/authSlice'
 
 export const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { error, loading } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const { error, loading } = useAppSelector(state => state.auth)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const user: IUserAuth = {
       email,
-      password,
-    };
+      password
+    }
 
-    dispatch(login(user));
-  };
+    dispatch(login(user))
+  }
 
   // Clean all auth states
   useEffect(() => {
-    dispatch(reset());
-  }, [dispatch]);
+    dispatch(reset())
+  }, [dispatch])
 
   return (
     <Box
@@ -80,7 +72,7 @@ export const Login = () => {
                   label="Email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   error={!!error?.match(/e-mail/g)}
                   helperText={error?.match(/e-mail/g) && error}
                 >
@@ -94,7 +86,7 @@ export const Login = () => {
                   label="Senha"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   error={!!error?.match(/\bsenha\b/g)}
                   helperText={error?.match(/\bsenha\b/g) && error}
                 >
@@ -117,12 +109,12 @@ export const Login = () => {
         </form>
         <Divider />
         <Typography textAlign="center" marginY={2}>
-          Não tem uma conta?{" "}
-          <Link component="button" onClick={() => navigate("/register")}>
+          Não tem uma conta?{' '}
+          <Link component="button" onClick={() => navigate('/register')}>
             Clique aqui
           </Link>
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}

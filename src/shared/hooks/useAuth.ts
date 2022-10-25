@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
-import { useAppSelector } from "./useAppSelector";
+import { useState, useEffect } from 'react'
+import { useAppSelector } from './useAppSelector'
 
 export const useAuth = () => {
-  const { user } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector(state => state.auth)
 
-  const [auth, setAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [auth, setAuth] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (user) {
-      setAuth(true);
+      setAuth(true)
     } else {
-      setAuth(false);
+      setAuth(false)
     }
 
-    setLoading(false);
-  }, [user]);
+    setLoading(false)
+  }, [user])
 
-  return { auth, loading };
-};
+  return { auth, loading }
+}

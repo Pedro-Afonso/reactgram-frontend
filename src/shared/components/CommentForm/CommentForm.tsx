@@ -1,22 +1,22 @@
-import { LoadingButton } from "@mui/lab";
-import { Box, Paper, TextField } from "@mui/material";
-import { useState } from "react";
+import { LoadingButton } from '@mui/lab'
+import { Box, Paper, TextField } from '@mui/material'
+import { useState } from 'react'
 
 interface ICommentFormProps {
   handleComment: (
     e: React.FormEvent<HTMLFormElement>,
     textCommentForm: string
-  ) => void;
+  ) => void
 }
 
 export const CommentForm: React.FC<ICommentFormProps> = ({ handleComment }) => {
-  const [textComment, setTextComment] = useState("");
+  const [textComment, setTextComment] = useState('')
 
   return (
     <form
-      onSubmit={(e) => {
-        handleComment(e, textComment);
-        setTextComment("");
+      onSubmit={e => {
+        handleComment(e, textComment)
+        setTextComment('')
       }}
     >
       <Box
@@ -35,7 +35,7 @@ export const CommentForm: React.FC<ICommentFormProps> = ({ handleComment }) => {
             label="Deixe o seu comentário:"
             type="text"
             value={textComment}
-            onChange={(e) => setTextComment(e.target.value)}
+            onChange={e => setTextComment(e.target.value)}
           />
         </Box>
         <Box marginTop={4}>
@@ -45,5 +45,5 @@ export const CommentForm: React.FC<ICommentFormProps> = ({ handleComment }) => {
         </Box>
       </Box>
     </form>
-  );
-};
+  )
+}

@@ -2,7 +2,6 @@ import { Link, Paper, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useNavigate } from 'react-router-dom'
 import { IPhoto } from '../../interface'
-import { uploads } from '../../utils'
 
 interface IPhotoItemProps {
   photo: IPhoto
@@ -31,7 +30,7 @@ export const PhotoItem: React.FC<IPhotoItemProps> = ({
         >
           <img
             width="100%"
-            src={`${uploads}/photos/${photo.image}`}
+            src={photo.image}
             alt={photo.title}
             style={{ cursor: linkControl ? 'pointer' : 'auto' }}
           />

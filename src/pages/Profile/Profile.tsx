@@ -25,7 +25,6 @@ import {
   updatePhoto
 } from '../../shared/slices/photoSlice'
 import { getUserDetails } from '../../shared/slices/userSlice'
-import { uploads } from '../../shared/utils'
 
 export const Profile = () => {
   const { id } = useParams()
@@ -118,11 +117,7 @@ export const Profile = () => {
           <Box display="flex" paddingY={2}>
             <Avatar
               sx={{ width: 128, height: 128 }}
-              src={
-                user.profileImage
-                  ? `${uploads}/users/${user.profileImage}`
-                  : undefined
-              }
+              src={user.profileImage ? user.profileImage : undefined}
             />
             <Box
               display="flex"
@@ -150,11 +145,7 @@ export const Profile = () => {
                 <Box flexDirection="column" gap={3}>
                   <Box>
                     {editImage && (
-                      <img
-                        width="600px"
-                        src={`${uploads}/photos/${editImage}`}
-                        alt={editTitle}
-                      />
+                      <img width="600px" src={editImage} alt={editTitle} />
                     )}
                   </Box>
                   <Box>
@@ -252,12 +243,7 @@ export const Profile = () => {
               {photos &&
                 photos.map(photo => (
                   <ImageListItem key={photo._id}>
-                    {photo.image && (
-                      <img
-                        src={`${uploads}/photos/${photo.image}`}
-                        alt={photo.title}
-                      />
-                    )}
+                    {photo.image && <img src={photo.image} alt={photo.title} />}
                     {id === userAuth!._id ? (
                       <ImageListItemBar
                         actionIcon={

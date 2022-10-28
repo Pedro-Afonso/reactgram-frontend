@@ -1,6 +1,5 @@
 import { Box, Typography, Avatar, Paper } from '@mui/material'
 import { IComments } from '../../interface/IPhoto'
-import { uploads } from '../../utils'
 
 interface ICommentItemProps {
   comment: IComments
@@ -12,7 +11,7 @@ export const CommentItem: React.FC<ICommentItemProps> = ({ comment }) => {
       <Box display="flex" justifyContent="start" alignItems="start" gap={1}>
         <Avatar
           sx={{ width: 32, height: 32 }}
-          src={comment.userImage && `${uploads}/users/${comment.userImage}`}
+          src={comment.userImage && comment.userImage}
           alt={comment.userName}
         />
         <Box paddingRight={1}>

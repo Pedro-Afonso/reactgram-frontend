@@ -5,7 +5,6 @@ import { LoadingButton } from '@mui/lab'
 
 import { profile, updateProfile } from '../../shared/slices/userSlice'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { uploads } from '../../shared/utils'
 
 export const EditProfile = () => {
   const [name, setName] = useState('')
@@ -92,10 +91,7 @@ export const EditProfile = () => {
         <Box paddingY={2}>
           <Avatar
             sx={{ width: 128, height: 128 }}
-            src={
-              previewImage ||
-              (profileImage ? `${uploads}/users/${profileImage}` : undefined)
-            }
+            src={previewImage /* || profileImage */ || undefined}
           />
         </Box>
         <form onSubmit={handleSubmit}>

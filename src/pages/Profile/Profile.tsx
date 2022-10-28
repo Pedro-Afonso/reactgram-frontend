@@ -1,6 +1,5 @@
 import { LoadingButton } from '@mui/lab'
 import {
-  Avatar,
   Divider,
   Grid,
   Icon,
@@ -16,6 +15,7 @@ import {
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { ProfileHeader } from '../../shared/components'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
 import { IPhoto } from '../../shared/interface'
 import {
@@ -113,25 +113,7 @@ export const Profile = () => {
         paddingX={4}
         paddingY={2}
       >
-        {user && (
-          <Box display="flex" paddingY={2}>
-            <Avatar
-              sx={{ width: 128, height: 128 }}
-              src={user.profileImage ? user.profileImage : undefined}
-            />
-            <Box
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-              marginLeft={2}
-              gap={1}
-              height="auto"
-            >
-              <Typography variant="h5">{user.name}</Typography>
-              <Typography>{user.bio}</Typography>
-            </Box>
-          </Box>
-        )}
+        {user && <ProfileHeader user={user} />}
         <Box width="100%">
           <Divider />
           <Box marginY={3}>
@@ -196,13 +178,22 @@ export const Profile = () => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <TextField
+                    <Button variant="contained" component="label">
+                      Upload
+                      <input
+                        hidden
+                        onChange={handleFile}
+                        accept="image/*"
+                        type="file"
+                      />
+                    </Button>
+                    {/* <TextField
                       fullWidth
                       variant="standard"
                       label="Imagem:"
                       type="file"
                       onChange={handleFile}
-                    />
+                    /> */}
                   </Grid>
 
                   {/* <Grid item xs={12}>

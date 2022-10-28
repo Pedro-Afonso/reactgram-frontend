@@ -75,7 +75,6 @@ export const EditProfile = () => {
         paddingY={2}
       >
         <Box
-          component="hgroup"
           display="flex"
           flexDirection="column"
           justifyContent="center"
@@ -95,77 +94,65 @@ export const EditProfile = () => {
           />
         </Box>
         <form onSubmit={handleSubmit}>
-          <Box marginBottom={4}>
-            <Box display="flex" flexDirection="column" gap={3}>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Nome"
-                  type="text"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  error={!!error?.match(/nome/g)}
-                  helperText={error?.match(/nome/g) && error}
-                />
-              </Box>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Email"
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  error={!!error?.match(/e-mail/g)}
-                  helperText={error?.match(/e-mail/g) && error}
-                />
-              </Box>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Imagem do perfil:"
-                  type="file"
-                  onChange={handleFile}
-                  error={!!error?.match(/imagem\b/g)}
-                  helperText={error?.match(/imagem\b/g) && error}
-                />
-              </Box>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Bio:"
-                  placeholder="Descrição do perfil"
-                  type="text"
-                  value={bio}
-                  onChange={e => setBio(e.target.value)}
-                />
-              </Box>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Deseja alterar sua senha?"
-                  placeholder="Digite sua nova senha"
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  error={!!error?.match(/\bsenha\b/g)}
-                  helperText={error?.match(/\bsenha\b/g) && error}
-                />
-              </Box>
-              <Box>
-                <LoadingButton
-                  loading={loading}
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                >
-                  Salvar
-                </LoadingButton>
-              </Box>
+          <Box marginBottom={4} display="flex" flexDirection="column" gap={3}>
+            <TextField
+              fullWidth
+              variant="standard"
+              label="Nome"
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              error={!!error?.match(/nome/g)}
+              helperText={error?.match(/nome/g) && error}
+            />
+            <TextField
+              fullWidth
+              variant="standard"
+              label="Email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              error={!!error?.match(/e-mail/g)}
+              helperText={error?.match(/e-mail/g) && error}
+            />
+            <TextField
+              fullWidth
+              variant="standard"
+              label="Imagem do perfil:"
+              type="file"
+              onChange={handleFile}
+              error={!!error?.match(/imagem\b/g)}
+              helperText={error?.match(/imagem\b/g) && error}
+            />
+            <TextField
+              fullWidth
+              variant="standard"
+              label="Bio:"
+              placeholder="Descrição do perfil"
+              type="text"
+              value={bio}
+              onChange={e => setBio(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              variant="standard"
+              label="Deseja alterar sua senha?"
+              placeholder="Digite sua nova senha"
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              error={!!error?.match(/\bsenha\b/g)}
+              helperText={error?.match(/\bsenha\b/g) && error}
+            />
+            <Box>
+              <LoadingButton
+                loading={loading}
+                type="submit"
+                fullWidth
+                variant="contained"
+              >
+                Salvar
+              </LoadingButton>
             </Box>
           </Box>
         </form>

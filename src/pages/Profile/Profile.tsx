@@ -1,21 +1,18 @@
-import { LoadingButton } from '@mui/lab'
 import {
   Divider,
-  Grid,
   Icon,
   IconButton,
   ImageList,
   ImageListItem,
   ImageListItemBar,
   Paper,
-  TextField,
   Typography,
   Button
 } from '@mui/material'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ProfileHeader } from '../../shared/components'
+import { ProfileHeader, UploadPhoto } from '../../shared/components'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
 import { IPhoto } from '../../shared/interface'
 import {
@@ -30,19 +27,19 @@ export const Profile = () => {
   const { id } = useParams()
 
   const dispatch = useAppDispatch()
-  const { user, loading } = useAppSelector(state => state.user)
+  const { user } = useAppSelector(state => state.user)
   const { user: userAuth } = useAppSelector(state => state.auth)
   const { photos } = useAppSelector(state => state.photo)
 
   const navigate = useNavigate()
 
   const [title, setTitle] = useState('')
-  const [image, setImage] = useState<File | string>('')
+  const [image, setImage] = useState<File | string | null>(null)
 
   const [editMode, setEditMode] = useState(false)
-  const [editImage, setEditImage] = useState('')
-  const [editTitle, setEditTitle] = useState('')
   const [editId, setEditId] = useState('')
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Load user data
   useEffect(() => {
@@ -52,22 +49,42 @@ export const Profile = () => {
     }
   }, [id, dispatch])
 
+  // clears the modal data when closing
+  useEffect(() => {
+    if (!editMode && !isModalOpen) {
+      setTitle('')
+      setImage(null)
+    } else if (editMode && !isModalOpen) {
+      setEditMode(false)
+      setImage(null)
+      setEditId('')
+      setTitle('')
+    }
+  }, [editMode, isModalOpen])
+
+  // Toggle isModalOpen
+  const toggleModal = () => {
+    setIsModalOpen(prev => !prev)
+  }
+
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
-    setImage(file || '')
+    setImage(file || null)
   }
 
   const handleEdit = (photo: IPhoto) => {
-    setEditImage(photo.image)
+    setImage(photo.image)
     setEditId(photo._id)
+    setTitle(photo.title)
     setEditMode(true)
+    toggleModal()
   }
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault()
-    dispatch(updatePhoto({ title: editTitle, _id: editId }))
+    dispatch(updatePhoto({ title, _id: editId }))
 
-    setEditMode(false)
+    toggleModal()
   }
 
   // Delete a photo
@@ -80,6 +97,8 @@ export const Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!image) return
 
     const photoData = {
       title,
@@ -94,7 +113,8 @@ export const Profile = () => {
     })
 
     await dispatch(publishPhoto(formData))
-    setTitle('')
+
+    toggleModal()
   }
 
   return (
@@ -121,109 +141,28 @@ export const Profile = () => {
               Compartilhe algum momento seu:
             </Typography>
           </Box>
-          {editMode ? (
-            <form onSubmit={handleUpdate}>
-              <Box marginBottom={4}>
-                <Box flexDirection="column" gap={3}>
-                  <Box>
-                    {editImage && (
-                      <img width="600px" src={editImage} alt={editTitle} />
-                    )}
-                  </Box>
-                  <Box>
-                    <TextField
-                      variant="standard"
-                      fullWidth
-                      label="Insira um novo título para a foto:"
-                      type="text"
-                      onChange={e => setEditTitle(e.target.value)}
-                    />
-                  </Box>
-                  <Divider />
-                  <Box>
-                    <LoadingButton
-                      fullWidth
-                      loading={loading}
-                      type="submit"
-                      variant="contained"
-                    >
-                      Atualizar
-                    </LoadingButton>
-                  </Box>
-                  <Box>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      onClick={() => setEditMode(false)}
-                    >
-                      Cancelar
-                    </Button>
-                  </Box>
-                </Box>
-              </Box>
-            </form>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <Box marginBottom={4}>
-                <Grid container display="flex" direction="column" gap={3}>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      variant="standard"
-                      label="Título para a foto:"
-                      type="text"
-                      value={title}
-                      onChange={e => setTitle(e.target.value)}
-                    />
-                  </Grid>
 
-                  <Grid item xs={12}>
-                    <Button variant="contained" component="label">
-                      Upload
-                      <input
-                        hidden
-                        onChange={handleFile}
-                        accept="image/*"
-                        type="file"
-                      />
-                    </Button>
-                    {/* <TextField
-                      fullWidth
-                      variant="standard"
-                      label="Imagem:"
-                      type="file"
-                      onChange={handleFile}
-                    /> */}
-                  </Grid>
+          {/* Open modal button */}
+          <Button size="large" variant="contained" onClick={toggleModal}>
+            Carregar Foto
+          </Button>
+          {/* /Open modal button */}
 
-                  {/* <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    variant="standard"
-                    label="Deseja alterar sua senha?"
-                    placeholder="Digite sua nova senha"
-                    type="text"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    //error={!!error?.match(/\bsenhas\b/g)}
-                    //helperText={error?.match(/\bsenhas\b/g) && error}
-                  />
-                </Grid> */}
-                  <Divider />
-                  <Grid>
-                    <LoadingButton
-                      loading={loading}
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                    >
-                      Postar
-                    </LoadingButton>
-                  </Grid>
-                </Grid>
-              </Box>
-            </form>
-          )}
+          <UploadPhoto
+            dialogTitle={
+              editMode ? 'Editar publicação' : 'Publicar uma nova foto'
+            }
+            editMode={editMode}
+            title={title}
+            setTitle={setTitle}
+            isOpen={isModalOpen}
+            toggleModal={toggleModal}
+            image={image}
+            handleFile={handleFile}
+            handleUpdate={handleUpdate}
+            handleSubmit={handleSubmit}
+            loading={false}
+          />
         </Box>
         <Box>
           <Typography variant="h2" fontSize={16}>

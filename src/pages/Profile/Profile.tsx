@@ -143,9 +143,11 @@ export const Profile = () => {
           </Box>
 
           {/* Open modal button */}
-          <Button size="large" variant="contained" onClick={toggleModal}>
-            Carregar Foto
-          </Button>
+          <Box display="flex" justifyContent="center">
+            <Button size="large" variant="contained" onClick={toggleModal}>
+              Carregar Foto
+            </Button>
+          </Box>
           {/* /Open modal button */}
 
           <UploadPhoto

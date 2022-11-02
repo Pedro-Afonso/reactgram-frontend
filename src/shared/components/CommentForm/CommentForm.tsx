@@ -1,49 +1,54 @@
+import { Box, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { Box, Paper, TextField } from '@mui/material'
 import { useState } from 'react'
 
+import { commentPhoto } from '../../slices/photoSlice'
+import { useAppDispatch } from '../../hooks'
+
 interface ICommentFormProps {
-  handleComment: (
-    e: React.FormEvent<HTMLFormElement>,
-    textCommentForm: string
-  ) => void
+  id?: string
 }
 
-export const CommentForm: React.FC<ICommentFormProps> = ({ handleComment }) => {
-  const [textComment, setTextComment] = useState('')
+export const CommentForm: React.FC<ICommentFormProps> = ({ id }) => {
+  const dispatch = useAppDispatch()
+
+  const [comment, setComment] = useState('')
+
+  const handleComment = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (!id || !comment.trim()) {
+      return
+    }
+
+    const commentData = {
+      comment,
+      id
+    }
+
+    dispatch(commentPhoto(commentData))
+
+    setComment('')
+  }
 
   return (
-    <form
-      onSubmit={e => {
-        handleComment(e, textComment)
-        setTextComment('')
-      }}
-    >
-      <Box
-        width="98%"
-        marginX="auto"
-        marginY={2}
-        component={Paper}
-        variant="elevation"
-        elevation={24}
-        padding={2}
+    <Box component="form" onSubmit={handleComment} display="flex" width="100%">
+      <TextField
+        fullWidth
+        variant="filled"
+        color="secondary"
+        label="Adicione um comentário"
+        type="text"
+        value={comment}
+        onChange={e => setComment(e.target.value)}
+      />
+      <LoadingButton
+        type="submit"
+        variant="contained"
+        disabled={!id || !comment}
       >
-        <Box>
-          <TextField
-            fullWidth
-            variant="standard"
-            label="Deixe o seu comentário:"
-            type="text"
-            value={textComment}
-            onChange={e => setTextComment(e.target.value)}
-          />
-        </Box>
-        <Box marginTop={4}>
-          <LoadingButton type="submit" fullWidth variant="contained">
-            Enviar
-          </LoadingButton>
-        </Box>
-      </Box>
-    </form>
+        Enviar
+      </LoadingButton>
+    </Box>
   )
 }

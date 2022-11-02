@@ -4,13 +4,16 @@ import { Box } from '@mui/material'
 
 import { getAllPhotos, likePhoto } from '../../shared/slices/photoSlice'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { LikeButton, PhotoItem } from '../../shared/components'
+import { PhotoItem } from '../../shared/components'
+import { useNavigate } from 'react-router-dom'
 
 export const Home = () => {
   const dispatch = useAppDispatch()
 
   const { photos } = useAppSelector(state => state.photo)
   const { user: authUser } = useAppSelector(state => state.auth)
+
+  const navigate = useNavigate()
 
   // Load photos
   useEffect(() => {
@@ -26,12 +29,11 @@ export const Home = () => {
       {photos &&
         photos.map((photo, key) => (
           <Box key={key} marginBottom={2}>
-            <PhotoItem photo={photo} linkControl />
-
-            <LikeButton
+            <PhotoItem
               user={authUser}
               photo={photo}
-              handleLike={() => handleLike(photo._id)}
+              navigate={navigate}
+              handleLike={handleLike}
             />
           </Box>
         ))}

@@ -322,7 +322,6 @@ export const photoSlice = createSlice({
         (state, action: PayloadAction<string>) => {
           state.loading = false
           state.error = action.payload
-          state.photo = null
         }
       )
       .addCase(getAllPhotos.pending, state => {

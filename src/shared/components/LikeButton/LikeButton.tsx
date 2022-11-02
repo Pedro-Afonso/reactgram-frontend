@@ -33,7 +33,7 @@ export const LikeButton: React.FC<ILikeProps> = ({
               <Icon>favorite_border</Icon>
             </IconButton>
           )}
-          <Typography>{photo.likes.length} like(s)</Typography>
+          <Typography>{photo.likes.length}</Typography>
         </>
       )}
     </Box>

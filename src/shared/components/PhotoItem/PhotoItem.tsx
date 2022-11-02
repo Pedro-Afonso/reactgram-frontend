@@ -1,53 +1,89 @@
-import { Link, Paper, Typography } from '@mui/material'
-import { Box } from '@mui/system'
-import { useNavigate } from 'react-router-dom'
-import { IPhoto } from '../../interface'
+import {
+  Avatar,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  IconButton,
+  Link,
+  Typography,
+  Icon
+} from '@mui/material'
+
+import { IPhoto, IUserIdToken } from '../../interface'
+import { CommentForm } from '../CommentForm/CommentForm'
+import { LikeButton } from '../LikeButton/LikeButton'
 
 interface IPhotoItemProps {
   photo: IPhoto
-  linkControl?: boolean
+  user?: IUserIdToken | null
+  photoLink?: boolean
+  handleLike: (photoId: string) => void
+  navigate: (value: string) => void
 }
 
 export const PhotoItem: React.FC<IPhotoItemProps> = ({
   photo,
-  linkControl = false
+  user,
+  navigate,
+  handleLike,
+  photoLink = true
 }) => {
-  const navigate = useNavigate()
-
+  const date = new Date(photo.createdAt)
   return (
-    <Box
-      component={Paper}
-      width="100%"
-      padding={2}
-      marginX="auto"
-      variant="outlined"
-    >
+    <Card>
+      <CardHeader
+        avatar={
+          <Avatar
+            onClick={() => navigate(`/users/${photo.userId}`)}
+            aria-label={photo?.userName}
+            sx={{ cursor: 'pointer' }}
+          >
+            R
+          </Avatar>
+        }
+        action={
+          <IconButton disabled aria-label="settings">
+            <Icon>more_verticon</Icon>
+          </IconButton>
+        }
+        title={photo?.userName}
+        subheader={`${date.toLocaleTimeString()} ${date.toLocaleDateString()}`}
+      />
+
       {photo.image && (
-        <button
+        <CardActionArea
+          disabled={!navigate}
           onClick={() => {
-            linkControl && navigate(`/photos/${photo._id}`)
+            photoLink && navigate(`/photos/${photo._id}`)
           }}
         >
-          <img
-            width="100%"
-            src={photo.image}
-            alt={photo.title}
-            style={{ cursor: linkControl ? 'pointer' : 'auto' }}
-          />
-        </button>
+          <CardMedia component="img" src={photo.image} alt={photo.title} />
+        </CardActionArea>
       )}
-      <Typography variant="h2" fontSize={18} fontWeight={400} marginTop={1}>
-        {photo.title}
-      </Typography>
-      <Typography fontSize={12}>
-        Publicado por:{' '}
-        <Link
-          component="button"
-          onClick={() => navigate(`/users/${photo.userId}`)}
-        >
-          {photo.userName}
-        </Link>
-      </Typography>
-    </Box>
+      <CardContent>
+        <Typography variant="h2" fontSize={18} fontWeight={400} marginTop={1}>
+          {photo.title}
+        </Typography>
+        <Typography fontSize={12}>
+          Publicado por:{' '}
+          <Link
+            component="button"
+            onClick={() => navigate && navigate(`/users/${photo.userId}`)}
+            color="secondary"
+          >
+            {photo.userName}
+          </Link>
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <LikeButton photo={photo} user={user} handleLike={handleLike} />
+      </CardActions>
+      <CardActions>
+        <CommentForm id={photo._id} />
+      </CardActions>
+    </Card>
   )
 }

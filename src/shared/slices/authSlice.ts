@@ -1,5 +1,11 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { IUserAuth, IUserIdToken, IUserAuthState } from '../interface'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import {
+  IUserIdToken,
+  IUserAuthState,
+  TAuth,
+  ILoginForm,
+  IRegisterForm
+} from '../interface'
 import { authService } from '../services/authService'
 
 const localUser = localStorage.getItem('user')
@@ -13,19 +19,20 @@ const initialState: IUserAuthState = {
 }
 
 // Register a user and sign in
-export const register = createAsyncThunk(
-  'auth/register',
-  async (data: IUserAuth, thunkAPI) => {
-    const res = await authService.register(data)
+export const register = createAsyncThunk<
+  TAuth,
+  IRegisterForm,
+  { rejectValue: string }
+>('auth/register', async (data, { rejectWithValue }) => {
+  const res = await authService.register(data)
 
-    // Check for errors
-    if (res.errors) {
-      return thunkAPI.rejectWithValue(res.errors[0])
-    }
-
-    return thunkAPI.fulfillWithValue(res)
+  // Check for errors
+  if (res.errors) {
+    return rejectWithValue(res.errors[0])
   }
-)
+
+  return res
+})
 
 // Logout a user
 export const logout = createAsyncThunk('auth/logout', () => {
@@ -33,19 +40,20 @@ export const logout = createAsyncThunk('auth/logout', () => {
 })
 
 // Sign in a user
-export const login = createAsyncThunk(
-  'auth/login',
-  async (user: Omit<IUserAuth, 'name' | 'confirmPassword'>, thunkAPI) => {
-    const res = await authService.login(user)
+export const login = createAsyncThunk<
+  TAuth,
+  ILoginForm,
+  { rejectValue: string }
+>('auth/login', async (user, { rejectWithValue }) => {
+  const res = await authService.login(user)
 
-    // Check for errors
-    if (res.errors) {
-      return thunkAPI.rejectWithValue(res.errors[0])
-    }
-
-    return thunkAPI.fulfillWithValue(res)
+  // Check for errors
+  if (res.errors) {
+    return rejectWithValue(res.errors[0])
   }
-)
+
+  return res
+})
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -64,23 +72,17 @@ export const authSlice = createSlice({
         state.loading = true
         state.error = null
       })
-      .addCase(
-        register.fulfilled.type,
-        (state, action: PayloadAction<IUserIdToken>) => {
-          state.loading = false
-          state.success = true
-          state.error = null
-          state.user = action.payload
-        }
-      )
-      .addCase(
-        register.rejected.type,
-        (state, action: PayloadAction<string>) => {
-          state.loading = false
-          state.error = action.payload ? action.payload : null
-          state.user = null
-        }
-      )
+      .addCase(register.fulfilled, (state, action) => {
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = action.payload
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload ? action.payload : null
+        state.user = null
+      })
       .addCase(logout.fulfilled, state => {
         state.loading = false
         state.success = true
@@ -91,16 +93,13 @@ export const authSlice = createSlice({
         state.loading = true
         state.error = null
       })
-      .addCase(
-        login.fulfilled.type,
-        (state, action: PayloadAction<IUserIdToken>) => {
-          state.loading = false
-          state.success = true
-          state.error = null
-          state.user = action.payload
-        }
-      )
-      .addCase(login.rejected.type, (state, action: PayloadAction<string>) => {
+      .addCase(login.fulfilled, (state, action) => {
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = action.payload
+      })
+      .addCase(login.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload ? action.payload : null
         state.user = null

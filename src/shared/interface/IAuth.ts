@@ -1,3 +1,24 @@
+export type TAuth = { _id: string; token: string; profileImage?: string }
+export type TErrors = string[]
+
+export interface IRegisterForm {
+  name?: string
+  email: string
+  password: string
+  confirmPassword?: string
+}
+
+export interface ILoginForm {
+  email: string
+  password: string
+}
+
+export interface IAuthResponse extends TAuth {
+  errors: TErrors
+}
+
+// excluir
+
 export interface IProfile {
   name: string
   email: string
@@ -5,13 +26,18 @@ export interface IProfile {
   profileImage?: string
   password?: string
 }
+export interface IUserResponse {
+  user?: IProfile
+  errors?: string[]
+}
+
 export interface IUserIdToken {
   _id: string
   token: string
 }
 
 export interface IUserAuthState {
-  user?: IUserIdToken | null
+  user?: TAuth | null
   error?: string | null
   success: boolean
   loading: boolean
@@ -24,20 +50,4 @@ export interface IUserProfileState {
   success: boolean
   loading: boolean
   message?: string | null
-}
-
-export interface IUserAuth {
-  name?: string
-  email: string
-  password: string
-  confirmPassword?: string
-}
-
-export interface IRegisterResponse {
-  user?: IUserIdToken
-  errors?: string[]
-}
-export interface IUserResponse {
-  user?: IProfile
-  errors?: string[]
 }

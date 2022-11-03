@@ -1,6 +1,6 @@
 import { ILoginForm, IRegisterForm, IUserIdToken } from '../interface'
 
-export const api = 'http://localhost:5000/api'
+export const api = import.meta.env.VITE_API
 
 interface IConfig {
   method?: string

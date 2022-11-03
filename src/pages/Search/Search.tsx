@@ -6,6 +6,7 @@ import { likePhoto, searchPhotos } from '../../shared/slices/photoSlice'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
 import { LikeButton, PhotoItem } from '../../shared/components'
 import { useQuery } from '../../shared/hooks/useQuery'
+import { useNavigate } from 'react-router-dom'
 
 export const Search = () => {
   const dispatch = useAppDispatch()
@@ -23,6 +24,8 @@ export const Search = () => {
     }
   }, [search, dispatch])
 
+  const navigate = useNavigate()
+
   const handleLike = (photoId: string) => {
     dispatch(likePhoto(photoId))
   }
@@ -32,7 +35,11 @@ export const Search = () => {
       {photos &&
         photos.map((photo, key) => (
           <Box key={key} marginBottom={2}>
-            <PhotoItem photo={photo} linkControl />
+            <PhotoItem
+              photo={photo}
+              handleLike={handleLike}
+              navigate={navigate}
+            />
 
             <LikeButton
               user={authUser}

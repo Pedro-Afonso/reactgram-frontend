@@ -1,12 +1,11 @@
 import { Box, Link, Paper, TextField, Typography, Divider } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { IUserAuth } from '../../shared/interface'
+import { useEffect, useState } from 'react'
+import { LoadingButton } from '@mui/lab'
 
-// Redux
+import { useAppDispatch, useAppSelector } from '../../shared/hooks'
 import { register, reset } from '../../shared/slices/authSlice'
+import { IRegisterForm } from '../../shared/interface'
 
 export const Register = () => {
   const [name, setName] = useState('')
@@ -22,7 +21,7 @@ export const Register = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const user: IUserAuth = {
+    const user: IRegisterForm = {
       name,
       email,
       password,

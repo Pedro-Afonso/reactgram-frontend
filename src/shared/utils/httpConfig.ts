@@ -1,13 +1,13 @@
-import { IUserAuth, IUserIdToken } from '../interface'
+import { ILoginForm, IRegisterForm, IUserIdToken } from '../interface'
 
 export const api = 'http://localhost:5000/api'
-export const uploads = 'http://localhost:5000/uploads'
 
 interface IConfig {
   method?: string
   body?:
     | string
-    | IUserAuth
+    | IRegisterForm
+    | ILoginForm
     | IUserIdToken
     | FormData
     | null
@@ -22,7 +22,8 @@ interface IConfig {
 type IRequestConfigProps = (
   method: string,
   data?:
-    | IUserAuth
+    | IRegisterForm
+    | ILoginForm
     | IUserIdToken
     | FormData
     | null

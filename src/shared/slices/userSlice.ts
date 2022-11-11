@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { IUserState, TCurrentUser, TUser } from '../interface'
 import { userService } from '../services/userService'
+import { RootState } from '../../store'
 
 const initialState: IUserState = {
   user: null,
@@ -14,11 +15,13 @@ const initialState: IUserState = {
 export const profile = createAsyncThunk<
   TCurrentUser,
   void,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('user/profile', async (_, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
 
-  const res = await userService.profile(userIdToken.auth.user.token)
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await userService.profile(auth.user.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -31,11 +34,13 @@ export const profile = createAsyncThunk<
 export const updateProfile = createAsyncThunk<
   TCurrentUser,
   FormData,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('user/update', async (data, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
 
-  const res = await userService.updateProfile(data, userIdToken.auth.user.token)
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await userService.updateProfile(data, auth.user.token)
 
   // Check for errors
   if ('errors' in res) {

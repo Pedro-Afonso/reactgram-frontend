@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 import {
   TLikePhotoRes,
   TPhoto,
@@ -6,6 +7,7 @@ import {
   IPhotoState
 } from '../interface'
 import { photoService } from '../services'
+import { RootState } from '../../store'
 
 const initialState: IPhotoState = {
   photos: [],
@@ -20,14 +22,13 @@ const initialState: IPhotoState = {
 export const publishPhoto = createAsyncThunk<
   TPhoto,
   FormData,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('photo/publish', async (photo, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
 
-  const res = await photoService.publishPhoto(
-    photo,
-    userIdToken.auth.user.token
-  )
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await photoService.publishPhoto(photo, auth.user.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -41,11 +42,13 @@ export const publishPhoto = createAsyncThunk<
 export const getUserPhotos = createAsyncThunk<
   TPhoto[],
   string,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('photo/userphotos', async (id, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
 
-  const res = await photoService.getUserPhotos(id, userIdToken.auth.user.token)
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await photoService.getUserPhotos(id, auth.user.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -58,11 +61,13 @@ export const getUserPhotos = createAsyncThunk<
 export const deletePhoto = createAsyncThunk<
   { id: string; message: string },
   string,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('photo/delete', async (id, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
 
-  const res = await photoService.deletePhoto(id, userIdToken.auth.user.token)
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await photoService.deletePhoto(id, auth.user.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -75,14 +80,16 @@ export const deletePhoto = createAsyncThunk<
 export const updatePhoto = createAsyncThunk<
   TUpdatePhotoRes,
   { title: string; id: string },
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('photo/update', async (photo, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
+
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
 
   const res = await photoService.updatePhoto(
     photo.title,
     photo.id,
-    userIdToken.auth.user.token
+    auth.user.token
   )
 
   // Check for errors
@@ -111,11 +118,13 @@ export const getPhoto = createAsyncThunk<
 export const likePhoto = createAsyncThunk<
   TLikePhotoRes,
   string,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('photo/likephoto', async (id, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
 
-  const res = await photoService.likePhoto(id, userIdToken.auth.user.token)
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await photoService.likePhoto(id, auth.user.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -128,11 +137,13 @@ export const likePhoto = createAsyncThunk<
 export const getAllPhotos = createAsyncThunk<
   TPhoto[],
   void,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('photo/getallphotos', async (_, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
 
-  const res = await photoService.getAllPhotos(userIdToken.auth.user.token)
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await photoService.getAllPhotos(auth.user.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -145,14 +156,13 @@ export const getAllPhotos = createAsyncThunk<
 export const searchPhotos = createAsyncThunk<
   TPhoto[],
   string,
-  { rejectValue: string }
+  { rejectValue: string; state: RootState }
 >('photo/searchphotos', async (query, { rejectWithValue, getState }) => {
-  const userIdToken: any = getState()
+  const { auth } = getState()
 
-  const res = await photoService.searchPhotos(
-    query,
-    userIdToken.auth.user.token
-  )
+  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await photoService.searchPhotos(query, auth.user.token)
 
   // Check for errors
   if ('errors' in res) {

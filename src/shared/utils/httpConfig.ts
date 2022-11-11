@@ -1,18 +1,8 @@
-import { ILoginForm, IRegisterForm, IUserIdToken } from '../interface'
-
 export const api = import.meta.env.VITE_API
 
 interface IConfig {
   method?: string
-  body?:
-    | string
-    | IRegisterForm
-    | ILoginForm
-    | IUserIdToken
-    | FormData
-    | null
-    | { title: string }
-    | { comment: string }
+  body?: any
   headers?: {
     'Content-Type'?: string
     Authorization?: string
@@ -21,14 +11,7 @@ interface IConfig {
 
 type IRequestConfigProps = (
   method: string,
-  data?:
-    | IRegisterForm
-    | ILoginForm
-    | IUserIdToken
-    | FormData
-    | null
-    | { title: string }
-    | { comment: string },
+  data?: any,
   token?: string | null,
   image?: boolean | null
 ) => RequestInit

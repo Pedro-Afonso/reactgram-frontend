@@ -89,11 +89,8 @@ export const Profile = () => {
   }
 
   // Delete a photo
-  const handleDelete = async (photoId: string) => {
-    await dispatch(deletePhoto(photoId))
-    if (id) {
-      await dispatch(getUserPhotos(id))
-    }
+  const handleDelete = (photoId: string) => {
+    dispatch(deletePhoto(photoId))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

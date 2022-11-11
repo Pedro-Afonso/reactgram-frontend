@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ProfileHeader, UploadPhoto } from '../../shared/components'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { IPhoto } from '../../shared/interface'
+import { TPhoto } from '../../shared/interface'
 import {
   deletePhoto,
   getUserPhotos,
@@ -27,6 +27,7 @@ export const Profile = () => {
   const { id } = useParams()
 
   const dispatch = useAppDispatch()
+
   const { user } = useAppSelector(state => state.user)
   const { user: userAuth } = useAppSelector(state => state.auth)
   const { photos } = useAppSelector(state => state.photo)
@@ -35,11 +36,11 @@ export const Profile = () => {
 
   const [title, setTitle] = useState('')
   const [image, setImage] = useState<File | string | null>(null)
-
   const [editMode, setEditMode] = useState(false)
   const [editId, setEditId] = useState('')
-
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const canEditDelete = id === userAuth!._id
 
   // Load user data
   useEffect(() => {
@@ -72,7 +73,7 @@ export const Profile = () => {
     setImage(file || null)
   }
 
-  const handleEdit = (photo: IPhoto) => {
+  const handleEdit = (photo: TPhoto) => {
     setImage(photo.image)
     setEditId(photo._id)
     setTitle(photo.title)
@@ -82,7 +83,7 @@ export const Profile = () => {
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault()
-    dispatch(updatePhoto({ title, _id: editId }))
+    dispatch(updatePhoto({ title, id: editId }))
 
     toggleModal()
   }
@@ -176,33 +177,30 @@ export const Profile = () => {
                 photos.map(photo => (
                   <ImageListItem key={photo._id}>
                     {photo.image && <img src={photo.image} alt={photo.title} />}
-                    {id === userAuth!._id ? (
-                      <ImageListItemBar
-                        actionIcon={
-                          <>
-                            <IconButton
-                              onClick={() => navigate(`/photos/${photo._id}`)}
-                            >
-                              <Icon>visibility</Icon>
-                            </IconButton>
-                            <IconButton onClick={() => handleEdit(photo)}>
-                              <Icon>mode_edit</Icon>
-                            </IconButton>
-                            <IconButton onClick={() => handleDelete(photo._id)}>
-                              <Icon>delete</Icon>
-                            </IconButton>
-                          </>
-                        }
-                      />
-                    ) : (
-                      <ImageListItemBar
-                        actionIcon={
-                          <IconButton>
+
+                    <ImageListItemBar
+                      actionIcon={
+                        <>
+                          <IconButton
+                            onClick={() => navigate(`/photos/${photo._id}`)}
+                          >
                             <Icon>visibility</Icon>
                           </IconButton>
-                        }
-                      />
-                    )}
+                          {canEditDelete && (
+                            <>
+                              <IconButton onClick={() => handleEdit(photo)}>
+                                <Icon>mode_edit</Icon>
+                              </IconButton>
+                              <IconButton
+                                onClick={() => handleDelete(photo._id)}
+                              >
+                                <Icon>delete</Icon>
+                              </IconButton>
+                            </>
+                          )}
+                        </>
+                      }
+                    />
                   </ImageListItem>
                 ))}
             </ImageList>

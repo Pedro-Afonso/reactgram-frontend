@@ -24,7 +24,7 @@ export const EditProfile = () => {
   useEffect(() => {
     if (user) {
       setName(user.name)
-      setEmail(user.email)
+      setEmail('email' in user ? user.email : '')
       setBio(user.bio || '')
       setProfileImage(user.profileImage || '')
     }

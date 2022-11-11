@@ -38,7 +38,7 @@ export const EditProfile = () => {
       setName(user.name)
       setEmail('email' in user ? user.email : '')
       setBio(user.bio || '')
-      setProfileImage(user.profileImage || '')
+      setPreviewImage(user.profileImage || '')
     }
   }, [user])
 
@@ -102,7 +102,7 @@ export const EditProfile = () => {
         <Box paddingY={2}>
           <Avatar
             sx={{ width: 128, height: 128 }}
-            src={previewImage /* || profileImage */ || undefined}
+            src={previewImage || undefined}
           />
         </Box>
         <form onSubmit={handleSubmit}>

@@ -2,37 +2,31 @@ import { Box, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useState } from 'react'
 
-import { commentPhoto } from '../../slices/photoSlice'
-import { useAppDispatch } from '../../hooks'
-
 interface ICommentFormProps {
-  id?: string
+  photoId: string
+  handleSubmitComment: (comment: string, photoId: string) => void
 }
 
-export const CommentForm: React.FC<ICommentFormProps> = ({ id }) => {
-  const dispatch = useAppDispatch()
-
+export const CommentForm: React.FC<ICommentFormProps> = ({
+  photoId,
+  handleSubmitComment
+}) => {
   const [comment, setComment] = useState('')
 
-  const handleComment = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!id || !comment.trim()) {
+    if (!photoId || !comment.trim()) {
       return
     }
 
-    const commentData = {
-      comment,
-      id
-    }
-
-    dispatch(commentPhoto(commentData))
+    handleSubmitComment(comment, photoId)
 
     setComment('')
   }
 
   return (
-    <Box component="form" onSubmit={handleComment} display="flex" width="100%">
+    <Box component="form" onSubmit={onSubmit} display="flex" width="100%">
       <TextField
         fullWidth
         variant="filled"
@@ -45,7 +39,7 @@ export const CommentForm: React.FC<ICommentFormProps> = ({ id }) => {
       <LoadingButton
         type="submit"
         variant="contained"
-        disabled={!id || !comment}
+        disabled={!photoId || !comment}
       >
         Enviar
       </LoadingButton>

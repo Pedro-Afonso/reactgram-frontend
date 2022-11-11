@@ -12,50 +12,60 @@ import {
   Icon
 } from '@mui/material'
 
-import { IPhoto, IUserIdToken } from '../../interface'
-import { CommentForm } from '../CommentForm/CommentForm'
-import { LikeButton } from '../LikeButton/LikeButton'
+import { TPhoto, TAuth } from '../../interface'
+import { CommentForm } from '../CommentForm'
+import { LikeButton } from '../LikeButton'
 
 interface IPhotoItemProps {
-  photo: IPhoto
-  user?: IUserIdToken | null
+  photo: TPhoto
+  authUser: TAuth | null
   photoLink?: boolean
   handleLike: (photoId: string) => void
   navigate: (value: string) => void
+  handleSubmitComment: (comment: string, photoId: string) => void
 }
 
 export const PhotoItem: React.FC<IPhotoItemProps> = ({
   photo,
-  user,
+  authUser,
   navigate,
   handleLike,
+  handleSubmitComment,
   photoLink = true
 }) => {
-  const date = new Date(photo.createdAt)
+  const date = new Date(photo.createdAt).toLocaleDateString()
+  const time = new Date(photo.createdAt).toLocaleTimeString()
   return (
     <Card>
       <CardHeader
         avatar={
           <Avatar
-            onClick={() => navigate(`/users/${photo.userId}`)}
-            aria-label={photo?.userName}
+            onClick={() => navigate(`/users/${photo.user._id}`)}
+            src={photo?.user.profileImage}
+            aria-label={photo?.user.name}
             sx={{ cursor: 'pointer' }}
-          >
-            R
-          </Avatar>
+          />
         }
         action={
           <IconButton disabled aria-label="settings">
             <Icon>more_verticon</Icon>
           </IconButton>
         }
-        title={photo?.userName}
-        subheader={`${date.toLocaleTimeString()} ${date.toLocaleDateString()}`}
+        title={photo?.user.name}
+        subheader={
+          <Typography component="span" title={`${date} ${time}`} fontSize={14}>
+            {date}
+            <Typography component="span" title={time} fontSize={10}>
+              {' '}
+              {time}
+            </Typography>
+          </Typography>
+        }
       />
 
       {photo.image && (
         <CardActionArea
-          disabled={!navigate}
+          disabled={!photoLink}
           onClick={() => {
             photoLink && navigate(`/photos/${photo._id}`)
           }}
@@ -71,18 +81,21 @@ export const PhotoItem: React.FC<IPhotoItemProps> = ({
           Publicado por:{' '}
           <Link
             component="button"
-            onClick={() => navigate && navigate(`/users/${photo.userId}`)}
+            onClick={() => navigate && navigate(`/users/${photo.user._id}`)}
             color="secondary"
           >
-            {photo.userName}
+            {photo.user.name}
           </Link>
         </Typography>
       </CardContent>
       <CardActions>
-        <LikeButton photo={photo} user={user} handleLike={handleLike} />
+        <LikeButton photo={photo} authUser={authUser} handleLike={handleLike} />
       </CardActions>
       <CardActions>
-        <CommentForm id={photo._id} />
+        <CommentForm
+          photoId={photo._id}
+          handleSubmitComment={handleSubmitComment}
+        />
       </CardActions>
     </Card>
   )

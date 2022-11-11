@@ -1,15 +1,15 @@
 import { Box, Icon, IconButton, Paper, Typography } from '@mui/material'
-import { IPhoto, IUserIdToken } from '../../interface'
+import { TPhoto, TAuth } from '../../interface'
 
 interface ILikeProps {
-  photo: IPhoto
-  user?: IUserIdToken | null
+  photo: TPhoto
+  authUser: TAuth | null
   handleLike: (photoId: string) => void
 }
 
 export const LikeButton: React.FC<ILikeProps> = ({
   photo,
-  user,
+  authUser,
   handleLike
 }) => {
   return (
@@ -22,9 +22,9 @@ export const LikeButton: React.FC<ILikeProps> = ({
       alignItems="center"
       variant="outlined"
     >
-      {photo.likes && user && (
+      {photo.likes && authUser && (
         <>
-          {photo.likes.includes(user._id) ? (
+          {photo.likes.includes(authUser._id) ? (
             <IconButton>
               <Icon>favorite</Icon>
             </IconButton>

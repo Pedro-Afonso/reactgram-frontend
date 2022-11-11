@@ -1,27 +1,20 @@
-import { handleError } from './../utils/handleError'
 import { api, requestConfig, fecthRequest } from '../utils'
 
-import { IRegisterForm, IAuthResponse, ILoginForm } from '../interface'
+import { IRegisterForm, TAuthRes, ILoginForm } from '../interface'
+import { tryCatchService } from '../utils/tryCatchService'
 
 // Register a user and sign in
 const register = async (user: IRegisterForm) => {
   const config = requestConfig('POST', user)
 
-  const res = {} as IAuthResponse
+  return tryCatchService(async () => {
+    const res = await fecthRequest<TAuthRes>(`${api}/users/register`, config)
 
-  try {
-    const res = await fecthRequest<IAuthResponse>(
-      `${api}/users/register`,
-      config
-    )
-
-    if (res.token) {
+    if ('token' in res) {
       localStorage.setItem('user', JSON.stringify(res))
     }
-  } catch (error) {
-    res.errors = [handleError(error)]
-  }
-  return res
+    return res
+  })
 }
 
 // Logout a user
@@ -32,17 +25,15 @@ const logout = () => {
 // Sign in a user
 const login = async (data: ILoginForm) => {
   const config = requestConfig('POST', data)
-  let res = {} as IAuthResponse
-  try {
-    res = await fecthRequest<IAuthResponse>(`${api}/users/login`, config)
 
-    if (res.token) {
+  return tryCatchService(async () => {
+    const res = await fecthRequest<TAuthRes>(`${api}/users/login`, config)
+
+    if ('token' in res) {
       localStorage.setItem('user', JSON.stringify(res))
     }
-  } catch (error) {
-    res.errors = [handleError(error)]
-  }
-  return res
+    return res
+  })
 }
 
 export const authService = { register, logout, login }

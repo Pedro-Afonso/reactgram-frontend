@@ -1,20 +1,31 @@
-export interface IProfile {
+import { TErrors } from './IAuth'
+
+export type TUser = {
+  _id: string
   name: string
-  email: string
+  createdAt: string
   bio?: string
   profileImage?: string
-  password?: string
 }
 
-export interface IUserResponse {
-  user?: IProfile
-  errors?: string[]
+export type TCurrentUser = TUser & {
+  email: string
+  updatedAt: string
+  __v: number
 }
 
-export interface IUserProfileState {
-  user: IProfile | null
+// Responses
+// get current user and update user
+export type TCurrentUserRes = TCurrentUser | TErrors
+
+// get user by id response
+
+export type TUserRes = TUser | TErrors
+
+// Redux State
+export interface IUserState {
+  user: TUser | TCurrentUser | null
   error: string | null
   success: boolean
   loading: boolean
-  message?: string | null
 }

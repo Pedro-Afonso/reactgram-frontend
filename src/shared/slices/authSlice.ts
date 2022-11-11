@@ -1,18 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import {
-  IUserIdToken,
-  IUserAuthState,
-  TAuth,
-  ILoginForm,
-  IRegisterForm
-} from '../interface'
+
+import { ILoginForm, IRegisterForm, TAuth, IAuthState } from '../interface'
 import { authService } from '../services/authService'
 
 const localUser = localStorage.getItem('user')
-const user: IUserIdToken = localUser ? JSON.parse(localUser) : null
+const user: TAuth | null = localUser ? JSON.parse(localUser) : null
 
-const initialState: IUserAuthState = {
-  user: user || null,
+const initialState: IAuthState = {
+  user,
   error: null,
   success: false,
   loading: false
@@ -27,7 +22,7 @@ export const register = createAsyncThunk<
   const res = await authService.register(data)
 
   // Check for errors
-  if (res.errors) {
+  if ('errors' in res) {
     return rejectWithValue(res.errors[0])
   }
 
@@ -48,7 +43,7 @@ export const login = createAsyncThunk<
   const res = await authService.login(user)
 
   // Check for errors
-  if (res.errors) {
+  if ('errors' in res) {
     return rejectWithValue(res.errors[0])
   }
 
@@ -59,11 +54,11 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    reset: (state: IUserAuthState) => {
-      state.loading = false
-      state.error = null
-      state.success = false
+    reset: (state: IAuthState) => {
       state.user = null
+      state.error = null
+      state.loading = false
+      state.success = false
     }
   },
   extraReducers: builder => {

@@ -1,47 +1,32 @@
-import { handleError } from './../utils/handleError'
-import { IUserResponse } from '../interface/IUser'
 import { api, requestConfig, fecthRequest } from '../utils'
+import { TCurrentUserRes, TUserRes } from '../interface'
+import { tryCatchService } from '../utils/tryCatchService'
 
 // Get user details
-const profile = async (data: FormData | null, token: string) => {
-  const config = requestConfig('GET', data, token)
+const profile = async (token: string) => {
+  const config = requestConfig('GET', null, token)
 
-  let res: IUserResponse = {}
-
-  try {
-    res = await fecthRequest<IUserResponse>(`${api}/users/profile`, config)
-  } catch (error) {
-    res.errors = [handleError(error)]
-  }
-  return res
+  return tryCatchService(async () => {
+    return await fecthRequest<TCurrentUserRes>(`${api}/users/profile`, config)
+  })
 }
 
 // Update user details
 const updateProfile = async (data: FormData, token: string) => {
   const config = requestConfig('PUT', data, token, true)
 
-  let res: IUserResponse = {}
-
-  try {
-    res = await fecthRequest<IUserResponse>(`${api}/users/`, config)
-  } catch (error) {
-    res.errors = [handleError(error)]
-  }
-  return res
+  return tryCatchService(async () => {
+    return await fecthRequest<TCurrentUserRes>(`${api}/users/`, config)
+  })
 }
 
 // Get user details
 const getUserDetails = async (id: string) => {
   const config = requestConfig('GET')
 
-  let res: IUserResponse = {}
-
-  try {
-    res = await fecthRequest<IUserResponse>(`${api}/users/${id}`, config)
-  } catch (error) {
-    res.errors = [handleError(error)]
-  }
-  return res
+  return tryCatchService(async () => {
+    return await fecthRequest<TUserRes>(`${api}/users/${id}`, config)
+  })
 }
 
 export const userService = { profile, updateProfile, getUserDetails }

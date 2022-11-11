@@ -1,69 +1,75 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IProfile, IUserProfileState } from '../interface/IUser'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
+import { IUserState, TCurrentUser, TUser } from '../interface'
 import { userService } from '../services/userService'
 
-const initialState: IUserProfileState = {
-  user: { name: '', email: '', profileImage: '' },
+const initialState: IUserState = {
+  user: null,
   error: null,
   success: false,
-  loading: false,
-  message: null
+  loading: false
 }
 
 // Get user details, for edit data
-export const profile = createAsyncThunk('user/profile', async (_, thunkAPI) => {
-  const userIdToken: any = thunkAPI.getState()
+export const profile = createAsyncThunk<
+  TCurrentUser,
+  void,
+  { rejectValue: string }
+>('user/profile', async (_, { rejectWithValue, getState }) => {
+  const userIdToken: any = getState()
 
-  const res = await userService.profile(null, userIdToken.auth.user.token)
+  const res = await userService.profile(userIdToken.auth.user.token)
 
   // Check for errors
-  if (res.errors) {
-    return thunkAPI.rejectWithValue(res.errors[0])
+  if ('errors' in res) {
+    return rejectWithValue(res.errors[0])
   }
 
-  return thunkAPI.fulfillWithValue(res)
+  return res
 })
 
-export const updateProfile = createAsyncThunk(
-  'user/update',
-  async (data: FormData, thunkAPI) => {
-    const userIdToken: any = thunkAPI.getState()
+export const updateProfile = createAsyncThunk<
+  TCurrentUser,
+  FormData,
+  { rejectValue: string }
+>('user/update', async (data, { rejectWithValue, getState }) => {
+  const userIdToken: any = getState()
 
-    const res = await userService.updateProfile(
-      data,
-      userIdToken.auth.user.token
-    )
+  const res = await userService.updateProfile(data, userIdToken.auth.user.token)
 
-    // Check for errors
-    if (res.errors) {
-      return thunkAPI.rejectWithValue(res.errors[0])
-    }
-
-    return thunkAPI.fulfillWithValue(res)
+  // Check for errors
+  if ('errors' in res) {
+    return rejectWithValue(res.errors[0])
   }
-)
+
+  return res
+})
 
 // Get user details
-export const getUserDetails = createAsyncThunk(
-  'user/get',
-  async (id: string, thunkAPI) => {
-    const res = await userService.getUserDetails(id)
+export const getUserDetails = createAsyncThunk<
+  TUser,
+  string,
+  { rejectValue: string }
+>('user/get', async (id, { rejectWithValue }) => {
+  const res = await userService.getUserDetails(id)
 
-    // Check for errors
-    if (res.errors) {
-      return thunkAPI.rejectWithValue(res.errors[0])
-    }
-
-    return thunkAPI.fulfillWithValue(res)
+  // Check for errors
+  if ('errors' in res) {
+    return rejectWithValue(res.errors[0])
   }
-)
+
+  return res
+})
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    resetMessage: (state: IUserProfileState) => {
-      state.message = null
+    reset: (state: IUserState) => {
+      state.user = null
+      state.error = null
+      state.loading = false
+      state.success = false
     }
   },
   extraReducers: builder => {
@@ -72,60 +78,44 @@ export const userSlice = createSlice({
         state.loading = true
         state.error = null
       })
-      .addCase(
-        profile.fulfilled.type,
-        (state, action: PayloadAction<IProfile>) => {
-          state.loading = false
-          state.success = true
-          state.error = null
-          state.user = action.payload
-        }
-      )
+      .addCase(profile.fulfilled, (state, action) => {
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = action.payload
+      })
       .addCase(updateProfile.pending, state => {
         state.loading = true
         state.error = null
       })
-      .addCase(
-        updateProfile.fulfilled.type,
-        (state, action: PayloadAction<IProfile>) => {
-          state.loading = false
-          state.success = true
-          state.error = null
-          state.user = action.payload
-          state.message = 'Usuário atualizado com sucesso!'
-        }
-      )
-      .addCase(
-        updateProfile.rejected.type,
-        (state, action: PayloadAction<string>) => {
-          state.loading = false
-          state.error = action.payload ? action.payload : null
-          state.user = null
-        }
-      )
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = action.payload
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload ? action.payload : null
+        state.user = null
+      })
       .addCase(getUserDetails.pending, state => {
         state.loading = true
         state.error = null
       })
-      .addCase(
-        getUserDetails.fulfilled.type,
-        (state, action: PayloadAction<IProfile>) => {
-          state.loading = false
-          state.success = true
-          state.error = null
-          state.user = action.payload
-        }
-      )
-      .addCase(
-        getUserDetails.rejected.type,
-        (state, action: PayloadAction<string>) => {
-          state.loading = false
-          state.error = action.payload ? action.payload : null
-          state.user = null
-        }
-      )
+      .addCase(getUserDetails.fulfilled, (state, action) => {
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.user = action.payload
+      })
+      .addCase(getUserDetails.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload ? action.payload : null
+        state.user = null
+      })
   }
 })
 
-export const { resetMessage } = userSlice.actions
+export const { reset } = userSlice.actions
 export const { reducer: userReducer } = userSlice

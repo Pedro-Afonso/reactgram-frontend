@@ -1,68 +1,58 @@
-export interface IComments {
-  comment: string
-  userName: string
-  userImage: string
-  userId: string
+import { TErrors } from './IAuth'
+
+type TUser = {
   _id: string
+  name: string
+  profileImage?: string
 }
 
-export interface IPhoto {
+/*
+type TComment = {
+  _id: string
+  text: string
+  user: TUser
+  createdAt: string
+} */
+
+export type TPhoto = {
+  _id: string
   image: string
   title: string
   likes: string[]
-  userId: string
-  userName: string
-  _id: string
-  comments: IComments[]
+  comments: string[]
+  user: TUser
   createdAt: string
   updatedAt: string
   __v: number
 }
 
+// Responses
+// insert photo
+export type TPhotoRes = TPhoto | TErrors
+
+// delete a photo
+
+// update photo by id
+export type TUpdatePhotoRes = { photo: TPhoto; message: string }
+
+// get photo by id
+
+// get all photos
+export type TPhotosRes = TPhoto[] | TErrors
+
+// get all photos by user
+
+// search photo by title name
+
+// like a photo
+export type TLikePhotoRes = { photoId: string; userId: string; message: string }
+
+// Redux State
 export interface IPhotoState {
-  photos: IPhoto[]
-  photo: IPhoto | null
+  photos: TPhoto[]
+  photo: TPhoto | null
   error: string | null
   success: boolean
   loading: boolean
-  message?: string | null
+  message: string | null
 }
-
-export interface IErrors {
-  errors: string[]
-}
-
-export interface IMessage {
-  message: string
-}
-
-export interface IComment {
-  comment: {
-    comment: string
-    userName: string
-    userImage: string
-    userId: string
-  }
-}
-
-export interface ILike {
-  photoId: string
-  userId: string
-  message: string
-}
-
-export interface IPhotoResponse extends Partial<ILike & IComment> {
-  photo?: IPhoto
-  photos?: IPhoto[]
-  errors?: string[]
-  _id?: string
-  message?: string
-}
-
-//  export interface IPhotoMessageErrors extends IPhoto, IMessage, IErrors {}
-
-export interface ILikeErrors extends ILike, IErrors {}
-
-export interface ICommentsMessageErrors extends IComments, IMessage, IErrors {}
-export interface ICommentMessageErrors extends IComment, IMessage, IErrors {}
-export interface IPhotoMessageErrors extends IComment, IMessage, IErrors {}

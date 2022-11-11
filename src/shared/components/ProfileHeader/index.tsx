@@ -1,7 +1,7 @@
 import { Avatar, Box, Typography } from '@mui/material'
-import { IProfile } from '../../interface'
+import { TUser } from '../../interface'
 
-export const ProfileHeader: React.FC<{ user: IProfile }> = ({ user }) => {
+export const ProfileHeader: React.FC<{ user: TUser }> = ({ user }) => {
   return (
     <Box display="flex" paddingY={2}>
       <Avatar

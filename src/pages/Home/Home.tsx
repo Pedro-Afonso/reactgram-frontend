@@ -1,17 +1,19 @@
 import { useNavigate } from 'react-router-dom'
-import { Box } from '@mui/material'
+import { Backdrop, Box, CircularProgress } from '@mui/material'
 import { useEffect } from 'react'
 
 import { getAllPhotos, likePhoto } from '../../shared/slices/photoSlice'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { PhotoItem } from '../../shared/components'
 import { addComment } from '../../shared/slices/commentSlice'
+import { PhotoItem } from '../../shared/components'
 
 export const Home = () => {
   const dispatch = useAppDispatch()
 
-  const { photos } = useAppSelector(state => state.photo)
-  const { user: authUser } = useAppSelector(state => state.auth)
+  const { photos, loading: loadingPhoto } = useAppSelector(state => state.photo)
+  const { user: authUser, loading: loadingAuth } = useAppSelector(
+    state => state.auth
+  )
 
   const navigate = useNavigate()
 
@@ -42,6 +44,12 @@ export const Home = () => {
             />
           </Box>
         ))}
+      <Backdrop
+        sx={{ color: '#fff', zIndex: theme => theme.zIndex.modal + 1 }}
+        open={loadingAuth || loadingPhoto}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   )
 }

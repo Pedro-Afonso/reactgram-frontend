@@ -1,20 +1,21 @@
+import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-
-import { Box } from '@mui/system'
+import { Box, Backdrop, CircularProgress } from '@mui/material'
 
 import { likePhoto, searchPhotos } from '../../shared/slices/photoSlice'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { PhotoItem } from '../../shared/components'
-import { useQuery } from '../../shared/hooks/useQuery'
-import { useNavigate } from 'react-router-dom'
 import { addComment } from '../../shared/slices/commentSlice'
+import { useQuery } from '../../shared/hooks/useQuery'
+import { PhotoItem } from '../../shared/components'
 
 export const Search = () => {
   const dispatch = useAppDispatch()
 
-  const { user: authUser } = useAppSelector(state => state.auth)
+  const { user: authUser, loading: loadingAuth } = useAppSelector(
+    state => state.auth
+  )
 
-  const { photos } = useAppSelector(state => state.photo)
+  const { photos, loading: loadingPhoto } = useAppSelector(state => state.photo)
 
   const query = useQuery()
   const search = query.get('q')
@@ -49,6 +50,12 @@ export const Search = () => {
             />
           </Box>
         ))}
+      <Backdrop
+        sx={{ color: '#fff', zIndex: theme => theme.zIndex.modal + 1 }}
+        open={loadingAuth || loadingPhoto}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   )
 }

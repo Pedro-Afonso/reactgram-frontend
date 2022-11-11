@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
 
-import { Box, Typography, Paper, TextField, Avatar } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Paper,
+  TextField,
+  Avatar,
+  Backdrop,
+  CircularProgress
+} from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
 import { profile, updateProfile } from '../../shared/slices/userSlice'
@@ -15,7 +23,11 @@ export const EditProfile = () => {
   const [previewImage, setPreviewImage] = useState('')
 
   const dispatch = useAppDispatch()
-  const { user, loading, error } = useAppSelector(state => state.user)
+  const {
+    user,
+    loading: loadingUser,
+    error
+  } = useAppSelector(state => state.user)
   // Load user data
   useEffect(() => {
     dispatch(profile())
@@ -146,7 +158,7 @@ export const EditProfile = () => {
             />
             <Box>
               <LoadingButton
-                loading={loading}
+                loading={loadingUser}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -157,6 +169,12 @@ export const EditProfile = () => {
           </Box>
         </form>
       </Box>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: theme => theme.zIndex.modal + 1 }}
+        open={loadingUser}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   )
 }

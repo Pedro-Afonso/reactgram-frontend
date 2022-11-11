@@ -7,7 +7,9 @@ import {
   ImageListItemBar,
   Paper,
   Typography,
-  Button
+  Button,
+  Backdrop,
+  CircularProgress
 } from '@mui/material'
 import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
@@ -28,9 +30,11 @@ export const Profile = () => {
 
   const dispatch = useAppDispatch()
 
-  const { user } = useAppSelector(state => state.user)
-  const { user: userAuth } = useAppSelector(state => state.auth)
-  const { photos } = useAppSelector(state => state.photo)
+  const { user, loading: loadingUser } = useAppSelector(state => state.user)
+  const { user: userAuth, loading: loadingAuth } = useAppSelector(
+    state => state.auth
+  )
+  const { photos, loading: loadingPhoto } = useAppSelector(state => state.photo)
 
   const navigate = useNavigate()
 
@@ -210,6 +214,12 @@ export const Profile = () => {
           </Box>
         </Box>
       </Box>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: theme => theme.zIndex.modal + 1 }}
+        open={loadingUser || loadingAuth || loadingPhoto}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   )
 }

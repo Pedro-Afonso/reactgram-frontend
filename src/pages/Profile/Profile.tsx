@@ -1,4 +1,8 @@
 import {
+  Box,
+  Button,
+  Backdrop,
+  CircularProgress,
   Divider,
   Icon,
   IconButton,
@@ -6,24 +10,21 @@ import {
   ImageListItem,
   ImageListItemBar,
   Paper,
-  Typography,
-  Button,
-  Backdrop,
-  CircularProgress
+  Typography
 } from '@mui/material'
-import { Box } from '@mui/system'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ProfileHeader, UploadPhoto } from '../../shared/components'
-import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { TPhoto } from '../../shared/interface'
+
 import {
   deletePhoto,
   getUserPhotos,
   publishPhoto,
   updatePhoto
 } from '../../shared/slices/photoSlice'
+import { ProfileHeader, UploadPhoto } from '../../shared/components'
+import { useAppDispatch, useAppSelector } from '../../shared/hooks'
 import { getUserDetails } from '../../shared/slices/userSlice'
+import { TPhoto } from '../../shared/interface'
 
 export const Profile = () => {
   const { id } = useParams()
@@ -54,30 +55,31 @@ export const Profile = () => {
     }
   }, [id, dispatch])
 
-  // clears the modal data when closing
-  useEffect(() => {
-    if (!editMode && !isModalOpen) {
-      setTitle('')
-      setImage(null)
-    } else if (editMode && !isModalOpen) {
-      setEditMode(false)
-      setImage(null)
-      setEditId('')
-      setTitle('')
-    }
-  }, [editMode, isModalOpen])
+  // clears the modal data
+  const clearModal = () => {
+    setTitle('')
+    setImage(null)
+  }
 
   // Toggle isModalOpen
   const toggleModal = () => {
     setIsModalOpen(prev => !prev)
   }
 
+  // Stores the image file in the image state
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     setImage(file || null)
   }
 
-  const handleEdit = (photo: TPhoto) => {
+  const openUploadModal = () => {
+    clearModal()
+    setEditMode(false)
+    toggleModal()
+  }
+
+  const openEditModal = (photo: TPhoto) => {
+    clearModal()
     setImage(photo.image)
     setEditId(photo._id)
     setTitle(photo.title)
@@ -88,7 +90,6 @@ export const Profile = () => {
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault()
     dispatch(updatePhoto({ title, id: editId }))
-
     toggleModal()
   }
 
@@ -149,7 +150,11 @@ export const Profile = () => {
           {/* Open modal button */}
           {isTheProfileOwner && (
             <Box display="flex" justifyContent="center">
-              <Button size="large" variant="contained" onClick={toggleModal}>
+              <Button
+                size="large"
+                variant="contained"
+                onClick={openUploadModal}
+              >
                 Carregar Foto
               </Button>
             </Box>
@@ -195,7 +200,7 @@ export const Profile = () => {
                           </IconButton>
                           {isTheProfileOwner && (
                             <>
-                              <IconButton onClick={() => handleEdit(photo)}>
+                              <IconButton onClick={() => openEditModal(photo)}>
                                 <Icon>mode_edit</Icon>
                               </IconButton>
                               <IconButton

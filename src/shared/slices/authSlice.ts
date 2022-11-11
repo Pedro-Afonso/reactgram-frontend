@@ -54,7 +54,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    reset: (state: IAuthState) => {
+    reset: state => {
       state.user = null
       state.error = null
       state.loading = false

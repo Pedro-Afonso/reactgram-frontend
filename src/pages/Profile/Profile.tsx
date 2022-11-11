@@ -40,7 +40,7 @@ export const Profile = () => {
   const [editId, setEditId] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const canEditDelete = id === userAuth!._id
+  const isTheProfileOwner = id === userAuth!._id
 
   // Load user data
   useEffect(() => {
@@ -136,33 +136,39 @@ export const Profile = () => {
           <Divider />
           <Box marginY={3}>
             <Typography variant="h3" fontSize={18} textAlign="center">
-              Compartilhe algum momento seu:
+              {isTheProfileOwner
+                ? 'Compartilhe algum momento seu:'
+                : 'Publicações'}
             </Typography>
           </Box>
 
           {/* Open modal button */}
-          <Box display="flex" justifyContent="center">
-            <Button size="large" variant="contained" onClick={toggleModal}>
-              Carregar Foto
-            </Button>
-          </Box>
+          {isTheProfileOwner && (
+            <Box display="flex" justifyContent="center">
+              <Button size="large" variant="contained" onClick={toggleModal}>
+                Carregar Foto
+              </Button>
+            </Box>
+          )}
           {/* /Open modal button */}
 
-          <UploadPhoto
-            dialogTitle={
-              editMode ? 'Editar publicação' : 'Publicar uma nova foto'
-            }
-            editMode={editMode}
-            title={title}
-            setTitle={setTitle}
-            isOpen={isModalOpen}
-            toggleModal={toggleModal}
-            image={image}
-            handleFile={handleFile}
-            handleUpdate={handleUpdate}
-            handleSubmit={handleSubmit}
-            loading={false}
-          />
+          {isTheProfileOwner && (
+            <UploadPhoto
+              dialogTitle={
+                editMode ? 'Editar publicação' : 'Publicar uma nova foto'
+              }
+              editMode={editMode}
+              title={title}
+              setTitle={setTitle}
+              isOpen={isModalOpen}
+              toggleModal={toggleModal}
+              image={image}
+              handleFile={handleFile}
+              handleUpdate={handleUpdate}
+              handleSubmit={handleSubmit}
+              loading={false}
+            />
+          )}
         </Box>
         <Box>
           <Typography variant="h2" fontSize={16}>
@@ -183,7 +189,7 @@ export const Profile = () => {
                           >
                             <Icon>visibility</Icon>
                           </IconButton>
-                          {canEditDelete && (
+                          {isTheProfileOwner && (
                             <>
                               <IconButton onClick={() => handleEdit(photo)}>
                                 <Icon>mode_edit</Icon>

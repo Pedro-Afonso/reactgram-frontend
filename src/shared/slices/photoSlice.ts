@@ -166,7 +166,7 @@ export const photoSlice = createSlice({
   name: 'publish',
   initialState,
   reducers: {
-    resetMessage: (state: IPhotoState) => {
+    resetMessage: state => {
       state.message = null
     }
   },
@@ -195,6 +195,7 @@ export const photoSlice = createSlice({
       .addCase(getUserPhotos.pending, state => {
         state.loading = true
         state.error = null
+        state.photos = []
       })
       .addCase(getUserPhotos.fulfilled, (state, action) => {
         state.loading = false

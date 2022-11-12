@@ -4,8 +4,6 @@ import {
   AppBar,
   Box,
   Icon,
-  InputAdornment,
-  TextField,
   Toolbar,
   Typography,
   useTheme,
@@ -14,6 +12,7 @@ import {
 
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { logout, reset } from '../../slices/authSlice'
+import { SearchBar } from '../SearchBar'
 
 interface INavbarProps {
   children: React.ReactNode
@@ -57,21 +56,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
             <Box flex={2}>
               <Typography variant="h6">ReactGram</Typography>
             </Box>
-            <Box flex={2}>
-              <form onSubmit={handleSearch}>
-                <TextField
-                  placeholder="Pesquisar..."
-                  onChange={e => setQuery(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Icon>search</Icon>
-                      </InputAdornment>
-                    )
-                  }}
-                />
-              </form>
-            </Box>
+            <SearchBar setQuery={setQuery} handleSearch={handleSearch} />
             <Box
               display="flex"
               alignItems="center"

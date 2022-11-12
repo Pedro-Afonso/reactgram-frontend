@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-
 import {
   AppBar,
   Box,
@@ -13,7 +12,7 @@ import {
   MenuItem
 } from '@mui/material'
 
-import { useAppDispatch, useAppSelector, useAuth } from '../../hooks'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import { logout, reset } from '../../slices/authSlice'
 
 interface INavbarProps {
@@ -24,8 +23,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   const navigate = useNavigate()
   const theme = useTheme()
 
-  const { auth } = useAuth()
-  const { user } = useAppSelector(state => state.auth)
+  const { user: userAuth } = useAppSelector(state => state.auth)
   const dispatch = useAppDispatch()
 
   const [query, setQuery] = useState('')
@@ -81,16 +79,15 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
               flex={1}
               gap={1}
             >
-              {auth ? (
+              {userAuth ? (
                 <>
                   <MenuItem onClick={() => navigate('/home')}>
                     <Icon>home</Icon>
                   </MenuItem>
-                  {user && (
-                    <MenuItem onClick={() => navigate(`/users/${user._id}`)}>
-                      <Icon>camera_alt</Icon>
-                    </MenuItem>
-                  )}
+                  <MenuItem onClick={() => navigate(`/users/${userAuth._id}`)}>
+                    <Icon>camera_alt</Icon>
+                  </MenuItem>
+
                   <MenuItem onClick={() => navigate('/profile')}>
                     <Icon>person</Icon>
                   </MenuItem>

@@ -23,7 +23,7 @@ export const AppRoutes = () => {
         alignItems="center"
         justifyContent="center"
       >
-        <CircularProgress />;
+        <CircularProgress />
       </Box>
     )
   }

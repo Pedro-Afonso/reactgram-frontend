@@ -58,7 +58,7 @@ export const Login = () => {
             ReactGram
           </Typography>
           <Typography marginY={1} variant="h2" fontSize="1rem" fontWeight={400}>
-            Cadastre-se e compartilhe suas aventuras
+            Entre com o seu login e senha
           </Typography>
         </Box>
 

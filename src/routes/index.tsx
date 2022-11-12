@@ -9,10 +9,10 @@ import {
   Profile,
   Search
 } from '../pages'
-import { useAuth } from '../shared/hooks'
+import { useAppSelector } from '../shared/hooks'
 
 export const AppRoutes = () => {
-  const { auth, loading } = useAuth()
+  const { user: auth, loading } = useAppSelector(state => state.auth)
 
   if (loading) {
     return (

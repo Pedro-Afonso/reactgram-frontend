@@ -11,7 +11,7 @@ const register = async (user: IRegisterForm) => {
     const res = await fecthRequest<TAuthRes>(`${api}/users/register`, config)
 
     if ('token' in res) {
-      localStorage.setItem('user', JSON.stringify(res))
+      sessionStorage.setItem('user', JSON.stringify(res))
     }
     return res
   })
@@ -19,7 +19,7 @@ const register = async (user: IRegisterForm) => {
 
 // Logout a user
 const logout = () => {
-  localStorage.removeItem('user')
+  sessionStorage.removeItem('user')
 }
 
 // Sign in a user
@@ -30,7 +30,7 @@ const login = async (data: ILoginForm) => {
     const res = await fecthRequest<TAuthRes>(`${api}/users/login`, config)
 
     if ('token' in res) {
-      localStorage.setItem('user', JSON.stringify(res))
+      sessionStorage.setItem('user', JSON.stringify(res))
     }
     return res
   })

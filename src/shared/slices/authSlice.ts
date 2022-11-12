@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { ILoginForm, IRegisterForm, TAuth, IAuthState } from '../interface'
 import { authService } from '../services/authService'
 
-const localUser = localStorage.getItem('user')
+const localUser = sessionStorage.getItem('user')
 const user: TAuth | null = localUser ? JSON.parse(localUser) : null
 
 const initialState: IAuthState = {

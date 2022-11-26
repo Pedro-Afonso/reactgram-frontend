@@ -19,11 +19,12 @@ export const Profile = () => {
 
   const dispatch = useAppDispatch()
 
-  const { user, loading: loadingUser } = useAppSelector(state => state.user)
-  const { user: userAuth, loading: loadingAuth } = useAppSelector(
-    state => state.auth
-  )
-  const { loading: loadingPhoto } = useAppSelector(state => state.photo)
+  const user = useAppSelector(state => state.user.user)
+  const userAuth = useAppSelector(state => state.auth.user)
+
+  const loadingUser = useAppSelector(state => state.user.loading)
+  const loadingAuth = useAppSelector(state => state.auth.loading)
+  const loadingPhoto = useAppSelector(state => state.photo.loading)
 
   const isTheProfileOwner = id === userAuth!._id
 

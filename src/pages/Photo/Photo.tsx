@@ -17,7 +17,8 @@ export const Photo = () => {
 
   const dispatch = useAppDispatch()
 
-  const { photo, loading: ladingPhotos } = useAppSelector(state => state.photo)
+  const photo = useAppSelector(state => state.photo.photo)
+  const ladingPhotos = useAppSelector(state => state.photo.loading)
 
   // Load photo data
   useEffect(() => {

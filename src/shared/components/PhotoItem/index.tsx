@@ -1,38 +1,46 @@
-import {
-  Avatar,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  IconButton,
-  Link,
-  Typography,
-  Icon
-} from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
-import { TPhoto, TAuth } from '../../interface'
+import CardActionArea from '@mui/material/CardActionArea'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import CardHeader from '@mui/material/CardHeader'
+import IconButton from '@mui/material/IconButton'
+import CardMedia from '@mui/material/CardMedia'
+import Avatar from '@mui/material/Avatar'
+import Card from '@mui/material/Card'
+import Link from '@mui/material/Link'
+import Icon from '@mui/material/Icon'
+
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { addComment } from '../../slices/commentSlice'
+import { likePhoto } from '../../slices/photoSlice'
 import { CommentForm } from '../CommentForm'
 import { LikeButton } from '../LikeButton'
+import { TPhoto } from '../../interface'
 
 interface IPhotoItemProps {
   photo: TPhoto
-  authUser: TAuth | null
+
   photoLink?: boolean
-  handleLike: (photoId: string) => void
-  navigate: (value: string) => void
-  handleSubmitComment: (comment: string, photoId: string) => void
 }
 
 export const PhotoItem: React.FC<IPhotoItemProps> = ({
   photo,
-  authUser,
-  navigate,
-  handleLike,
-  handleSubmitComment,
   photoLink = true
 }) => {
+  const authUser = useAppSelector(state => state.auth.user)
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const handleLike = (photoId: string) => {
+    dispatch(likePhoto(photoId))
+  }
+
+  const handleSubmitComment = (comment: string, photoId: string) => {
+    dispatch(addComment({ comment, photoId }))
+  }
+
   const date = new Date(photo.createdAt).toLocaleDateString()
   const time = new Date(photo.createdAt).toLocaleTimeString()
   return (

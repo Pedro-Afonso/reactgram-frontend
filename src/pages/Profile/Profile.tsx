@@ -19,7 +19,6 @@ export const Profile = () => {
 
   const dispatch = useAppDispatch()
 
-  const user = useAppSelector(state => state.user.user)
   const userAuth = useAppSelector(state => state.auth.user)
 
   const loadingUser = useAppSelector(state => state.user.loading)
@@ -52,7 +51,7 @@ export const Profile = () => {
         paddingX={4}
         paddingY={2}
       >
-        {user && <ProfileHeader user={user} />}
+        <ProfileHeader />
         <Box width="100%">
           <Divider />
           <Box marginY={3}>

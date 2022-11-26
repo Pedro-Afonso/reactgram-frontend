@@ -1,30 +1,18 @@
 import {
   Box,
-  Button,
   Backdrop,
   CircularProgress,
   Divider,
-  Icon,
-  IconButton,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
   Paper,
   Typography
 } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
-import {
-  deletePhoto,
-  getUserPhotos,
-  publishPhoto,
-  updatePhoto
-} from '../../shared/slices/photoSlice'
-import { ProfileHeader, UploadPhoto } from '../../shared/components'
+import { ProfileHeader, Gallery, DialogAddPhoto } from '../../shared/components'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
+import { getUserPhotos } from '../../shared/slices/photoSlice'
 import { getUserDetails } from '../../shared/slices/userSlice'
-import { TPhoto } from '../../shared/interface'
 
 export const Profile = () => {
   const { id } = useParams()
@@ -35,15 +23,7 @@ export const Profile = () => {
   const { user: userAuth, loading: loadingAuth } = useAppSelector(
     state => state.auth
   )
-  const { photos, loading: loadingPhoto } = useAppSelector(state => state.photo)
-
-  const navigate = useNavigate()
-
-  const [title, setTitle] = useState('')
-  const [image, setImage] = useState<File | string | null>(null)
-  const [editMode, setEditMode] = useState(false)
-  const [editId, setEditId] = useState('')
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { loading: loadingPhoto } = useAppSelector(state => state.photo)
 
   const isTheProfileOwner = id === userAuth!._id
 
@@ -54,71 +34,6 @@ export const Profile = () => {
       dispatch(getUserPhotos(id))
     }
   }, [id, dispatch])
-
-  // clears the modal data
-  const clearModal = () => {
-    setTitle('')
-    setImage(null)
-  }
-
-  // Toggle isModalOpen
-  const toggleModal = () => {
-    setIsModalOpen(prev => !prev)
-  }
-
-  // Stores the image file in the image state
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
-    setImage(file || null)
-  }
-
-  const openUploadModal = () => {
-    clearModal()
-    setEditMode(false)
-    toggleModal()
-  }
-
-  const openEditModal = (photo: TPhoto) => {
-    clearModal()
-    setImage(photo.image)
-    setEditId(photo._id)
-    setTitle(photo.title)
-    setEditMode(true)
-    toggleModal()
-  }
-
-  const handleUpdate = (e: React.FormEvent) => {
-    e.preventDefault()
-    dispatch(updatePhoto({ title, id: editId }))
-    toggleModal()
-  }
-
-  // Delete a photo
-  const handleDelete = (photoId: string) => {
-    dispatch(deletePhoto(photoId))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!image) return
-
-    const photoData = {
-      title,
-      image
-    }
-
-    // build form data
-    const formData = new FormData()
-
-    Object.entries(photoData).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-
-    await dispatch(publishPhoto(formData))
-
-    toggleModal()
-  }
 
   return (
     <Box
@@ -147,75 +62,21 @@ export const Profile = () => {
             </Typography>
           </Box>
 
-          {/* Open modal button */}
-          {isTheProfileOwner && (
+          {/* Button to open the image upload modal */}
+          {isTheProfileOwner ? (
             <Box display="flex" justifyContent="center">
-              <Button
-                size="large"
-                variant="contained"
-                onClick={openUploadModal}
-              >
-                Carregar Foto
-              </Button>
+              <DialogAddPhoto />
             </Box>
-          )}
-          {/* /Open modal button */}
-
-          {isTheProfileOwner && (
-            <UploadPhoto
-              dialogTitle={
-                editMode ? 'Editar publicação' : 'Publicar uma nova foto'
-              }
-              editMode={editMode}
-              title={title}
-              setTitle={setTitle}
-              isOpen={isModalOpen}
-              toggleModal={toggleModal}
-              image={image}
-              handleFile={handleFile}
-              handleUpdate={handleUpdate}
-              handleSubmit={handleSubmit}
-              loading={false}
-            />
-          )}
+          ) : null}
+          {/* /Button to open the image upload modal */}
         </Box>
         <Box>
           <Typography variant="h2" fontSize={16}>
             Fotos publicadas:
           </Typography>
-          <Box maxWidth={800}>
-            <ImageList cols={3}>
-              {photos &&
-                photos.map(photo => (
-                  <ImageListItem key={photo._id}>
-                    {photo.image && <img src={photo.image} alt={photo.title} />}
 
-                    <ImageListItemBar
-                      actionIcon={
-                        <>
-                          <IconButton
-                            onClick={() => navigate(`/photos/${photo._id}`)}
-                          >
-                            <Icon>visibility</Icon>
-                          </IconButton>
-                          {isTheProfileOwner && (
-                            <>
-                              <IconButton onClick={() => openEditModal(photo)}>
-                                <Icon>mode_edit</Icon>
-                              </IconButton>
-                              <IconButton
-                                onClick={() => handleDelete(photo._id)}
-                              >
-                                <Icon>delete</Icon>
-                              </IconButton>
-                            </>
-                          )}
-                        </>
-                      }
-                    />
-                  </ImageListItem>
-                ))}
-            </ImageList>
+          <Box maxWidth={800}>
+            <Gallery />
           </Box>
         </Box>
       </Box>

@@ -8,21 +8,26 @@ import {
   IconButton,
   Icon
 } from '@mui/material'
+import { useAppSelector, useAppDispatch } from '../../hooks'
 
 import { TComment } from '../../interface'
+import { deleteComment } from '../../slices/commentSlice'
 
 interface ICommentItemProps {
   comment: TComment
-  currentUserId?: string
-  deleteComment: (value: string) => void
 }
 
-export const CommentItem: React.FC<ICommentItemProps> = ({
-  comment,
-  currentUserId,
-  deleteComment
-}) => {
-  const canDelete = currentUserId === comment.user._id
+export const CommentItem: React.FC<ICommentItemProps> = ({ comment }) => {
+  const dispatch = useAppDispatch()
+
+  const authUser = useAppSelector(state => state.auth.user)
+
+  const canDelete = authUser?._id === comment.user._id
+
+  const handleDeleteComment = () => {
+    if (!canDelete) return
+    dispatch(deleteComment(comment._id))
+  }
 
   return (
     <Card component={Paper} variant="outlined">
@@ -50,7 +55,7 @@ export const CommentItem: React.FC<ICommentItemProps> = ({
         </CardContent>
 
         {canDelete && (
-          <IconButton onClick={() => deleteComment(comment._id)}>
+          <IconButton onClick={handleDeleteComment}>
             <Icon>delete_forever</Icon>
           </IconButton>
         )}

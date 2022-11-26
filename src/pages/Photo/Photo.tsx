@@ -1,15 +1,16 @@
-import { Backdrop, Box, CircularProgress, Paper } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 
-import {
-  getComments,
-  deleteComment,
-  addComment
-} from '../../shared/slices/commentSlice'
+import CircularProgress from '@mui/material/CircularProgress'
+import Backdrop from '@mui/material/Backdrop'
+import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
+
+import { getComments, addComment } from '../../shared/slices/commentSlice'
 import { getPhoto, likePhoto } from '../../shared/slices/photoSlice'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { PhotoItem, CommentItem } from '../../shared/components'
+import { Comments } from '../../shared/components/Comments'
+import { PhotoItem } from '../../shared/components'
 
 export const Photo = () => {
   const { id } = useParams()
@@ -18,9 +19,6 @@ export const Photo = () => {
 
   const { user } = useAppSelector(state => state.auth)
   const { photo, loading: ladingPhotos } = useAppSelector(state => state.photo)
-  const { comments, loading: loadingComments } = useAppSelector(
-    state => state.comment
-  )
 
   const navigate = useNavigate()
 
@@ -34,10 +32,6 @@ export const Photo = () => {
 
   const handleLike = (photoId: string) => {
     dispatch(likePhoto(photoId))
-  }
-
-  const handleDeleteComment = (commentId: string) => {
-    dispatch(deleteComment(commentId))
   }
 
   const handleSubmitComment = (comment: string, photoId: string) => {
@@ -57,22 +51,7 @@ export const Photo = () => {
             handleSubmitComment={handleSubmitComment}
           />
 
-          {comments && !loadingComments ? (
-            <Box>
-              {comments.map((comment, key) => (
-                <CommentItem
-                  deleteComment={handleDeleteComment}
-                  currentUserId={user?._id}
-                  comment={comment}
-                  key={key}
-                />
-              ))}
-            </Box>
-          ) : (
-            <Box display="flex" justifyContent="center" paddingY={2}>
-              <CircularProgress color="inherit" />
-            </Box>
-          )}
+          <Comments />
         </>
       )}
 

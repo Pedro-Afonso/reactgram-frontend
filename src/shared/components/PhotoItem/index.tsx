@@ -21,7 +21,6 @@ import { TPhoto } from '../../interface'
 
 interface IPhotoItemProps {
   photo: TPhoto
-
   photoLink?: boolean
 }
 
@@ -89,7 +88,7 @@ export const PhotoItem: React.FC<IPhotoItemProps> = ({
           Publicado por:{' '}
           <Link
             component="button"
-            onClick={() => navigate && navigate(`/users/${photo.user._id}`)}
+            onClick={() => navigate(`/users/${photo.user._id}`)}
             color="secondary"
           >
             {photo.user.name}

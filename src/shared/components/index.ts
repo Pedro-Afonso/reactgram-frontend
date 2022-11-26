@@ -1,6 +1,7 @@
 export * from './CommentForm'
 export * from './CommentItem'
 export * from './Comments'
+export * from './DialogEditPhoto'
 export * from './LikeButton'
 export * from './Navbar'
 export * from './PhotoItem'

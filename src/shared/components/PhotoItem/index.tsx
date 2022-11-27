@@ -12,9 +12,8 @@ import Card from '@mui/material/Card'
 import Link from '@mui/material/Link'
 import Icon from '@mui/material/Icon'
 
-import { useAppDispatch, useAppSelector } from '../../hooks'
 import { addComment } from '../../slices/commentSlice'
-import { likePhoto } from '../../slices/photoSlice'
+import { useAppDispatch } from '../../hooks'
 import { CommentForm } from '../CommentForm'
 import { LikeButton } from '../LikeButton'
 import { TPhoto } from '../../interface'
@@ -28,13 +27,8 @@ export const PhotoItem: React.FC<IPhotoItemProps> = ({
   photo,
   photoLink = true
 }) => {
-  const authUser = useAppSelector(state => state.auth.user)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
-  const handleLike = (photoId: string) => {
-    dispatch(likePhoto(photoId))
-  }
 
   const handleSubmitComment = (comment: string, photoId: string) => {
     dispatch(addComment({ comment, photoId }))
@@ -96,7 +90,7 @@ export const PhotoItem: React.FC<IPhotoItemProps> = ({
         </Typography>
       </CardContent>
       <CardActions>
-        <LikeButton photo={photo} authUser={authUser} handleLike={handleLike} />
+        <LikeButton photo={photo} />
       </CardActions>
       <CardActions>
         <CommentForm

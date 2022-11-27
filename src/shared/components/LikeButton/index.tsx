@@ -1,17 +1,26 @@
-import { Box, Icon, IconButton, Paper, Typography } from '@mui/material'
-import { TPhoto, TAuth } from '../../interface'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import Paper from '@mui/material/Paper'
+import Icon from '@mui/material/Icon'
+import Box from '@mui/material/Box'
+
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { likePhoto } from '../../slices/photoSlice'
+import { TPhoto } from '../../interface'
 
 interface ILikeProps {
   photo: TPhoto
-  authUser: TAuth | null
-  handleLike: (photoId: string) => void
 }
 
-export const LikeButton: React.FC<ILikeProps> = ({
-  photo,
-  authUser,
-  handleLike
-}) => {
+export const LikeButton: React.FC<ILikeProps> = ({ photo }) => {
+  const dispatch = useAppDispatch()
+
+  const authUser = useAppSelector(state => state.auth.user)
+
+  const handleLike = (photoId: string) => {
+    dispatch(likePhoto(photoId))
+  }
+
   return (
     <Box
       component={Paper}

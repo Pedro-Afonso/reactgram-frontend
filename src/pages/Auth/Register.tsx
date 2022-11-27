@@ -1,39 +1,24 @@
-import { Box, Link, Paper, TextField, Typography, Divider } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { LoadingButton } from '@mui/lab'
 
-import { useAppDispatch, useAppSelector } from '../../shared/hooks'
-import { register, reset } from '../../shared/slices/authSlice'
+import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
+import Paper from '@mui/material/Paper'
+import Link from '@mui/material/Link'
+import Box from '@mui/material/Box'
+
+import { useAppDispatch } from '../../shared/hooks'
+import { register } from '../../shared/slices/authSlice'
 import { IRegisterForm } from '../../shared/interface'
+import { RegisterForm } from '../../shared/components'
 
 export const Register = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-
-  const { error, loading } = useAppSelector(state => state.auth)
-
   const dispatch = useAppDispatch()
 
   const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const user: IRegisterForm = {
-      name,
-      email,
-      password,
-      confirmPassword
-    }
-    dispatch(register(user))
+  const handleRegister = (data: IRegisterForm) => {
+    dispatch(register(data))
   }
-
-  // Clean all auth states
-  useEffect(() => {
-    dispatch(reset())
-  }, [dispatch])
 
   return (
     <Box
@@ -60,78 +45,7 @@ export const Register = () => {
           </Typography>
         </Box>
 
-        <form onSubmit={handleSubmit}>
-          <Box marginBottom={4}>
-            <Box display="flex" flexDirection="column" gap={3}>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Nome"
-                  type="text"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  error={!!error?.match(/nome/g)}
-                  helperText={error?.match(/nome/g) && error}
-                >
-                  Nome
-                </TextField>
-              </Box>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Email"
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  error={!!error?.match(/e-mail/g)}
-                  helperText={error?.match(/e-mail/g) && error}
-                >
-                  Email
-                </TextField>
-              </Box>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Senha"
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  error={!!error?.match(/\bsenha\b/g)}
-                  helperText={error?.match(/\bsenha\b/g) && error}
-                >
-                  Senha
-                </TextField>
-              </Box>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Confirme a senha"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={e => setConfirmPassword(e.target.value)}
-                  error={!!error?.match(/\bsenhas\b/g)}
-                  helperText={error?.match(/\bsenhas\b/g) && error}
-                >
-                  Confirme a senha
-                </TextField>
-              </Box>
-              <Box>
-                <LoadingButton
-                  loading={loading}
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                >
-                  Cadastrar
-                </LoadingButton>
-              </Box>
-            </Box>
-          </Box>
-        </form>
+        <RegisterForm handleRegister={handleRegister} />
         <Divider />
         <Typography textAlign="center" marginY={2}>
           Já tem conta?{' '}

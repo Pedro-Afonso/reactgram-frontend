@@ -44,7 +44,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
             <Box flex={2}>
               <Typography variant="h6">ReactGram</Typography>
             </Box>
-            <SearchBar />
+            {userAuth ? <SearchBar /> : null}
             <Box
               display="flex"
               alignItems="center"

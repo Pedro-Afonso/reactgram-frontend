@@ -1,37 +1,21 @@
 // material ui
-import { Box, Typography, Paper, TextField, Link, Divider } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
-
-// hooks
-import { useAppDispatch, useAppSelector } from '../../shared/hooks'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 
-// interface
-import { ILoginForm } from '../../shared/interface'
+import { Box, Typography, Paper, Link, Divider } from '@mui/material'
 
-// redux
 import { login, reset } from '../../shared/slices/authSlice'
+import { useAppDispatch } from '../../shared/hooks'
+import { ILoginForm } from '../../shared/interface'
+import { LoginForm } from '../../shared/components'
 
 export const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { error, loading } = useAppSelector(state => state.auth)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const user: ILoginForm = {
-      email,
-      password
-    }
-
-    dispatch(login(user))
+  const handleLogin = (data: ILoginForm) => {
+    dispatch(login(data))
   }
-
   // Clean all auth states
   useEffect(() => {
     dispatch(reset())
@@ -62,51 +46,7 @@ export const Login = () => {
           </Typography>
         </Box>
 
-        <form onSubmit={handleSubmit}>
-          <Box marginBottom={4}>
-            <Box display="flex" flexDirection="column" gap={3}>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Email"
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  error={!!error?.match(/e-mail/g)}
-                  helperText={error?.match(/e-mail/g) && error}
-                >
-                  Email
-                </TextField>
-              </Box>
-              <Box>
-                <TextField
-                  fullWidth
-                  variant="standard"
-                  label="Senha"
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  error={!!error?.match(/\bsenha\b/g)}
-                  helperText={error?.match(/\bsenha\b/g) && error}
-                >
-                  Senha
-                </TextField>
-              </Box>
-
-              <Box>
-                <LoadingButton
-                  loading={loading}
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                >
-                  Entrar
-                </LoadingButton>
-              </Box>
-            </Box>
-          </Box>
-        </form>
+        <LoginForm handleLogin={handleLogin} />
         <Divider />
         <Typography textAlign="center" marginY={2}>
           Não tem uma conta?{' '}

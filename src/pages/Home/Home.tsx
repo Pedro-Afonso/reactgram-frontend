@@ -6,6 +6,7 @@ import Box from '@mui/material/Box'
 
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
 import { getAllPhotos } from '../../shared/slices/photoSlice'
+import { profile } from '../../shared/slices/userSlice'
 import { PhotoFeed } from '../../shared/components'
 
 export const Home = () => {
@@ -17,6 +18,7 @@ export const Home = () => {
 
   // Load photos
   useEffect(() => {
+    dispatch(profile())
     dispatch(getAllPhotos())
   }, [dispatch])
 

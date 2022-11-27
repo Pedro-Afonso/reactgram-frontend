@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Tooltip from '@mui/material/Tooltip'
-import Avatar from '@mui/material/Avatar'
 import AppBar from '@mui/material/AppBar'
 import Menu from '@mui/material/Menu'
 import Icon from '@mui/material/Icon'
@@ -23,9 +22,12 @@ interface INavbarProps {
 }
 
 export const Navbar: React.FC<INavbarProps> = ({ children }) => {
-  const navigate = useNavigate()
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
+
   const theme = useTheme()
   const upMd = useMediaQuery(theme.breakpoints.up('md'))
+
+  const navigate = useNavigate()
 
   const userAuth = useAppSelector(state => state.auth.user)
   const dispatch = useAppDispatch()
@@ -38,10 +40,6 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
 
     navigate('/login')
   }
-
-  const user = useAppSelector(state => state.user.user)
-
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null)
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
@@ -93,7 +91,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
                     <>
                       <Tooltip title="Mais Opções">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                          <Avatar alt={user?.name} />
+                          <Icon>menu</Icon>
                         </IconButton>
                       </Tooltip>
                       <Menu

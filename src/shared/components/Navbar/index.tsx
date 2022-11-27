@@ -1,24 +1,22 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { useMediaQuery, useTheme } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
+import Tooltip from '@mui/material/Tooltip'
+import Avatar from '@mui/material/Avatar'
 import AppBar from '@mui/material/AppBar'
-import {
-  Menu,
-  Avatar,
-  IconButton,
-  Tooltip,
-  useMediaQuery,
-  useTheme
-} from '@mui/material'
+import Menu from '@mui/material/Menu'
 import Icon from '@mui/material/Icon'
 import Box from '@mui/material/Box'
 
+import { reset as resetProfile } from '../../slices/userSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { logout, reset } from '../../slices/authSlice'
 import { SearchBar } from '../SearchBar'
-import { useState } from 'react'
 
 interface INavbarProps {
   children: React.ReactNode
@@ -33,6 +31,8 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   const dispatch = useAppDispatch()
 
   const handleLogout = () => {
+    handleCloseUserMenu()
+    dispatch(resetProfile())
     dispatch(logout())
     dispatch(reset())
 
@@ -49,6 +49,20 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+
+  const handleHome = () => {
+    handleCloseUserMenu()
+    navigate('/home')
+  }
+  const handleProfile = () => {
+    handleCloseUserMenu()
+    navigate('/profile')
+  }
+  const handleGallery = () => {
+    handleCloseUserMenu()
+    if (!userAuth) return
+    navigate(`/users/${userAuth._id}`)
   }
 
   return (
@@ -79,7 +93,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
                     <>
                       <Tooltip title="Mais Opções">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                          <Avatar alt={user?.name} src={user?.profileImage} />
+                          <Avatar alt={user?.name} />
                         </IconButton>
                       </Tooltip>
                       <Menu
@@ -89,7 +103,6 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
                           vertical: 'bottom',
                           horizontal: 'left'
                         }}
-                        keepMounted
                         transformOrigin={{
                           vertical: 'top',
                           horizontal: 'left'
@@ -97,16 +110,14 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                       >
-                        <MenuItem onClick={() => navigate('/home')}>
+                        <MenuItem onClick={handleHome}>
                           <Icon>home</Icon>
                         </MenuItem>
-                        <MenuItem
-                          onClick={() => navigate(`/users/${userAuth._id}`)}
-                        >
+                        <MenuItem onClick={handleGallery}>
                           <Icon>camera_alt</Icon>
                         </MenuItem>
 
-                        <MenuItem onClick={() => navigate('/profile')}>
+                        <MenuItem onClick={handleProfile}>
                           <Icon>person</Icon>
                         </MenuItem>
                         <MenuItem onClick={handleLogout}>

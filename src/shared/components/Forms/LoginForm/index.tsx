@@ -61,9 +61,6 @@ export const LoginForm: React.FC<ILoginFormProps> = ({ handleLogin }) => {
       <Button type="submit" variant="contained" color="warning">
         Entrar
       </Button>
-      <Button variant="contained" color="error">
-        Usar as credenciais de um convidado
-      </Button>
     </Box>
   )
 }

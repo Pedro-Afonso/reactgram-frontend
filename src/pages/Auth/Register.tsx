@@ -36,11 +36,17 @@ export const Register = () => {
           flexDirection="column"
           justifyContent="center"
           alignItems="center"
+          minWidth="25rem"
         >
-          <Typography marginY={2} variant="h1" fontSize="2rem" fontWeight={600}>
+          <Typography marginY={1} variant="h1" fontSize="2rem" fontWeight={600}>
             ReactGram
           </Typography>
-          <Typography marginY={1} variant="h2" fontSize="1rem" fontWeight={400}>
+          <Typography
+            marginBottom={2}
+            variant="h2"
+            fontSize="1rem"
+            fontWeight={400}
+          >
             Cadastre-se e compartilhe suas aventuras
           </Typography>
         </Box>

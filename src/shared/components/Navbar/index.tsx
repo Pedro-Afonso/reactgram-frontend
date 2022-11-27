@@ -1,14 +1,12 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import {
-  AppBar,
-  Box,
-  Icon,
-  Toolbar,
-  Typography,
-  useTheme,
-  MenuItem
-} from '@mui/material'
+
+import Typography from '@mui/material/Typography'
+import MenuItem from '@mui/material/MenuItem'
+import Toolbar from '@mui/material/Toolbar'
+import AppBar from '@mui/material/AppBar'
+import { useTheme } from '@mui/material'
+import Icon from '@mui/material/Icon'
+import Box from '@mui/material/Box'
 
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { logout, reset } from '../../slices/authSlice'
@@ -22,18 +20,8 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   const navigate = useNavigate()
   const theme = useTheme()
 
-  const { user: userAuth } = useAppSelector(state => state.auth)
+  const userAuth = useAppSelector(state => state.auth.user)
   const dispatch = useAppDispatch()
-
-  const [query, setQuery] = useState('')
-
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    if (query) {
-      return navigate(`/search?q=${query}`)
-    }
-  }
 
   const handleLogout = () => {
     dispatch(logout())
@@ -56,7 +44,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
             <Box flex={2}>
               <Typography variant="h6">ReactGram</Typography>
             </Box>
-            <SearchBar setQuery={setQuery} handleSearch={handleSearch} />
+            <SearchBar />
             <Box
               display="flex"
               alignItems="center"

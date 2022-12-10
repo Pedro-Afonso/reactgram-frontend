@@ -1,4 +1,10 @@
-export type TAuth = { _id: string; token: string; profileImage?: string }
+import { TUser } from './IUser'
+
+export type TAuth = TUser & {
+  email: string
+  updatedAt: string
+  __v: number
+}
 export type TErrors = { errors: string[] }
 
 //  Requests
@@ -15,11 +21,14 @@ export interface ILoginForm {
 }
 
 // Responses
-export type TAuthRes = TAuth | TErrors
+export type TAuthRes =
+  | { authUser: TAuth; token: string; message: string }
+  | TErrors
 
 // Redux State
 export interface IAuthState {
-  user: TAuth | null
+  authUser: TAuth | null
+  token: string | null
   error: string | null
   success: boolean
   loading: boolean

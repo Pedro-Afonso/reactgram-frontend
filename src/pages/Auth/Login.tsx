@@ -1,10 +1,9 @@
 // material ui
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Box, Typography, Paper, Link, Divider } from '@mui/material'
 
-import { login, reset } from '../../shared/slices/authSlice'
+import { login } from '../../shared/slices/authSlice'
 import { useAppDispatch } from '../../shared/hooks'
 import { ILoginForm } from '../../shared/interface'
 import { LoginForm } from '../../shared/components'
@@ -16,10 +15,6 @@ export const Login = () => {
   const handleLogin = (data: ILoginForm) => {
     dispatch(login(data))
   }
-  // Clean all auth states
-  useEffect(() => {
-    dispatch(reset())
-  }, [dispatch])
 
   return (
     <Box

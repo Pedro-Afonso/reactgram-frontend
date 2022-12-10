@@ -1,4 +1,4 @@
-import { TErrors } from './IAuth'
+import { TAuth, TErrors } from './IAuth'
 
 export type TUser = {
   _id: string
@@ -16,7 +16,7 @@ export type TCurrentUser = TUser & {
 
 // Responses
 // get current user and update user
-export type TCurrentUserRes = TCurrentUser | TErrors
+export type TCurrentUserRes = { authUser: TCurrentUser } | TErrors
 
 // get user by id response
 
@@ -25,6 +25,7 @@ export type TUserRes = TUser | TErrors
 // Redux State
 export interface IUserState {
   user: TUser | TCurrentUser | null
+  authUser: TAuth | null
   error: string | null
   success: boolean
   loading: boolean

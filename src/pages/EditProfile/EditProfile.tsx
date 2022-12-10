@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
-import { profile, updateProfile } from '../../shared/slices/userSlice'
+import { updateProfile } from '../../shared/slices/userSlice'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
 
 export const EditProfile = () => {
@@ -27,11 +27,7 @@ export const EditProfile = () => {
     authUser,
     loading: loadingUser,
     error
-  } = useAppSelector(state => state.user)
-  // Load user data
-  useEffect(() => {
-    dispatch(profile())
-  }, [dispatch])
+  } = useAppSelector(state => state.auth)
 
   useEffect(() => {
     if (authUser) {

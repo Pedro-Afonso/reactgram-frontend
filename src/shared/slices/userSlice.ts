@@ -6,6 +6,7 @@ import { RootState } from '../../store'
 
 const initialState: IUserState = {
   user: null,
+  authUser: null,
   error: null,
   success: false,
   loading: false
@@ -13,7 +14,7 @@ const initialState: IUserState = {
 
 // Get user details, for edit data
 export const profile = createAsyncThunk<
-  TCurrentUser,
+  { authUser: TCurrentUser },
   void,
   { rejectValue: string; state: RootState }
 >('user/profile', async (_, { rejectWithValue, getState }) => {
@@ -32,7 +33,7 @@ export const profile = createAsyncThunk<
 })
 
 export const updateProfile = createAsyncThunk<
-  TCurrentUser,
+  { authUser: TCurrentUser },
   FormData,
   { rejectValue: string; state: RootState }
 >('user/update', async (data, { rejectWithValue, getState }) => {
@@ -82,12 +83,13 @@ export const userSlice = createSlice({
       .addCase(profile.pending, state => {
         state.loading = true
         state.error = null
+        state.authUser = null
       })
       .addCase(profile.fulfilled, (state, action) => {
         state.loading = false
         state.success = true
         state.error = null
-        state.user = action.payload
+        state.authUser = action.payload.authUser
       })
       .addCase(updateProfile.pending, state => {
         state.loading = true
@@ -97,7 +99,7 @@ export const userSlice = createSlice({
         state.loading = false
         state.success = true
         state.error = null
-        state.user = action.payload
+        state.authUser = action.payload.authUser
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false

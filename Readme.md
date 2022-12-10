@@ -1,52 +1,67 @@
-<h1 align="center">PROJETO REACTGRAM (frontend)</h1>
+<a href="./LICENSE">![GitHub](https://img.shields.io/github/license/pedro-afonso/chat-app-frontend?style=plastic)</a>
+![GitHub repo size](https://img.shields.io/github/repo-size/pedro-afonso/chat-app-frontend?style=plastic)
+![GitHub Repo stars](https://img.shields.io/github/stars/pedro-afonso/chat-app-frontend?color=yellow&style=plastic)
 
-# Sobre o projeto
-
-## Conteúdos
-
-- :camera_flash: [Screenshots do Projeto](#camera_flash-screenshots-do-projeto)
-- 🌈 [Sobre o projeto](#project)
-- 🔥 [Como instalar e usar o projeto](#install)
-- 🔥 [Tecnologias](#build-with)
-- 📑 [Páginas](#pages)
-- ⚙ [Funcionalidades](#features)
-- 📝 [Licença](#license)
-
-## Tecnologias
-
-### Frontend
-
-<ul>
-  <li>React</li>
-  <li>Typescript</li>
-  <li>Materil UI</li>
-  <li>Redux Toolkit</li>
-</ul>
-
-### Backend
-
-<ul>
-<li>NodeJS</li>
-<li>Typescript</li>
-<li>Express</li>
-<li>Express validation</li>
-<li>Multer</li>
-<li>JSON Web Token</li>
-<li>CORS</li>
-<li>MongoDB</li>
-</ul>
+<h1 align="center">Projeto Reactgram</h1>
 
 <br />
 
+
+# :pushpin: Índice de conteúdos
+
+- [Screenshots do Projeto](#camera_flash-screenshots-do-projeto)
+- [Sobre o Projeto](#monocle_face-sobre-o-projeto)
+- [Tecnologias](#globe_with_meridians-tecnologias-usadas)
+- [Features](#triangular_flag_on_post-features)
+- [Instalação](#question-como-instalar-e-executar-o-projeto)
+- [Autor](#closed_book-autor)
+
+</br>
+
+---
 # :camera_flash: Screenshots do Projeto
 
-<br />
+|sd|
+|--|
+|ds|
 
 # :monocle_face: Sobre o Projeto
 
 Este projeto tem o objetivo de compartilhar atualizações pessoais por meio do website. As atualizações são exibidas na página inicial para que todos possam visualizar. As páginas e funcionalidades foram inspiradas no Instagram.
 
 <br />
+
+# :globe_with_meridians: Tecnologias Usadas
+## Frontend
+
+✅ [React](https://reactjs.org/) - Biblioteca JS.
+
+✅ [Typescript](https://www.typescriptlang.org) - Para fazer a tipagem
+
+✅ [Material UI](https://mui.com) - Biblioteca de estilos.
+
+✅ [Redux Toolkit](https://redux-toolkit.js.org) - Conjunto de ferramentas para simplificar o desenvolvimento Redux
+
+✅ [Lints] — ESlint/Prettier/EditorConfig
+
+## Backend
+
+✅ [NodeJS](https://nodejs.org/en/) - Ambiente de desenvolvimento javascript.
+
+✅ [Typescript](https://www.typescriptlang.org) - Para fazer a tipagem
+
+✅ [Express](https://expressjs.com) - Framework usado para construir a API.
+
+✅ [Multer](https://github.com/expressjs/multer#readme) - Usado como middleware para lidar com dados do tipo multipart/form-data.
+
+✅ [Mongoose](https://mongoosejs.com) - Biblioteca usada para a modelagem de dados de objeto para MongoDB e NodeJS.
+
+✅ [MongoDB](https://www.mongodb.com) - Sistema gerenciador de banco de dados NoSQL.
+
+✅ [Lints] — ESlint/Prettier/EditorConfig
+
+<br />
+
 
 ## Como instalar e usar o projeto
 

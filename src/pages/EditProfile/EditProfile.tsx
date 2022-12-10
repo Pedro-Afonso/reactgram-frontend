@@ -24,7 +24,7 @@ export const EditProfile = () => {
 
   const dispatch = useAppDispatch()
   const {
-    user,
+    authUser,
     loading: loadingUser,
     error
   } = useAppSelector(state => state.user)
@@ -34,13 +34,13 @@ export const EditProfile = () => {
   }, [dispatch])
 
   useEffect(() => {
-    if (user) {
-      setName(user.name)
-      setEmail('email' in user ? user.email : '')
-      setBio(user.bio || '')
-      setPreviewImage(user.profileImage || '')
+    if (authUser) {
+      setName(authUser.name)
+      setEmail('email' in authUser ? authUser.email : '')
+      setBio(authUser.bio || '')
+      setPreviewImage(authUser.profileImage || '')
     }
-  }, [user])
+  }, [authUser])
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]

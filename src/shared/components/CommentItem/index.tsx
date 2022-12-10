@@ -20,7 +20,7 @@ interface ICommentItemProps {
 export const CommentItem: React.FC<ICommentItemProps> = ({ comment }) => {
   const dispatch = useAppDispatch()
 
-  const authUser = useAppSelector(state => state.auth.user)
+  const authUser = useAppSelector(state => state.auth.authUser)
 
   const canDelete = authUser?._id === comment.user._id
 

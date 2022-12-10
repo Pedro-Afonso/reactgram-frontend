@@ -29,7 +29,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
 
   const navigate = useNavigate()
 
-  const userAuth = useAppSelector(state => state.auth.user)
+  const authUser = useAppSelector(state => state.auth.authUser)
   const dispatch = useAppDispatch()
 
   const handleLogout = () => {
@@ -59,8 +59,8 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
   }
   const handleGallery = () => {
     handleCloseUserMenu()
-    if (!userAuth) return
-    navigate(`/users/${userAuth._id}`)
+    if (!authUser) return
+    navigate(`/users/${authUser._id}`)
   }
 
   return (
@@ -77,7 +77,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
             <Box flex={2}>
               <Typography variant="h6">ReactGram</Typography>
             </Box>
-            {userAuth ? <SearchBar /> : null}
+            {authUser ? <SearchBar /> : null}
             <Box
               display="flex"
               alignItems="center"
@@ -85,7 +85,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
               flex={1}
               gap={1}
             >
-              {userAuth ? (
+              {authUser ? (
                 <>
                   {!upMd ? (
                     <>
@@ -130,7 +130,7 @@ export const Navbar: React.FC<INavbarProps> = ({ children }) => {
                         <Icon>home</Icon>
                       </MenuItem>
                       <MenuItem
-                        onClick={() => navigate(`/users/${userAuth._id}`)}
+                        onClick={() => navigate(`/users/${authUser._id}`)}
                       >
                         <Icon>camera_alt</Icon>
                       </MenuItem>

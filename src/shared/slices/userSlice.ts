@@ -19,9 +19,9 @@ export const profile = createAsyncThunk<
 >('user/profile', async (_, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await userService.profile(auth.user.token)
+  const res = await userService.profile(auth.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -38,9 +38,9 @@ export const updateProfile = createAsyncThunk<
 >('user/update', async (data, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await userService.updateProfile(data, auth.user.token)
+  const res = await userService.updateProfile(data, auth.token)
 
   // Check for errors
   if ('errors' in res) {

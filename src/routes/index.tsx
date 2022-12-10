@@ -11,39 +11,42 @@ import {
 import { useAppSelector } from '../shared/hooks'
 
 export const AppRoutes = () => {
-  const auth = useAppSelector(state => state.auth.user)
+  const authUser = useAppSelector(state => state.auth.authUser)
 
   return (
     <Routes>
       <Route
         path="/home"
-        element={auth ? <Home /> : <Navigate to="/login" />}
+        element={authUser ? <Home /> : <Navigate to="/login" />}
       />
       <Route
         path="/login"
-        element={!auth ? <Login /> : <Navigate to="/home" />}
+        element={!authUser ? <Login /> : <Navigate to="/home" />}
       />
       <Route
         path="/register"
-        element={!auth ? <Register /> : <Navigate to="/home" />}
+        element={!authUser ? <Register /> : <Navigate to="/home" />}
       />
       <Route
         path="/profile"
-        element={auth ? <EditProfile /> : <Navigate to="/login" />}
+        element={authUser ? <EditProfile /> : <Navigate to="/login" />}
       />
       <Route
         path="/users/:id"
-        element={auth ? <Profile /> : <Navigate to="/login" />}
+        element={authUser ? <Profile /> : <Navigate to="/login" />}
       />
       <Route
         path="/search"
-        element={auth ? <Search /> : <Navigate to="/login" />}
+        element={authUser ? <Search /> : <Navigate to="/login" />}
       />
       <Route
         path="/photos/:id"
-        element={auth ? <Photo /> : <Navigate to="/login" />}
+        element={authUser ? <Photo /> : <Navigate to="/login" />}
       />
-      <Route path="*" element={auth ? <Home /> : <Navigate to="/login" />} />
+      <Route
+        path="*"
+        element={authUser ? <Home /> : <Navigate to="/login" />}
+      />
     </Routes>
   )
 }

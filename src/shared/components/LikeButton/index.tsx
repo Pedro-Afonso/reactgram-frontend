@@ -15,7 +15,7 @@ interface ILikeProps {
 export const LikeButton: React.FC<ILikeProps> = ({ photo }) => {
   const dispatch = useAppDispatch()
 
-  const authUser = useAppSelector(state => state.auth.user)
+  const authUser = useAppSelector(state => state.auth.authUser)
 
   const handleLike = (photoId: string) => {
     dispatch(likePhoto(photoId))

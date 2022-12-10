@@ -19,13 +19,13 @@ export const Profile = () => {
 
   const dispatch = useAppDispatch()
 
-  const userAuth = useAppSelector(state => state.auth.user)
+  const authUser = useAppSelector(state => state.auth.authUser)
 
   const loadingUser = useAppSelector(state => state.user.loading)
   const loadingAuth = useAppSelector(state => state.auth.loading)
   const loadingPhoto = useAppSelector(state => state.photo.loading)
 
-  const isTheProfileOwner = id === userAuth!._id
+  const isTheProfileOwner = id === authUser!._id
 
   // Load user data
   useEffect(() => {

@@ -26,9 +26,9 @@ export const publishPhoto = createAsyncThunk<
 >('photo/publish', async (photo, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await photoService.publishPhoto(photo, auth.user.token)
+  const res = await photoService.publishPhoto(photo, auth.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -46,9 +46,9 @@ export const getUserPhotos = createAsyncThunk<
 >('photo/userphotos', async (id, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await photoService.getUserPhotos(id, auth.user.token)
+  const res = await photoService.getUserPhotos(id, auth.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -65,9 +65,9 @@ export const deletePhoto = createAsyncThunk<
 >('photo/delete', async (id, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await photoService.deletePhoto(id, auth.user.token)
+  const res = await photoService.deletePhoto(id, auth.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -84,13 +84,9 @@ export const updatePhoto = createAsyncThunk<
 >('photo/update', async (photo, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await photoService.updatePhoto(
-    photo.title,
-    photo.id,
-    auth.user.token
-  )
+  const res = await photoService.updatePhoto(photo.title, photo.id, auth.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -122,9 +118,9 @@ export const likePhoto = createAsyncThunk<
 >('photo/likephoto', async (id, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await photoService.likePhoto(id, auth.user.token)
+  const res = await photoService.likePhoto(id, auth.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -141,9 +137,9 @@ export const getAllPhotos = createAsyncThunk<
 >('photo/getallphotos', async (_, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await photoService.getAllPhotos(auth.user.token)
+  const res = await photoService.getAllPhotos(auth.token)
 
   // Check for errors
   if ('errors' in res) {
@@ -160,9 +156,9 @@ export const searchPhotos = createAsyncThunk<
 >('photo/searchphotos', async (query, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await photoService.searchPhotos(query, auth.user.token)
+  const res = await photoService.searchPhotos(query, auth.token)
 
   // Check for errors
   if ('errors' in res) {

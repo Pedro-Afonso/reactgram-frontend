@@ -21,9 +21,9 @@ export const addComment = createAsyncThunk<
 >('comment/addcomment', async (data, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await commentService.addComment(data, auth.user.token)
+  const res = await commentService.addComment(data, auth.token)
 
   // Check for errors
   if ('errors' in res) return rejectWithValue(res.errors[0])
@@ -38,9 +38,9 @@ export const deleteComment = createAsyncThunk<
 >('comment/deletecomment', async (id, { rejectWithValue, getState }) => {
   const { auth } = getState()
 
-  if (!auth.user) return rejectWithValue('Ocorreu um erro!')
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
 
-  const res = await commentService.deleteComment(id, auth.user.token)
+  const res = await commentService.deleteComment(id, auth.token)
 
   // Check for errors
   if ('errors' in res) return rejectWithValue(res.errors[0])

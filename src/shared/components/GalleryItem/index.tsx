@@ -19,11 +19,11 @@ export const GalleryItem: React.FC<IGalleryItemProps> = ({ photo }) => {
 
   const dispatch = useAppDispatch()
 
-  const userAuth = useAppSelector(state => state.auth.user)
+  const authUser = useAppSelector(state => state.auth.authUser)
 
   const navigate = useNavigate()
 
-  const isTheProfileOwner = id === userAuth!._id
+  const isTheProfileOwner = id === authUser!._id
 
   // Delete a photo
   const handleDelete = () => {

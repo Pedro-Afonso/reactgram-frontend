@@ -3,11 +3,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { ILoginForm, IRegisterForm, TAuth, IAuthState } from '../interface'
 import { authService } from '../services/authService'
 
-const localUser = sessionStorage.getItem('user')
-const user: TAuth | null = localUser ? JSON.parse(localUser) : null
+const localUser = sessionStorage.getItem('userToken')
+const token: string | null = localUser ? JSON.parse(localUser) : null
 
 const initialState: IAuthState = {
-  user,
+  authUser: null,
+  token,
   error: null,
   success: false,
   loading: false
@@ -15,7 +16,7 @@ const initialState: IAuthState = {
 
 // Register a user and sign in
 export const register = createAsyncThunk<
-  TAuth,
+  { authUser: TAuth; token: string; message: string },
   IRegisterForm,
   { rejectValue: string }
 >('auth/register', async (data, { rejectWithValue }) => {
@@ -36,7 +37,7 @@ export const logout = createAsyncThunk('auth/logout', () => {
 
 // Sign in a user
 export const login = createAsyncThunk<
-  TAuth,
+  { authUser: TAuth; token: string; message: string },
   ILoginForm,
   { rejectValue: string }
 >('auth/login', async (user, { rejectWithValue }) => {
@@ -55,7 +56,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     reset: state => {
-      state.user = null
+      state.authUser = null
       state.error = null
       state.loading = false
       state.success = false
@@ -66,38 +67,44 @@ export const authSlice = createSlice({
       .addCase(register.pending, state => {
         state.loading = true
         state.error = null
+        state.token = null
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload ? action.payload : null
+        state.authUser = null
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false
         state.success = true
         state.error = null
-        state.user = action.payload
+        state.authUser = action.payload.authUser
+        state.token = action.payload.token
       })
-      .addCase(register.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload ? action.payload : null
-        state.user = null
-      })
+
       .addCase(logout.fulfilled, state => {
+        state.token = null
         state.loading = false
         state.success = true
         state.error = null
-        state.user = null
+        state.authUser = null
       })
       .addCase(login.pending, state => {
         state.loading = true
         state.error = null
+        state.token = null
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload ? action.payload : null
+        state.authUser = null
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false
         state.success = true
         state.error = null
-        state.user = action.payload
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload ? action.payload : null
-        state.user = null
+        state.authUser = action.payload.authUser
+        state.token = action.payload.token
       })
   }
 })

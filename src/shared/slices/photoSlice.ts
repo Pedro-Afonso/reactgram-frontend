@@ -169,7 +169,7 @@ export const searchPhotos = createAsyncThunk<
 })
 
 export const photoSlice = createSlice({
-  name: 'publish',
+  name: 'photo',
   initialState,
   reducers: {
     resetPhoto: state => {

@@ -4,9 +4,9 @@ import Paper from '@mui/material/Paper'
 import Icon from '@mui/material/Icon'
 import Box from '@mui/material/Box'
 
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { likePhoto } from '../../slices/photoSlice'
-import { TPhoto } from '../../interface'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { likePhoto } from '../../../slices/photoSlice'
+import { TPhoto } from '../../../interface'
 
 interface ILikeProps {
   photo: TPhoto

@@ -15,7 +15,7 @@ import Icon from '@mui/material/Icon'
 import { addComment } from '../../slices/commentSlice'
 import { useAppDispatch } from '../../hooks'
 import { CommentForm } from '../CommentForm'
-import { LikeButton } from '../LikeButton'
+import { LikeButton } from './LikeButton'
 import { TPhoto } from '../../interface'
 
 interface IPhotoItemProps {

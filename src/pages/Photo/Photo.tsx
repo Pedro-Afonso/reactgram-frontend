@@ -9,7 +9,7 @@ import Box from '@mui/material/Box'
 import { useAppDispatch, useAppSelector } from '../../shared/hooks'
 import { getComments } from '../../shared/slices/commentSlice'
 import { Comments } from '../../shared/components/Comments'
-import { getPhoto } from '../../shared/slices/photoSlice'
+import { getPhoto, resetPhoto } from '../../shared/slices/photoSlice'
 import { PhotoItem } from '../../shared/components'
 
 export const Photo = () => {
@@ -18,10 +18,12 @@ export const Photo = () => {
   const dispatch = useAppDispatch()
 
   const photo = useAppSelector(state => state.photo.photo)
-  const ladingPhotos = useAppSelector(state => state.photo.loading)
+  const ladingPhoto = useAppSelector(state => state.photo.loading)
 
   // Load photo data
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    dispatch(resetPhoto())
     if (id) {
       dispatch(getPhoto(id))
       dispatch(getComments(id))
@@ -40,7 +42,7 @@ export const Photo = () => {
 
       <Backdrop
         sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
-        open={ladingPhotos}
+        open={ladingPhoto}
       >
         <CircularProgress color="inherit" />
       </Backdrop>

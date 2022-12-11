@@ -172,6 +172,9 @@ export const photoSlice = createSlice({
   name: 'publish',
   initialState,
   reducers: {
+    resetPhoto: state => {
+      state.photo = null
+    },
     resetMessage: state => {
       state.message = null
     }
@@ -318,5 +321,5 @@ export const photoSlice = createSlice({
   }
 })
 
-export const { resetMessage } = photoSlice.actions
+export const { resetPhoto, resetMessage } = photoSlice.actions
 export const { reducer: photoReducer } = photoSlice

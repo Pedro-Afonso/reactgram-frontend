@@ -5,10 +5,10 @@ import ImageListItem from '@mui/material/ImageListItem'
 import IconButton from '@mui/material/IconButton'
 import Icon from '@mui/material/Icon'
 
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { deletePhoto } from '../../slices/photoSlice'
-import { DialogEditPhoto } from '../../components'
-import { TPhoto } from '../../interface'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { deletePhoto } from '../../../slices/photoSlice'
+import { DialogEditPhoto } from '../..'
+import { TPhoto } from '../../../interface'
 
 interface IGalleryItemProps {
   photo: TPhoto

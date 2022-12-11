@@ -22,7 +22,7 @@ export const AppRoutes = () => {
     dispatch(profile())
   }, [dispatch])
 
-  if (loadingAuthUser && !authUser) return
+  if (loadingAuthUser && !authUser) return <></>
 
   return (
     <Routes>

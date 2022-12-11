@@ -2,15 +2,6 @@ import { api, requestConfig, fecthRequest } from '../utils'
 import { TCurrentUserRes, TUserRes } from '../interface'
 import { tryCatchService } from '../utils/tryCatchService'
 
-// Get user details
-const profile = async (token: string) => {
-  const config = requestConfig('GET', null, token)
-
-  return tryCatchService(async () => {
-    return await fecthRequest<TCurrentUserRes>(`${api}/users/profile`, config)
-  })
-}
-
 // Update user details
 const updateProfile = async (data: FormData, token: string) => {
   const config = requestConfig('PUT', data, token, true)
@@ -29,4 +20,4 @@ const getUserDetails = async (id: string) => {
   })
 }
 
-export const userService = { profile, updateProfile, getUserDetails }
+export const userService = { updateProfile, getUserDetails }

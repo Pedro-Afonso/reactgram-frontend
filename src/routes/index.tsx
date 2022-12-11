@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+
 import {
   EditProfile,
   Home,
@@ -8,10 +10,19 @@ import {
   Profile,
   Search
 } from '../pages'
-import { useAppSelector } from '../shared/hooks'
+import { useAppDispatch, useAppSelector } from '../shared/hooks'
+import { profile } from '../shared/slices/authSlice'
 
 export const AppRoutes = () => {
   const authUser = useAppSelector(state => state.auth.authUser)
+  const loadingAuthUser = useAppSelector(state => state.auth.loading)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(profile())
+  }, [dispatch])
+
+  if (loadingAuthUser && !authUser) return
 
   return (
     <Routes>

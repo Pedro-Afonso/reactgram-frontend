@@ -12,26 +12,6 @@ const initialState: IUserState = {
   loading: false
 }
 
-// Get user details, for edit data
-export const profile = createAsyncThunk<
-  { authUser: TCurrentUser },
-  void,
-  { rejectValue: string; state: RootState }
->('user/profile', async (_, { rejectWithValue, getState }) => {
-  const { auth } = getState()
-
-  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
-
-  const res = await userService.profile(auth.token)
-
-  // Check for errors
-  if ('errors' in res) {
-    return rejectWithValue(res.errors[0])
-  }
-
-  return res
-})
-
 export const updateProfile = createAsyncThunk<
   { authUser: TCurrentUser },
   FormData,
@@ -80,17 +60,6 @@ export const userSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(profile.pending, state => {
-        state.loading = true
-        state.error = null
-        state.authUser = null
-      })
-      .addCase(profile.fulfilled, (state, action) => {
-        state.loading = false
-        state.success = true
-        state.error = null
-        state.authUser = action.payload.authUser
-      })
       .addCase(updateProfile.pending, state => {
         state.loading = true
         state.error = null

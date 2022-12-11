@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { RootState } from '../../store'
 
-import { ILoginForm, IRegisterForm, TAuth, IAuthState } from '../interface'
+import {
+  ILoginForm,
+  IRegisterForm,
+  TAuth,
+  IAuthState,
+  TCurrentUser
+} from '../interface'
 import { authService } from '../services/authService'
 
 const localUser = sessionStorage.getItem('userToken')
@@ -51,6 +58,26 @@ export const login = createAsyncThunk<
   return res
 })
 
+// Get user details, for edit data
+export const profile = createAsyncThunk<
+  { authUser: TCurrentUser },
+  void,
+  { rejectValue: string; state: RootState }
+>('auth/profile', async (_, { rejectWithValue, getState }) => {
+  const { auth } = getState()
+
+  if (!auth.token) return rejectWithValue('Ocorreu um erro!')
+
+  const res = await authService.profile(auth.token)
+
+  // Check for errors
+  if ('errors' in res) {
+    return rejectWithValue(res.errors[0])
+  }
+
+  return res
+})
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -64,6 +91,21 @@ export const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addCase(profile.pending, state => {
+        state.loading = true
+        state.error = null
+        state.authUser = null
+      })
+      .addCase(profile.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload ? action.payload : null
+      })
+      .addCase(profile.fulfilled, (state, action) => {
+        state.loading = false
+        state.success = true
+        state.error = null
+        state.authUser = action.payload.authUser
+      })
       .addCase(register.pending, state => {
         state.loading = true
         state.error = null
